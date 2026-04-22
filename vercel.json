@@ -1,0 +1,9 @@
+{
+  "framework": null,
+  "cleanUrls": true,
+  "functions": {
+    "api/telemetry.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
