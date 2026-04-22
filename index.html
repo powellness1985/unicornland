@@ -466,7 +466,8 @@ let selectedGameCharacter = JSON.parse(localStorage.getItem('selectedCharacter')
 function showCharacterDetails(char) {
   currentCharacter = char;
   document.getElementById('character-details').classList.add('active');
-  document.getElementById('character-details-image').src = `/assets/characters/${char.name.toLowerCase()}-${char.variation}.png`;
+  const sanitizedName = char.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  document.getElementById('character-details-image').src = `/assets/characters/${sanitizedName}-${char.variation}.png`;
   document.getElementById('character-details-name').textContent = char.name;
   document.getElementById('character-details-bio').textContent = char.bio;
 }
@@ -610,7 +611,8 @@ function render() {
   const fruityX = gameState.fruity.facingRight ? gameState.fruity.x : -gameState.fruity.x;
 
   // Try to draw character image, fall back to emoji
-  const charImg = window.characterImages && window.characterImages[`${selectedGameCharacter.name.toLowerCase()}-${selectedGameCharacter.variation}`];
+  const sanitizedCharName = selectedGameCharacter.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const charImg = window.characterImages && window.characterImages[`${sanitizedCharName}-${selectedGameCharacter.variation}`];
   if (charImg && charImg.complete) {
     const imgSize = 80;
     ctx.drawImage(charImg, fruityX - imgSize / 2, gameState.fruity.y - imgSize / 2, imgSize, imgSize);
@@ -879,7 +881,8 @@ function gameLoop() {
 // Preload character images
 window.characterImages = {};
 CHARACTERS.forEach(char => {
-  const key = `${char.name.toLowerCase()}-${char.variation}`;
+  const sanitizedName = char.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const key = `${sanitizedName}-${char.variation}`;
   const img = new Image();
   img.src = `/assets/characters/${key}.png`;
   img.onerror = () => console.log(`Could not load ${key}`);
