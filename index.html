@@ -710,7 +710,7 @@ function render() {
   // Draw magic beams
   gameState.beams = gameState.beams.filter(b => b.life > 0);
   gameState.beams.forEach(b => {
-    const beamLength = 400;
+    const beamLength = Math.hypot(canvas.width, canvas.height);
     const endX = b.x + b.dirX * beamLength;
     const endY = b.y + b.dirY * beamLength;
     const alpha = b.life / 20;
@@ -765,10 +765,18 @@ canvas.addEventListener('click', (e) => {
 
 let lastTapTime = 0;
 let lastTapX = 0, lastTapY = 0;
+let pendingMoveTimeout = null;
 
 function handleTap(x, y) {
   const now = Date.now();
   const doubleTap = now - lastTapTime < 300;
+
+  // Clear any pending move if this is a double-tap
+  if (doubleTap && pendingMoveTimeout) {
+    clearTimeout(pendingMoveTimeout);
+    pendingMoveTimeout = null;
+  }
+
   lastTapTime = now;
   lastTapX = x;
   lastTapY = y;
@@ -805,10 +813,13 @@ function handleTap(x, y) {
     gameState.balloons = gameState.balloons.filter(b => !b.popped);
     gameState.messageQueue.push({ text: ENCOURAGEMENT_MESSAGES[Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length)], life: 100 });
   } else if (!doubleTap) {
-    // SINGLE TAP: Move ONLY (no magic, no extra rotation changes)
-    gameState.fruity.targetX = x;
-    gameState.fruity.targetY = y;
-    gameState.fruity.facingRight = x > gameState.fruity.x;
+    // SINGLE TAP: Queue movement, execute after 300ms if no double-tap comes
+    pendingMoveTimeout = setTimeout(() => {
+      gameState.fruity.targetX = x;
+      gameState.fruity.targetY = y;
+      gameState.fruity.facingRight = x > gameState.fruity.x;
+      pendingMoveTimeout = null;
+    }, 300);
   }
 }
 
