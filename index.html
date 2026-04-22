@@ -12,28 +12,232 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: Arial, sans-serif;
+      font-family: 'Arial', sans-serif;
       background: #000;
+      overflow: hidden;
     }
     canvas {
       display: block;
       max-width: 100%;
       max-height: 100%;
+      touch-action: none;
+    }
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: linear-gradient(180deg, #FFD6A5 0%, #C8B6FF 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      font-family: Arial, sans-serif;
+    }
+    #loading-title {
+      font-size: 48px;
+      font-weight: bold;
+      color: #9B59B6;
+      margin-bottom: 60px;
+      text-align: center;
+    }
+    #loading-emoji {
+      font-size: 120px;
+      margin-bottom: 40px;
+      animation: bounce 0.6s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+    #loading-bar-container {
+      width: 300px;
+      height: 30px;
+      background: rgba(255, 255, 255, 0.3);
+      border: 3px solid #FFF;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+    #loading-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #FF6B6B, #FFD93D, #4ECDC4, #A78BFA, #FF6B6B);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      border-radius: 12px;
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    #loading-text {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #FFF;
+      font-weight: bold;
+      text-align: center;
     }
   </style>
 </head>
 <body>
+<div id="loading-screen">
+  <div id="loading-emoji">🦄</div>
+  <div id="loading-title">Welcome to Unicorn Land</div>
+  <div id="loading-bar-container">
+    <div id="loading-bar-fill"></div>
+  </div>
+  <div id="loading-text">Getting ready for magic...</div>
+</div>
 <canvas id="game"></canvas>
 <script>
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
 
+// Responsive canvas sizing
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+window.addEventListener('resize', () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+
 // ============================================================================
-// GAME STATE
+// LOADING SCREEN
 // ============================================================================
+
+let loadingProgress = 0;
+
+function updateLoadingBar() {
+  const loadingFill = document.getElementById('loading-bar-fill');
+  if (loadingFill) {
+    loadingFill.style.width = loadingProgress + '%';
+  }
+
+  if (loadingProgress < 100) {
+    loadingProgress += Math.random() * 30;
+    setTimeout(updateLoadingBar, 300);
+  } else {
+    // Finish loading
+    setTimeout(() => {
+      const loadingScreen = document.getElementById('loading-screen');
+      if (loadingScreen) {
+        loadingScreen.style.transition = 'opacity 0.8s ease-out';
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+          startGame();
+        }, 800);
+      }
+    }, 500);
+  }
+}
+
+updateLoadingBar();
+
+// ============================================================================
+// ASSET MANAGEMENT (with emoji fallbacks)
+// ============================================================================
+
+const assets = {
+  characters: {},
+  animals: {},
+  interactive: {},
+  world: {},
+  particles: {},
+  ui: {},
+  loaded: false,
+};
+
+// Asset loading with fallback support
+async function loadAssets() {
+  const assetMap = {
+    characters: ['fruity-idle', 'fruity-flying', 'fruity-happy', 'fruity-crowned', 'firey-shy', 'firey-playful', 'firey-silly'],
+    animals: ['fee-butterfly', 'char-chameleon', 'mae-bunny', 'sage-owl'],
+    interactive: ['balloon-red', 'balloon-blue', 'balloon-yellow', 'balloon-purple', 'balloon-soggy', 'balloon-candy', 'balloon-maroon', 'balloon-gold', 'candy-lollipop', 'candy-cupcake', 'fruit-apple', 'fruit-strawberry', 'fruit-popsicle-rainbow'],
+    world: ['house-left', 'house-right', 'tree-center', 'hill-grass', 'cloud-fluffy', 'cloud-wispy', 'rain-cloud-soft', 'school', 'school-flag'],
+    particles: ['particle-cupcake', 'particle-rainbow', 'particle-sparkle', 'raindrop', 'magic-beam-arc', 'magic-beam-impact', 'rainbow-celebration-arc', 'confetti', 'glitter-red', 'glitter-blue', 'glitter-yellow', 'glitter-purple', 'soggy-raindrop-overlay'],
+    ui: ['magic-meter-background', 'world-painting-progress-bg', 'message-bubble'],
+  };
+
+  for (const [category, names] of Object.entries(assetMap)) {
+    assets[category] = {};
+    for (const name of names) {
+      assets[category][name] = null;
+      const path = `/assets/${category}/${name}.png`;
+      const img = new Image();
+      img.src = path;
+      img.onerror = () => {
+        assets[category][name] = 'fallback';
+      };
+      img.onload = () => {
+        assets[category][name] = img;
+      };
+    }
+  }
+  assets.loaded = true;
+}
+
+loadAssets();
+
+// ============================================================================
+// GAME STATE & CONSTANTS
+// ============================================================================
+
+const GAME_CONFIG = {
+  FRUITY_SPEED: 300,
+  FRUITY_SIZE: 60,
+  MAGIC_MAX: 100,
+  MAGIC_COST_PER_SHOT: 25,
+  MAGIC_REGEN_TIME: 4,
+  MAGIC_BEAM_TRAVEL_TIME: 0.4,
+  BALLOON_TARGET_COUNT: 5,
+  BALLOON_SPAWN_INTERVAL: 5,
+  RAIN_CLOUD_SPAWN_INTERVAL: 10,
+  SOGGY_DURATION: 5,
+  FIREY_SPAWN_INTERVAL: 30,
+  FIREY_SCREEN_TIME: 10,
+  FRUIT_SPAWN_INTERVAL: 45,
+  SPARKLE_BOOST_SHOTS: 3,
+  GLITTER_NEEDED_FOR_COMPLETE: 20,
+  CUMULATIVE_COUNTER: 0,
+};
+
+// Kid-show inspired encouragement messages
+const ENCOURAGEMENT_MESSAGES = [
+  // Daniel Tiger's Neighborhood
+  { text: "Take a breath, make a plan, do your best! 🌟", color: '#FF6B6B' },
+  { text: "Fruity is trying!", color: '#FFD93D' },
+  { text: "When something seems bad, turn it around, and find something GOOD! 🌈", color: '#4ECDC4' },
+
+  // Bluey
+  { text: "You're awesome! 💪", color: '#A78BFA' },
+  { text: "Excellent! 🎉", color: '#FF6B6B' },
+  { text: "You can do it! 💕", color: '#FFB6D9' },
+
+  // Sesame Street
+  { text: "That's terrific! 🌟", color: '#FFD93D' },
+  { text: "You're a superstar! ⭐", color: '#FF6B6B' },
+  { text: "Keep going, you're doing great! 🎊", color: '#A78BFA' },
+
+  // Gabby's Dollhouse
+  { text: "Meow-velous! 🐱", color: '#FFB6D9' },
+  { text: "You're amazing! ✨", color: '#4ECDC4' },
+
+  // Generic encouragement
+  { text: "Amazing tap! 🎯", color: '#FF6B6B' },
+  { text: "Great job! 🌈", color: '#FFD93D' },
+  { text: "You did it! 🎉", color: '#4ECDC4' },
+  { text: "So awesome! 💫", color: '#A78BFA' },
+  { text: "Look at you go! 🚀", color: '#FF6B6B' },
+  { text: "Fantastic! 🌟", color: '#FFD93D' },
+  { text: "Keep shining! ✨", color: '#4ECDC4' },
+  { text: "You're incredible! 💕", color: '#A78BFA' },
+  { text: "Beautiful work! 🌸", color: '#FFB6D9' },
+];
 
 const game = {
   fruity: {
@@ -43,14 +247,31 @@ const game = {
     targetY: canvas.height * 0.35,
     vx: 0,
     vy: 0,
-    size: 60,
     wingFlap: 0,
+    facingRight: true,
+    magic: GAME_CONFIG.MAGIC_MAX,
+    magicRegenTimer: 0,
     idleTime: 0,
-    magicTimer: 0,
   },
-  raindrops: [],
+
+  balloons: [],
+  rainClouds: [],
+  bonusfruits: [],
+  animals: [],
   particles: [],
+  messages: [],
+  firey: null,
+  school: null,
+
+  worldPainting: 0,
+  worldElements: [],
+
   sessionId: generateUUID(),
+  startTime: Date.now(),
+  balloonsPoppedThisSession: 0,
+  fireyTransformsThisSession: 0,
+  cloudsClearedThisSession: 0,
+  fruitPickupsThisSession: 0,
 };
 
 function generateUUID() {
@@ -60,108 +281,132 @@ function generateUUID() {
   });
 }
 
+function loadCumulativeCounter() {
+  const saved = localStorage.getItem('unicornland_rainbows_painted');
+  GAME_CONFIG.CUMULATIVE_COUNTER = saved ? parseInt(saved) : 0;
+}
+
+function saveCumulativeCounter() {
+  localStorage.setItem('unicornland_rainbows_painted', GAME_CONFIG.CUMULATIVE_COUNTER);
+}
+
+loadCumulativeCounter();
+
 // ============================================================================
-// INITIALIZE RAIN
+// INITIALIZE WORLD ELEMENTS
 // ============================================================================
 
-for (let i = 0; i < 60; i++) {
-  game.raindrops.push({
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-    speed: 80 + Math.random() * 60,
-    angle: 0.2,
-    width: 2,
-    height: 10,
-    opacity: 0.3 + Math.random() * 0.2,
-  });
+function initializeWorld() {
+  const worldY = canvas.height * 0.65;
+
+  game.worldElements = [
+    { name: 'hill', x: canvas.width * 0.5, y: worldY, type: 'hill', color: 0 },
+    { name: 'house-left', x: 150, y: worldY - 50, type: 'house', color: 0 },
+    { name: 'house-right', x: canvas.width - 150, y: worldY - 45, type: 'house', color: 0 },
+    { name: 'tree', x: canvas.width * 0.5, y: worldY - 100, type: 'tree', color: 0 },
+  ];
+
+  if (Math.random() < 0.3) {
+    game.school = {
+      x: canvas.width * 0.75,
+      y: worldY - 80,
+      color: 0,
+      glowIntensity: 0,
+      visible: false,
+      spawnTimer: 5,
+      appeared: false,
+    };
+  }
+}
+
+function initializeAnimals() {
+  const worldY = canvas.height * 0.65;
+
+  game.animals = [
+    { name: 'Sage', emoji: '🦉', x: 100, y: worldY + 40, type: 'owl' },
+    { name: 'Fee', emoji: '🦋', x: canvas.width * 0.25, y: worldY, type: 'butterfly' },
+    { name: 'Mae', emoji: '🐰', x: canvas.width * 0.5, y: worldY + 40, type: 'bunny' },
+    { name: 'Char', emoji: '🦎', x: canvas.width * 0.75, y: worldY + 40, type: 'chameleon' },
+  ];
 }
 
 // ============================================================================
-// DRAW BACKGROUND GRADIENT & RAIN
+// RENDERING FUNCTIONS
 // ============================================================================
 
 function drawBackground() {
-  // Gradient sky
   const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-  grad.addColorStop(0, '#FFD6A5'); // Peachy pink
-  grad.addColorStop(1, '#C8B6FF'); // Lavender
+  grad.addColorStop(0, '#FFD6A5');
+  grad.addColorStop(1, '#C8B6FF');
   ctx.fillStyle = grad;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 }
 
 function drawRain() {
-  game.raindrops.forEach(drop => {
-    ctx.globalAlpha = drop.opacity;
-    ctx.fillStyle = '#E0E0FF';
-    ctx.fillRect(drop.x, drop.y, drop.width, drop.height);
+  ctx.globalAlpha = 0.15;
+  ctx.fillStyle = '#E0E0FF';
 
-    // Update position
-    drop.y += drop.speed * (1 / 60);
-    drop.x += drop.speed * drop.angle * (1 / 60);
+  for (let i = 0; i < 50; i++) {
+    const x = (game.startTime / 100 + i * 20) % (canvas.width + 50);
+    const y = (game.startTime / 80 + i * 15) % (canvas.height + 50);
+    ctx.fillRect(x, y, 2, 10);
+  }
 
-    // Wrap
-    if (drop.y > canvas.height) {
-      drop.y = -drop.height;
-      drop.x = Math.random() * canvas.width;
-    }
-    if (drop.x < 0) drop.x = canvas.width;
-    if (drop.x > canvas.width) drop.x = 0;
-  });
   ctx.globalAlpha = 1;
 }
-
-// ============================================================================
-// DRAW WORLD
-// ============================================================================
 
 function drawWorld() {
   const worldY = canvas.height * 0.65;
 
-  // Hill
-  ctx.fillStyle = '#808080';
-  ctx.beginPath();
-  ctx.moveTo(0, worldY + 40);
-  ctx.lineTo(canvas.width * 0.3, worldY - 60);
-  ctx.lineTo(canvas.width, worldY + 40);
-  ctx.fill();
+  game.worldElements.forEach(el => {
+    if (el.type === 'hill') {
+      const hueShift = el.color * 40;
+      ctx.fillStyle = `hsl(${120 + hueShift}, ${50 + el.color * 20}%, ${50 + el.color * 10}%)`;
+      ctx.beginPath();
+      ctx.moveTo(0, worldY + 40);
+      ctx.lineTo(canvas.width * 0.3, worldY - 60);
+      ctx.lineTo(canvas.width, worldY + 40);
+      ctx.fill();
+    } else if (el.type === 'house') {
+      const colorVal = el.color * 30;
+      ctx.fillStyle = `hsl(0, 0%, ${70 + colorVal}%)`;
+      ctx.fillRect(el.x - 45, el.y - 35, 90, 70);
+      ctx.fillStyle = `hsl(30, ${20 + el.color * 40}%, ${40 + el.color * 30}%)`;
+      ctx.beginPath();
+      ctx.moveTo(el.x - 45, el.y - 35);
+      ctx.lineTo(el.x + 45, el.y - 35);
+      ctx.lineTo(el.x, el.y - 70);
+      ctx.fill();
+    } else if (el.type === 'tree') {
+      ctx.fillStyle = `hsl(0, 0%, ${55 + el.color * 20}%)`;
+      ctx.fillRect(el.x - 5, el.y, 10, 50);
+      const greenVal = el.color * 60;
+      ctx.fillStyle = `hsl(120, ${40 + greenVal}%, ${40 + el.color * 20}%)`;
+      ctx.beginPath();
+      ctx.arc(el.x, el.y - 20, 25 + el.color * 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
 
-  // House 1
-  ctx.fillStyle = '#999999';
-  ctx.fillRect(60, worldY - 70, 90, 70);
-  ctx.fillStyle = '#808080';
-  ctx.beginPath();
-  ctx.moveTo(60, worldY - 70);
-  ctx.lineTo(150, worldY - 70);
-  ctx.lineTo(105, worldY - 95);
-  ctx.fill();
+  if (game.school && game.school.visible) {
+    ctx.globalAlpha = 0.9 + Math.sin(Date.now() / 500) * 0.1 * game.school.glowIntensity;
+    ctx.fillStyle = `hsl(0, 80%, ${60 + game.school.color * 25}%)`;
 
-  // House 2
-  ctx.fillStyle = '#999999';
-  ctx.fillRect(canvas.width - 140, worldY - 65, 80, 65);
-  ctx.fillStyle = '#808080';
-  ctx.beginPath();
-  ctx.moveTo(canvas.width - 140, worldY - 65);
-  ctx.lineTo(canvas.width - 60, worldY - 65);
-  ctx.lineTo(canvas.width - 100, worldY - 88);
-  ctx.fill();
+    ctx.fillRect(game.school.x - 60, game.school.y - 50, 120, 100);
 
-  // Tree
-  ctx.fillStyle = '#666666';
-  ctx.fillRect(canvas.width * 0.5 - 5, worldY - 50, 10, 50);
-  ctx.fillStyle = '#808080';
-  ctx.beginPath();
-  ctx.arc(canvas.width * 0.5, worldY - 70, 25, 0, Math.PI * 2);
-  ctx.fill();
+    if (game.school.glowIntensity > 0) {
+      ctx.strokeStyle = `hsla(280, 100%, 50%, ${game.school.glowIntensity * 0.5})`;
+      ctx.lineWidth = 3;
+      ctx.strokeRect(game.school.x - 65, game.school.y - 55, 130, 110);
+    }
+
+    ctx.globalAlpha = 1;
+  }
 }
-
-// ============================================================================
-// DRAW FRUITY
-// ============================================================================
 
 function drawFruity() {
   const f = game.fruity;
 
-  // Glow
   ctx.globalAlpha = 0.25;
   ctx.fillStyle = '#FFD700';
   ctx.beginPath();
@@ -169,16 +414,219 @@ function drawFruity() {
   ctx.fill();
   ctx.globalAlpha = 1;
 
-  // Unicorn emoji (no animation, no shaking)
+  const wingFlap = Math.sin(f.wingFlap) * 1.5;
+
+  // Fruity with directional facing
   ctx.font = 'bold 90px Arial';
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  ctx.fillText('🦄', f.x, f.y);
+
+  // Save and flip context if facing left
+  if (!f.facingRight) {
+    ctx.save();
+    ctx.scale(-1, 1);
+    ctx.fillText('🦄', -f.x, f.y + wingFlap);
+    ctx.restore();
+  } else {
+    ctx.fillText('🦄', f.x, f.y + wingFlap);
+  }
 }
 
-// ============================================================================
-// DRAW PARTICLES
-// ============================================================================
+function drawMagicMeter() {
+  const meterX = game.fruity.x - 40;
+  const meterY = game.fruity.y + 80;
+  const meterWidth = 80;
+  const meterHeight = 8;
+
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+  ctx.fillRect(meterX, meterY, meterWidth, meterHeight);
+
+  const magicPercent = game.fruity.magic / GAME_CONFIG.MAGIC_MAX;
+  const grad = ctx.createLinearGradient(meterX, 0, meterX + meterWidth, 0);
+  grad.addColorStop(0, '#FF6B6B');
+  grad.addColorStop(0.25, '#FFD93D');
+  grad.addColorStop(0.5, '#4ECDC4');
+  grad.addColorStop(0.75, '#A78BFA');
+  grad.addColorStop(1, '#FF6B6B');
+  ctx.fillStyle = grad;
+  ctx.fillRect(meterX, meterY, meterWidth * magicPercent, meterHeight);
+
+  ctx.strokeStyle = '#FFF';
+  ctx.lineWidth = 1.5;
+  ctx.strokeRect(meterX, meterY, meterWidth, meterHeight);
+
+  // Magic full indicator
+  if (game.fruity.magic >= GAME_CONFIG.MAGIC_MAX) {
+    ctx.fillStyle = '#FFD700';
+    ctx.font = 'bold 12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText('⚡', meterX + meterWidth / 2, meterY - 10);
+  }
+}
+
+function drawWorldPaintingProgress() {
+  const barWidth = 220;
+  const barX = (canvas.width - barWidth) / 2;
+  const barY = 30;
+  const barHeight = 12;
+
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.4)';
+  ctx.fillRect(barX, barY, barWidth, barHeight);
+
+  const paintPercent = Math.min(game.worldPainting / GAME_CONFIG.GLITTER_NEEDED_FOR_COMPLETE, 1);
+  const grad = ctx.createLinearGradient(barX, 0, barX + barWidth, 0);
+  grad.addColorStop(0, '#FF6B6B');
+  grad.addColorStop(0.25, '#FFD93D');
+  grad.addColorStop(0.5, '#4ECDC4');
+  grad.addColorStop(0.75, '#A78BFA');
+  grad.addColorStop(1, '#FF6B6B');
+  ctx.fillStyle = grad;
+  ctx.fillRect(barX, barY, barWidth * paintPercent, barHeight);
+
+  ctx.strokeStyle = '#FFF';
+  ctx.lineWidth = 2;
+  ctx.strokeRect(barX, barY, barWidth, barHeight);
+
+  ctx.fillStyle = '#FFF';
+  ctx.font = 'bold 13px Arial';
+  ctx.textAlign = 'center';
+  ctx.fillText('🌈 World Painting', (canvas.width / 2), 58);
+
+  // Percentage display
+  const percent = Math.round(paintPercent * 100);
+  ctx.font = 'bold 11px Arial';
+  ctx.fillText(`${percent}%`, (canvas.width / 2), 75);
+}
+
+function drawCumulativeCounter() {
+  ctx.fillStyle = '#FFF';
+  ctx.font = 'bold 14px Arial';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'bottom';
+  ctx.fillText(`🌈 Rainbows painted: ${GAME_CONFIG.CUMULATIVE_COUNTER}`, 20, canvas.height - 20);
+}
+
+function drawRainClouds() {
+  game.rainClouds.forEach(cloud => {
+    ctx.globalAlpha = 0.7;
+    ctx.fillStyle = '#B8A0D9';
+    ctx.beginPath();
+    ctx.arc(cloud.x - 20, cloud.y, 20, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cloud.x + 10, cloud.y, 25, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(cloud.x + 30, cloud.y, 20, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Add smiley face to clouds
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#FFF';
+    ctx.font = '20px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('☁️', cloud.x + 5, cloud.y);
+
+    ctx.globalAlpha = 1;
+  });
+}
+
+function drawBalloons() {
+  game.balloons.forEach(b => {
+    ctx.globalAlpha = b.soggy ? 0.6 : 1;
+    ctx.fillStyle = b.soggy ? '#CCC' : getColorHex(b.color);
+    ctx.beginPath();
+    ctx.arc(b.x, b.y, b.radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    if (!b.soggy) {
+      ctx.globalAlpha = 0.4;
+      ctx.fillStyle = '#FFF';
+      ctx.beginPath();
+      ctx.arc(b.x - 8, b.y - 8, 8, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    // Soggy raindrops
+    if (b.soggy) {
+      ctx.globalAlpha = 0.7;
+      ctx.fillStyle = '#5ECCC4';
+      for (let i = 0; i < 3; i++) {
+        const dropX = b.x - 8 + i * 8;
+        const dropY = b.y - 10;
+        ctx.beginPath();
+        ctx.ellipse(dropX, dropY, 3, 5, 0.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.strokeStyle = '#999';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(b.x, b.y + b.radius);
+    ctx.lineTo(b.x, b.y + b.radius + 30);
+    ctx.stroke();
+
+    ctx.globalAlpha = 1;
+  });
+}
+
+function drawBonusFruits() {
+  game.bonusfruits.forEach(fruit => {
+    const emojis = { apple: '🍎', strawberry: '🍓', popsicle: '🍭' };
+    ctx.font = 'bold 30px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(emojis[fruit.type], fruit.x, fruit.y);
+
+    ctx.globalAlpha = 0.3;
+    ctx.fillStyle = '#FFD700';
+    ctx.beginPath();
+    ctx.arc(fruit.x, fruit.y, fruit.size + 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1;
+  });
+}
+
+function drawFirey() {
+  if (!game.firey) return;
+
+  ctx.globalAlpha = 0.9;
+
+  ctx.fillStyle = '#9B59B6';
+  ctx.beginPath();
+  ctx.arc(game.firey.x, game.firey.y, 30, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#FF6B6B';
+  ctx.beginPath();
+  ctx.ellipse(game.firey.x - 25, game.firey.y, 15, 25, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(game.firey.x + 25, game.firey.y, 15, 25, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.font = '40px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  const state = game.firey.taps === 0 ? 'shy' : game.firey.taps === 1 ? 'playful' : 'silly';
+  if (state === 'shy') ctx.fillText('😨', game.firey.x, game.firey.y);
+  if (state === 'playful') ctx.fillText('😊', game.firey.x, game.firey.y);
+  if (state === 'silly') ctx.fillText('😆', game.firey.x, game.firey.y);
+
+  ctx.globalAlpha = 1;
+}
+
+function drawAnimals() {
+  game.animals.forEach(animal => {
+    ctx.font = 'bold 40px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(animal.emoji, animal.x, animal.y);
+  });
+}
 
 function drawParticles() {
   game.particles = game.particles.filter(p => {
@@ -199,8 +647,27 @@ function drawParticles() {
   ctx.globalAlpha = 1;
 }
 
+function drawMessages() {
+  game.messages = game.messages.filter(m => {
+    m.life -= 1 / 60;
+    m.y -= 30 * (1 / 60);
+
+    if (m.life > 0) {
+      ctx.globalAlpha = m.life / m.maxLife;
+      ctx.fillStyle = m.color;
+      ctx.font = 'bold 16px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(m.text, m.x, m.y);
+      return true;
+    }
+    return false;
+  });
+  ctx.globalAlpha = 1;
+}
+
 // ============================================================================
-// UPDATE FRUITY
+// UPDATE LOGIC
 // ============================================================================
 
 function updateFruity() {
@@ -209,74 +676,379 @@ function updateFruity() {
   const dy = f.targetY - f.y;
   const dist = Math.sqrt(dx * dx + dy * dy);
 
+  // Update facing direction
+  if (dx !== 0) {
+    f.facingRight = dx > 0;
+  }
+
   if (dist > 5) {
-    f.vx = (dx / dist) * 300;
-    f.vy = (dy / dist) * 300;
+    f.vx = (dx / dist) * GAME_CONFIG.FRUITY_SPEED;
+    f.vy = (dy / dist) * GAME_CONFIG.FRUITY_SPEED;
     f.idleTime = 0;
   } else {
-    f.vx *= 0.9;
-    f.vy *= 0.9;
+    f.vx = 0;
+    f.vy = 0;
     f.idleTime += 1 / 60;
   }
 
   f.x += f.vx * (1 / 60);
   f.y += f.vy * (1 / 60);
 
-  // Keep in bounds
+  f.wingFlap += 0.015;
+
   f.x = Math.max(50, Math.min(canvas.width - 50, f.x));
   f.y = Math.max(50, Math.min(canvas.height - 50, f.y));
 
-  // Passive magic
-  f.magicTimer += 1 / 60;
-  if (f.magicTimer > 5) {
-    f.magicTimer = 0;
-    if (Math.random() < 0.5) {
-      // Cupcake
-      game.particles.push({
-        x: f.x + Math.random() * 40 - 20,
-        y: f.y + 25,
-        vx: 0,
-        vy: 100,
-        emoji: '🧁',
-        size: 20,
-        life: 5,
-        maxLife: 5,
-      });
-    } else {
-      // Rainbow
-      for (let i = 0; i < 2; i++) {
+  f.magicRegenTimer += 1 / 60;
+  if (f.magicRegenTimer >= GAME_CONFIG.MAGIC_REGEN_TIME) {
+    f.magicRegenTimer = 0;
+    f.magic = Math.min(f.magic + GAME_CONFIG.MAGIC_MAX / 4, GAME_CONFIG.MAGIC_MAX);
+  }
+
+  if (Math.random() < 0.02) {
+    game.particles.push({
+      x: f.x + Math.random() * 30 - 15,
+      y: f.y + Math.random() * 30 - 15,
+      vx: (Math.random() - 0.5) * 60,
+      vy: (Math.random() - 0.5) * 60,
+      emoji: Math.random() < 0.5 ? '🧁' : '✨',
+      size: 16,
+      life: 1,
+      maxLife: 1,
+    });
+  }
+}
+
+function updateSchool() {
+  if (!game.school) return;
+
+  game.school.spawnTimer -= 1 / 60;
+  if (game.school.spawnTimer <= 0 && !game.school.visible) {
+    game.school.visible = true;
+    if (!game.school.appeared) {
+      game.school.appeared = true;
+      // Shimmer effect on first appearance
+      for (let i = 0; i < 12; i++) {
         game.particles.push({
-          x: f.x - 25 + Math.random() * 20 - 10,
-          y: f.y + Math.random() * 20 - 10,
-          vx: -60 - Math.random() * 30,
-          vy: -30 - Math.random() * 20,
-          emoji: '🌈',
-          size: 18,
-          life: 1.5,
-          maxLife: 1.5,
+          x: game.school.x + (Math.random() - 0.5) * 100,
+          y: game.school.y + (Math.random() - 0.5) * 80,
+          vx: (Math.random() - 0.5) * 100,
+          vy: (Math.random() - 0.5) * 100,
+          emoji: '✨',
+          size: 14,
+          life: 1,
+          maxLife: 1,
         });
       }
+      addEncouragementMessage('Your school is celebrating with you! 🎓✨', game.school.x, game.school.y - 80, '#C41E3A');
     }
   }
 }
 
+let balloonSpawnTimer = 0;
+
+function updateBalloons() {
+  balloonSpawnTimer += 1 / 60;
+
+  while (game.balloons.length < GAME_CONFIG.BALLOON_TARGET_COUNT && balloonSpawnTimer >= GAME_CONFIG.BALLOON_SPAWN_INTERVAL) {
+    spawnBalloon();
+    balloonSpawnTimer -= GAME_CONFIG.BALLOON_SPAWN_INTERVAL;
+  }
+
+  game.balloons = game.balloons.filter(balloon => {
+    balloon.y -= balloon.speed * (1 / 60);
+    balloon.x += Math.sin(balloon.y / 50) * 20 * (1 / 60);
+    return balloon.y > -50;
+  });
+}
+
+function spawnBalloon() {
+  const colors = ['red', 'blue', 'yellow', 'purple'];
+  const color = colors[Math.floor(Math.random() * colors.length)];
+
+  game.balloons.push({
+    x: Math.random() * (canvas.width - 100) + 50,
+    y: canvas.height + 50,
+    speed: 40 + Math.random() * 30,
+    radius: 25,
+    color: color,
+    soggy: false,
+    soggyTimer: 0,
+  });
+}
+
+function getColorHex(color) {
+  const colors = {
+    red: '#FF6B6B',
+    blue: '#4ECDC4',
+    yellow: '#FFD93D',
+    purple: '#A78BFA',
+  };
+  return colors[color] || '#FF6B6B';
+}
+
+function popBalloon(balloonIndex) {
+  const balloon = game.balloons[balloonIndex];
+  if (!balloon) return;
+
+  game.balloons.splice(balloonIndex, 1);
+  game.balloonsPoppedThisSession++;
+
+  for (let i = 0; i < 12; i++) {
+    game.particles.push({
+      x: balloon.x,
+      y: balloon.y,
+      vx: (Math.random() - 0.5) * 150,
+      vy: Math.random() * 100 - 50,
+      emoji: '✨',
+      size: 12,
+      life: 2,
+      maxLife: 2,
+      color: balloon.color,
+    });
+  }
+
+  game.worldPainting += 1;
+  paintNearbyElements(balloon.x, balloon.y, balloon.color);
+
+  const msg = ENCOURAGEMENT_MESSAGES[Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length)];
+  addEncouragementMessage(msg.text, balloon.x, balloon.y - 30, msg.color);
+
+  game.particles.push({
+    x: balloon.x,
+    y: balloon.y,
+    vx: 0,
+    vy: 80,
+    emoji: '🍬',
+    size: 16,
+    life: 3,
+    maxLife: 3,
+  });
+}
+
+function paintNearbyElements(x, y, color) {
+  game.worldElements.forEach(el => {
+    const dist = Math.hypot(el.x - x, el.y - y);
+    if (dist < 200) {
+      el.color = Math.min(el.color + 0.5, 1);
+    }
+  });
+
+  if (game.school && game.school.visible) {
+    const dist = Math.hypot(game.school.x - x, game.school.y - y);
+    if (dist < 200) {
+      game.school.color = Math.min(game.school.color + 0.5, 1);
+      game.school.glowIntensity = Math.min(game.school.glowIntensity + 0.3, 1);
+    }
+  }
+}
+
+let rainCloudSpawnTimer = 0;
+
+function updateRainClouds() {
+  rainCloudSpawnTimer += 1 / 60;
+
+  if (rainCloudSpawnTimer >= GAME_CONFIG.RAIN_CLOUD_SPAWN_INTERVAL) {
+    spawnRainCloud();
+    rainCloudSpawnTimer = 0;
+  }
+
+  game.rainClouds = game.rainClouds.filter(cloud => {
+    cloud.x -= 50 * (1 / 60);
+    return cloud.x > -100;
+  });
+
+  game.balloons.forEach(balloon => {
+    game.rainClouds.forEach(cloud => {
+      const dist = Math.hypot(balloon.x - cloud.x, balloon.y - cloud.y);
+      if (dist < 60 && !balloon.soggy) {
+        balloon.soggy = true;
+        balloon.soggyTimer = GAME_CONFIG.SOGGY_DURATION;
+      }
+    });
+
+    if (balloon.soggy) {
+      balloon.soggyTimer -= 1 / 60;
+      if (balloon.soggyTimer <= 0) {
+        balloon.soggy = false;
+      }
+    }
+  });
+}
+
+function spawnRainCloud() {
+  game.rainClouds.push({
+    x: canvas.width + 50,
+    y: canvas.height * 0.2 + Math.random() * (canvas.height * 0.3),
+    width: 60,
+    height: 40,
+  });
+}
+
+let fruitSpawnTimer = GAME_CONFIG.FRUIT_SPAWN_INTERVAL;
+let sparkleBoostActive = 0;
+
+function updateBonusFruits() {
+  fruitSpawnTimer -= 1 / 60;
+
+  if (fruitSpawnTimer <= 0 && game.bonusfruits.length < 1) {
+    spawnBonusFruit();
+    fruitSpawnTimer = GAME_CONFIG.FRUIT_SPAWN_INTERVAL;
+  }
+
+  game.bonusfruits = game.bonusfruits.filter(fruit => {
+    fruit.x -= 50 * (1 / 60);
+    return fruit.x > -50;
+  });
+
+  if (sparkleBoostActive > 0) {
+    sparkleBoostActive -= 1 / 60;
+  }
+}
+
+function spawnBonusFruit() {
+  const fruits = ['apple', 'strawberry', 'popsicle'];
+  const fruit = fruits[Math.floor(Math.random() * fruits.length)];
+
+  game.bonusfruits.push({
+    x: canvas.width + 50,
+    y: canvas.height * 0.3 + Math.random() * (canvas.height * 0.4),
+    type: fruit,
+    size: 20,
+  });
+}
+
+function pickupFruit() {
+  if (game.bonusfruits.length === 0) return;
+
+  game.bonusfruits.pop();
+  game.fruitPickupsThisSession++;
+
+  game.fruity.magic = GAME_CONFIG.MAGIC_MAX;
+  sparkleBoostActive = GAME_CONFIG.SPARKLE_BOOST_SHOTS;
+
+  addEncouragementMessage('Power-up! ⚡', game.fruity.x, game.fruity.y - 40, '#FFD700');
+
+  for (let i = 0; i < 15; i++) {
+    game.particles.push({
+      x: game.fruity.x,
+      y: game.fruity.y,
+      vx: (Math.random() - 0.5) * 200,
+      vy: (Math.random() - 0.5) * 200,
+      emoji: '⚡',
+      size: 16,
+      life: 1,
+      maxLife: 1,
+    });
+  }
+}
+
+let fireySpawnTimer = GAME_CONFIG.FIREY_SPAWN_INTERVAL;
+
+function updateFirey() {
+  if (!game.firey) {
+    fireySpawnTimer -= 1 / 60;
+    if (fireySpawnTimer <= 0) {
+      spawnFirey();
+      fireySpawnTimer = GAME_CONFIG.FIREY_SPAWN_INTERVAL;
+    }
+  } else {
+    game.firey.screenTime -= 1 / 60;
+    game.firey.x -= 80 * (1 / 60);
+
+    if (game.firey.screenTime <= 0 || game.firey.x < -100) {
+      game.firey = null;
+    }
+  }
+}
+
+function spawnFirey() {
+  game.firey = {
+    x: canvas.width + 50,
+    y: canvas.height * 0.4,
+    screenTime: GAME_CONFIG.FIREY_SCREEN_TIME,
+    taps: 0,
+    transformed: false,
+  };
+}
+
+function tapFirey() {
+  if (!game.firey || game.firey.transformed) return;
+
+  game.firey.taps++;
+
+  if (game.firey.taps >= 3) {
+    transformFirey();
+  }
+}
+
+function transformFirey() {
+  if (!game.firey) return;
+
+  game.firey.transformed = true;
+  game.fireyTransformsThisSession++;
+
+  addEncouragementMessage('Firey is SO SILLY now! 🎉', game.firey.x, game.firey.y - 50, '#A78BFA');
+
+  for (let i = 0; i < 20; i++) {
+    game.particles.push({
+      x: game.firey.x,
+      y: game.firey.y,
+      vx: (Math.random() - 0.5) * 200,
+      vy: Math.random() * 100 - 50,
+      emoji: '🎉',
+      size: 16,
+      life: 2,
+      maxLife: 2,
+    });
+  }
+
+  for (let i = 0; i < 20; i++) {
+    setTimeout(() => {
+      game.particles.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        vx: (Math.random() - 0.5) * 50,
+        vy: 80 + Math.random() * 50,
+        emoji: Math.random() < 0.5 ? '🍬' : '🍭',
+        size: 14,
+        life: 4,
+        maxLife: 4,
+      });
+    }, i * 30);
+  }
+
+  setTimeout(() => {
+    if (game.firey) game.firey.screenTime = -1;
+  }, 1000);
+}
+
 // ============================================================================
-// INPUT
+// INPUT HANDLING
 // ============================================================================
 
-let hintAlpha = 1;
-let showHint = true;
+let lastTapTime = 0;
+let lastTapPos = null;
+const DOUBLE_TAP_THRESHOLD = 300;
 
-canvas.addEventListener('click', (e) => {
-  const rect = canvas.getBoundingClientRect();
-  const x = (e.clientX - rect.left) * (canvas.width / rect.width);
-  const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+function handleTap(x, y) {
+  const now = Date.now();
 
+  if (lastTapTime && now - lastTapTime < DOUBLE_TAP_THRESHOLD && lastTapPos &&
+      Math.hypot(x - lastTapPos.x, y - lastTapPos.y) < 50) {
+    handleDoubleTap(x, y);
+    lastTapTime = 0;
+  } else {
+    handleSingleTap(x, y);
+    lastTapTime = now;
+    lastTapPos = { x, y };
+  }
+}
+
+function handleSingleTap(x, y) {
   game.fruity.targetX = x;
   game.fruity.targetY = y;
-  showHint = false;
 
-  // Sparkle trail
   for (let i = 0; i < 6; i++) {
     game.particles.push({
       x: game.fruity.x + Math.random() * 30 - 15,
@@ -289,62 +1061,258 @@ canvas.addEventListener('click', (e) => {
       maxLife: 0.4,
     });
   }
-});
+}
 
-// Touch support
+function handleDoubleTap(x, y) {
+  if (game.fruity.magic >= GAME_CONFIG.MAGIC_COST_PER_SHOT) {
+    game.fruity.magic -= GAME_CONFIG.MAGIC_COST_PER_SHOT;
+
+    const beam = {
+      startX: game.fruity.x,
+      startY: game.fruity.y,
+      endX: x,
+      endY: y,
+      progress: 0,
+      duration: GAME_CONFIG.MAGIC_BEAM_TRAVEL_TIME,
+      hit: false,
+    };
+
+    checkBeamCollisions(beam);
+
+    game.particles.push({
+      x: game.fruity.x,
+      y: game.fruity.y,
+      vx: (x - game.fruity.x) / GAME_CONFIG.MAGIC_BEAM_TRAVEL_TIME,
+      vy: (y - game.fruity.y) / GAME_CONFIG.MAGIC_BEAM_TRAVEL_TIME,
+      emoji: '✨',
+      size: 16,
+      life: GAME_CONFIG.MAGIC_BEAM_TRAVEL_TIME,
+      maxLife: GAME_CONFIG.MAGIC_BEAM_TRAVEL_TIME,
+    });
+
+    setTimeout(() => {
+      for (let i = 0; i < 8; i++) {
+        game.particles.push({
+          x: x,
+          y: y,
+          vx: (Math.random() - 0.5) * 200,
+          vy: (Math.random() - 0.5) * 200,
+          emoji: '✨',
+          size: 14,
+          life: 0.8,
+          maxLife: 0.8,
+        });
+      }
+    }, GAME_CONFIG.MAGIC_BEAM_TRAVEL_TIME * 1000);
+  } else {
+    const msg = ENCOURAGEMENT_MESSAGES[Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length)];
+    addEncouragementMessage('Magic charging... ✨', game.fruity.x, game.fruity.y - 40, '#FF6B6B');
+  }
+}
+
+function checkBeamCollisions(beam) {
+  const targetX = beam.endX;
+  const targetY = beam.endY;
+  const hitRadius = 40;
+
+  for (let i = 0; i < game.balloons.length; i++) {
+    const balloon = game.balloons[i];
+    const dist = Math.hypot(balloon.x - targetX, balloon.y - targetY);
+    if (dist < hitRadius + balloon.radius) {
+      popBalloon(i);
+      beam.hit = true;
+      return;
+    }
+  }
+
+  if (game.firey && !game.firey.transformed) {
+    const dist = Math.hypot(game.firey.x - targetX, game.firey.y - targetY);
+    if (dist < hitRadius + 40) {
+      tapFirey();
+      beam.hit = true;
+      return;
+    }
+  }
+
+  for (let i = 0; i < game.bonusfruits.length; i++) {
+    const fruit = game.bonusfruits[i];
+    const dist = Math.hypot(fruit.x - targetX, fruit.y - targetY);
+    if (dist < hitRadius + 20) {
+      pickupFruit();
+      beam.hit = true;
+      return;
+    }
+  }
+
+  for (let i = 0; i < game.rainClouds.length; i++) {
+    const cloud = game.rainClouds[i];
+    const dist = Math.hypot(cloud.x - targetX, cloud.y - targetY);
+    if (dist < hitRadius + 40) {
+      game.rainClouds.splice(i, 1);
+      game.cloudsClearedThisSession++;
+      addEncouragementMessage('You cleared the rain! 🌈', cloud.x, cloud.y, '#4ECDC4');
+      beam.hit = true;
+      return;
+    }
+  }
+
+  if (game.school && game.school.visible) {
+    const dist = Math.hypot(game.school.x - targetX, game.school.y - targetY);
+    if (dist < hitRadius + 60) {
+      game.school.glowIntensity = 1;
+      const schoolMsg = ENCOURAGEMENT_MESSAGES[Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length)];
+      addEncouragementMessage('Go Sparkle Hill! 🎓✨', game.school.x, game.school.y, '#C41E3A');
+      beam.hit = true;
+      return;
+    }
+  }
+}
+
+function addEncouragementMessage(text, x, y, color) {
+  game.messages.push({
+    text: text,
+    x: x,
+    y: y,
+    color: color,
+    life: 2,
+    maxLife: 2,
+  });
+}
+
 canvas.addEventListener('touchstart', (e) => {
   const rect = canvas.getBoundingClientRect();
   const touch = e.touches[0];
   const x = (touch.clientX - rect.left) * (canvas.width / rect.width);
   const y = (touch.clientY - rect.top) * (canvas.height / rect.height);
+  handleTap(x, y);
+});
 
-  game.fruity.targetX = x;
-  game.fruity.targetY = y;
-  showHint = false;
-
-  for (let i = 0; i < 6; i++) {
-    game.particles.push({
-      x: game.fruity.x + Math.random() * 30 - 15,
-      y: game.fruity.y + Math.random() * 30 - 15,
-      vx: (Math.random() - 0.5) * 150,
-      vy: (Math.random() - 0.5) * 150,
-      emoji: '✨',
-      size: 16,
-      life: 0.4,
-      maxLife: 0.4,
-    });
-  }
+canvas.addEventListener('click', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * (canvas.width / rect.width);
+  const y = (e.clientY - rect.top) * (canvas.height / rect.height);
+  handleTap(x, y);
 });
 
 // ============================================================================
-// MAIN LOOP
+// WORLD COMPLETION & CELEBRATION
 // ============================================================================
 
-function draw() {
-  drawBackground();
-  drawRain();
-  drawWorld();
-  updateFruity();
-  drawFruity();
-  drawParticles();
+let celebrationActive = false;
 
-  // Hint
-  if (showHint) {
-    hintAlpha -= 0.005;
-    ctx.globalAlpha = Math.max(0, hintAlpha);
-    ctx.font = 'bold 20px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillStyle = '#9966CC';
-    ctx.fillText('✨ Tap to help Fruity fly ✨', canvas.width * 0.5, canvas.height * 0.12);
-    ctx.globalAlpha = 1;
+function checkWorldCompletion() {
+  if (game.worldPainting >= GAME_CONFIG.GLITTER_NEEDED_FOR_COMPLETE && !celebrationActive) {
+    startCelebration();
   }
-
-  requestAnimationFrame(draw);
 }
 
-draw();
+function startCelebration() {
+  celebrationActive = true;
+  GAME_CONFIG.CUMULATIVE_COUNTER++;
+  saveCumulativeCounter();
 
-console.log('[UNICORN LAND] Started. Session:', game.sessionId);
+  addEncouragementMessage('You made the whole world beautiful! 🌈✨', canvas.width / 2, canvas.height / 2, '#A78BFA');
+  addEncouragementMessage("Fruity never gives up, just like you! 💕", canvas.width / 2, canvas.height / 2 + 50, '#FFB6D9');
+
+  for (let i = 0; i < 30; i++) {
+    game.particles.push({
+      x: canvas.width / 2 + (Math.random() - 0.5) * 200,
+      y: canvas.height / 2 + (Math.random() - 0.5) * 200,
+      vx: (Math.random() - 0.5) * 300,
+      vy: (Math.random() - 0.5) * 300,
+      emoji: ['🎉', '🌈', '✨', '🎊'][Math.floor(Math.random() * 4)],
+      size: 20,
+      life: 3,
+      maxLife: 3,
+    });
+  }
+
+  game.fruity.crowned = true;
+
+  setTimeout(() => {
+    resetWorld();
+  }, 8000);
+}
+
+function resetWorld() {
+  celebrationActive = false;
+  game.fruity.crowned = false;
+  game.worldPainting = 0;
+
+  game.worldElements.forEach(el => {
+    el.color = 0;
+  });
+
+  if (game.school) {
+    game.school.color = 0;
+    game.school.glowIntensity = 0;
+  }
+
+  game.balloons = [];
+  game.rainClouds = [];
+  game.bonusfruits = [];
+  balloonSpawnTimer = 0;
+  rainCloudSpawnTimer = 0;
+  fruitSpawnTimer = GAME_CONFIG.FRUIT_SPAWN_INTERVAL;
+}
+
+// ============================================================================
+// MAIN GAME LOOP
+// ============================================================================
+
+function startGame() {
+  function draw() {
+    drawBackground();
+    drawRain();
+    drawWorld();
+    drawRainClouds();
+    drawBalloons();
+    drawBonusFruits();
+    drawFirey();
+    drawAnimals();
+    drawFruity();
+    drawParticles();
+    drawMessages();
+    drawMagicMeter();
+    drawWorldPaintingProgress();
+    drawCumulativeCounter();
+
+    if (game.fruity.crowned) {
+      ctx.font = 'bold 40px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('👑', game.fruity.x, game.fruity.y - 80);
+    }
+
+    updateFruity();
+    updateBalloons();
+    updateRainClouds();
+    updateBonusFruits();
+    updateFirey();
+    updateSchool();
+
+    game.bonusfruits.forEach((fruit, i) => {
+      const dist = Math.hypot(fruit.x - game.fruity.x, fruit.y - game.fruity.y);
+      if (dist < 60) {
+        pickupFruit();
+        game.bonusfruits.splice(i, 1);
+      }
+    });
+
+    checkWorldCompletion();
+
+    requestAnimationFrame(draw);
+  }
+
+  initializeWorld();
+  initializeAnimals();
+
+  console.log('[UNICORN LAND] Game started. Session:', game.sessionId);
+  console.log('[UNICORN LAND] Tap to move, double-tap to shoot magic!');
+  draw();
+}
+
+// Start loading
+loadAssets();
 </script>
 </body>
 </html>
