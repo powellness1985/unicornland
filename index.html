@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <title>Unicorn Land — A Game by Waverly</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Kaboom.js -->
+  <script src="https://unpkg.com/kaboom@3000.1.17/dist/kaboom.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      font-family: 'Fredoka', sans-serif;
+      overflow: hidden;
+      background: #000;
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+    }
+  </style>
+</head>
+<body>
+  <script>
+    // ============================================================================
+    // COMPONENT 1: Setup, Background & Fruity
+    // ============================================================================
+
+    // Initialize Kaboom with full viewport, portrait orientation preferred
+    const k = kaboom({
+      width: window.innerWidth,
+      height: window.innerHeight,
+      canvas: document.querySelector("canvas"),
+      pixelDensity: window.devicePixelRatio || 1,
+    });
+
+    // Session tracking for telemetry
+    const sessionId = generateUUID();
+    const deviceType = detectDeviceType();
+    let firstInteraction = true;
+    let hasPopped = false; // Track if any balloon has been popped in this session
+    let telemetryQueue = [];
+
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        const r = Math.random() * 16 | 0;
+        const v = c === 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    function detectDeviceType() {
+      const ua = navigator.userAgent;
+      if (/iPad|iPhone|iPod/.test(ua)) return 'iPad';
+      if (/Android/.test(ua)) return 'Android';
+      return 'Desktop';
+    }
+
+    // Telemetry client (queues events, flushes every 10 seconds or on session end)
+    async function logEvent(eventType, eventData = {}) {
+      const event = {
+        sessionId,
+        eventType,
+        eventData,
+        timestamp: new Date().toISOString(),
+        deviceType,
+      };
+
+      telemetryQueue.push(event);
+
+      // Log to console for debugging
+      console.log(`[EVENT] ${eventType}`, eventData);
+
+      // Try to flush if we have enough events or on critical events
+      if (eventType === 'session_end' || telemetryQueue.length >= 10) {
+        await flushTelemetry();
+      }
+    }
+
+    async function flushTelemetry() {
+      if (telemetryQueue.length === 0) return;
+
+      const eventsToSend = [...telemetryQueue];
+      telemetryQueue = [];
+
+      try {
+        // Send events to telemetry endpoint (will work in Component 8)
+        await fetch('/api/telemetry', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ events: eventsToSend }),
+        }).catch(() => {
+          // Silent failure if API unreachable
+        });
+      } catch (e) {
+        console.error('[TELEMETRY] Error:', e);
+      }
+    }
+
+    // Log session start
+    logEvent('session_start', { deviceType });
+
+    // ============================================================================
+    // BACKGROUND: Gradient Sky & Rain
+    // ============================================================================
+
+    // Gradient background (peachy pink to lavender)
+    const skyGradient = k.drawText({
+      text: '',
+      pos: k.vec2(0, 0),
+      anchor: 'topleft',
+    });
+
+    // Draw gradient using layers
+    const bgLayer = k.add([
+      k.rect(k.width(), k.height()),
+      k.pos(0, 0),
+      k.anchor('topleft'),
+    ]);
+
+    // Use a custom drawing approach for gradient
+    k.onDraw(() => {
+      // Draw gradient background
+      const ctx = k.getContext();
+      const gradient = ctx.createLinearGradient(0, 0, 0, k.height());
+      gradient.addColorStop(0, '#FFD6A5');    // Peachy pink
+      gradient.addColorStop(1, '#C8B6FF');    // Lavender
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, k.width(), k.height());
+    });
+
+    // ============================================================================
+    // RAIN PARTICLES (constant, gentle, diagonal)
+    // ============================================================================
+
+    const raindrops = [];
+    const maxRaindrops = 60;
+
+    function createRaindrop() {
+      const x = Math.random() * k.width();
+      const y = Math.random() * k.height();
+      const speed = 80 + Math.random() * 40;
+      const angle = 0.3; // Diagonal: slightly rightward
+
+      raindrops.push({
+        x,
+        y,
+        speed,
+        angle,
+        width: 2,
+        height: 12,
+        opacity: 0.3 + Math.random() * 0.3,
+      });
+    }
+
+    // Initialize rain
+    for (let i = 0; i < maxRaindrops; i++) {
+      createRaindrop();
+    }
+
+    // Draw and update rain
+    k.onDraw(() => {
+      const ctx = k.getContext();
+
+      for (let i = 0; i < raindrops.length; i++) {
+        const drop = raindrops[i];
+
+        // Draw raindrop
+        ctx.globalAlpha = drop.opacity;
+        ctx.fillStyle = '#E0E0FF';
+        ctx.fillRect(drop.x, drop.y, drop.width, drop.height);
+        ctx.globalAlpha = 1;
+
+        // Update position
+        drop.y += drop.speed * k.dt();
+        drop.x += drop.speed * drop.angle * k.dt();
+
+        // Wrap around screen
+        if (drop.y > k.height()) {
+          drop.y = -drop.height;
+          drop.x = Math.random() * k.width();
+        }
+        if (drop.x < 0) {
+          drop.x = k.width();
+        } else if (drop.x > k.width()) {
+          drop.x = 0;
+        }
+      }
+    });
+
+    // ============================================================================
+    // BACKGROUND WORLD: Grayscale houses, hills, trees
+    // ============================================================================
+
+    const worldY = k.height() * 0.7;
+    const groundColor = k.Color.fromHex('#888888'); // Grayscale
+
+    // Simple hill
+    k.add([
+      k.polygon([
+        k.vec2(0, worldY + 40),
+        k.vec2(k.width() * 0.3, worldY - 60),
+        k.vec2(k.width(), worldY + 40),
+      ]),
+      k.color(0.5, 0.5, 0.5), // Gray
+      k.anchor('topleft'),
+      'background',
+      { name: 'hill', painted: false },
+    ]);
+
+    // House 1 (left)
+    const house1 = k.add([
+      k.rect(100, 80),
+      k.pos(60, worldY - 80),
+      k.color(0.6, 0.6, 0.6),
+      'background',
+      { name: 'house', painted: false },
+    ]);
+
+    // House roof
+    k.add([
+      k.polygon([
+        k.vec2(60, worldY - 80),
+        k.vec2(160, worldY - 80),
+        k.vec2(110, worldY - 110),
+      ]),
+      k.color(0.5, 0.5, 0.5),
+      'background',
+    ]);
+
+    // House 2 (right)
+    const house2 = k.add([
+      k.rect(80, 70),
+      k.pos(k.width() - 140, worldY - 70),
+      k.color(0.6, 0.6, 0.6),
+      'background',
+      { name: 'house', painted: false },
+    ]);
+
+    // House 2 roof
+    k.add([
+      k.polygon([
+        k.vec2(k.width() - 140, worldY - 70),
+        k.vec2(k.width() - 60, worldY - 70),
+        k.vec2(k.width() - 100, worldY - 95),
+      ]),
+      k.color(0.5, 0.5, 0.5),
+      'background',
+    ]);
+
+    // Tree (center)
+    k.add([
+      k.rect(12, 60),
+      k.pos(k.width() * 0.5 - 6, worldY - 60),
+      k.color(0.4, 0.4, 0.4),
+      'background',
+      { name: 'tree', painted: false },
+    ]);
+
+    // Tree foliage
+    k.add([
+      k.circle(30),
+      k.pos(k.width() * 0.5, worldY - 80),
+      k.color(0.5, 0.5, 0.5),
+      'background',
+    ]);
+
+    // ============================================================================
+    // FRUITY: The Sparkly Winged Unicorn
+    // ============================================================================
+
+    const fruityCenterX = k.width() * 0.5;
+    const fruityCenterY = k.height() * 0.35;
+
+    const fruity = k.add([
+      k.text('🦄', { size: 80, font: 'Fredoka' }),
+      k.pos(fruityCenterX, fruityCenterY),
+      k.anchor('center'),
+      k.z(100),
+      {
+        targetX: fruityCenterX,
+        targetY: fruityCenterY,
+        vx: 0,
+        vy: 0,
+        wingFlap: 0,
+        idleTime: 0,
+        passiveMagicTimer: 0,
+      },
+    ]);
+
+    // Fruity's glow effect (drawn behind)
+    const fruityGlow = k.add([
+      k.circle(60),
+      k.pos(fruityCenterX, fruityCenterY),
+      k.anchor('center'),
+      k.color(1, 0.8, 0.9),
+      k.opacity(0.15),
+      k.z(99),
+    ]);
+
+    // Update Fruity position and animations
+    fruity.onUpdate(() => {
+      // Glow follows Fruity
+      fruityGlow.pos = fruity.pos;
+
+      // Smooth movement to target
+      const dx = fruity.targetX - fruity.pos.x;
+      const dy = fruity.targetY - fruity.pos.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+
+      if (distance > 5) {
+        fruity.vx = (dx / distance) * 300;
+        fruity.vy = (dy / distance) * 300;
+        fruity.idleTime = 0;
+      } else {
+        fruity.vx *= 0.9;
+        fruity.vy *= 0.9;
+        fruity.idleTime += k.dt();
+      }
+
+      fruity.pos.x += fruity.vx * k.dt();
+      fruity.pos.y += fruity.vy * k.dt();
+
+      // Gentle bobbing when idle
+      if (fruity.idleTime > 0.2) {
+        const bob = Math.sin(fruity.idleTime * 2) * 8;
+        fruity.pos.y = fruity.targetY + bob;
+      }
+
+      // Wing flapping animation
+      fruity.wingFlap += k.dt() * 4;
+      const flap = Math.sin(fruity.wingFlap) * 0.1;
+      fruity.scale = k.vec2(1 + flap * 0.2, 1 - flap * 0.1);
+
+      // Passive magic: cupcakes & rainbows
+      fruity.passiveMagicTimer += k.dt();
+      if (fruity.passiveMagicTimer > 4 + Math.random() * 2) {
+        fruity.passiveMagicTimer = 0;
+
+        if (Math.random() < 0.5) {
+          // Drop cupcake
+          dropCupcake(fruity.pos);
+        } else {
+          // Rainbow fart puff
+          emitRainbowPuff(fruity.pos);
+        }
+      }
+
+      // Keep Fruity in bounds with padding
+      const padding = 50;
+      fruity.pos.x = Math.max(padding, Math.min(k.width() - padding, fruity.pos.x));
+      fruity.pos.y = Math.max(padding, Math.min(k.height() - padding, fruity.pos.y));
+    });
+
+    // Passive magic helper: drop cupcake
+    function dropCupcake(pos) {
+      k.add([
+        k.text('🧁', { size: 24, font: 'Fredoka' }),
+        k.pos(pos.x + k.rand(-20, 20), pos.y + 20),
+        k.anchor('center'),
+        k.z(50),
+        {
+          vy: 0,
+          life: 8,
+        },
+        'cupcake',
+      ]).onUpdate(function() {
+        this.vy += 200 * k.dt();
+        this.pos.y += this.vy * k.dt();
+        this.life -= k.dt();
+        this.opacity = this.life / 8;
+
+        if (this.pos.y > k.height()) {
+          this.destroy();
+        }
+      });
+    }
+
+    // Passive magic helper: rainbow fart puff
+    function emitRainbowPuff(pos) {
+      const colors = [
+        k.Color.fromHex('#FF69B4'), // Hot pink
+        k.Color.fromHex('#00E5FF'), // Cyan
+        k.Color.fromHex('#FFEB3B'), // Yellow
+        k.Color.fromHex('#A7F3D0'), // Mint
+      ];
+
+      const color = k.choose(colors);
+
+      k.add([
+        k.text('🌈', { size: 20, font: 'Fredoka' }),
+        k.pos(pos.x - 30 + k.rand(-10, 10), pos.y + k.rand(-10, 10)),
+        k.anchor('center'),
+        k.z(30),
+        {
+          vx: -30 - k.rand(0, 20),
+          vy: -20 - k.rand(0, 20),
+          life: 2,
+        },
+      ]).onUpdate(function() {
+        this.pos.x += this.vx * k.dt();
+        this.pos.y += this.vy * k.dt();
+        this.life -= k.dt();
+        this.opacity = this.life / 2;
+
+        if (this.life <= 0) {
+          this.destroy();
+        }
+      });
+    }
+
+    // ============================================================================
+    // INPUT: Tap anywhere to move Fruity
+    // ============================================================================
+
+    let tapHintTime = 5;
+    const tapHint = k.add([
+      k.text('✨ Tap anywhere to help Fruity fly ✨', { size: 20, font: 'Fredoka' }),
+      k.pos(k.width() * 0.5, k.height() * 0.15),
+      k.anchor('center'),
+      k.color(0.9, 0.6, 0.9),
+      k.z(200),
+    ]);
+
+    k.onMouseDown((mousePos) => {
+      if (firstInteraction) {
+        firstInteraction = false;
+        logEvent('first_interaction');
+      }
+
+      // Move Fruity to tap position
+      fruity.targetX = mousePos.x;
+      fruity.targetY = mousePos.y;
+
+      // Create rainbow sparkle trail
+      for (let i = 0; i < 5; i++) {
+        k.add([
+          k.circle(5),
+          k.pos(fruity.pos.x + k.rand(-15, 15), fruity.pos.y + k.rand(-15, 15)),
+          k.anchor('center'),
+          k.z(30),
+          {
+            vx: k.rand(-50, 50),
+            vy: k.rand(-50, 50),
+            life: 0.5,
+          },
+        ]).onUpdate(function() {
+          this.pos.x += this.vx * k.dt();
+          this.pos.y += this.vy * k.dt();
+          this.life -= k.dt();
+          this.opacity = this.life / 0.5;
+
+          if (this.life <= 0) {
+            this.destroy();
+          }
+        });
+      }
+    });
+
+    // Hide tap hint after 5 seconds
+    k.onUpdate(() => {
+      tapHintTime -= k.dt();
+      if (tapHintTime > 0) {
+        tapHint.opacity = Math.min(1, tapHintTime);
+      } else if (tapHint) {
+        tapHint.destroy();
+      }
+    });
+
+    // ============================================================================
+    // WINDOW RESIZE HANDLING
+    // ============================================================================
+
+    window.addEventListener('resize', () => {
+      k.width = window.innerWidth;
+      k.height = window.innerHeight;
+    });
+
+    // Telemetry: flush on page unload
+    window.addEventListener('beforeunload', async () => {
+      await logEvent('session_end');
+      await flushTelemetry();
+    });
+  </script>
+</body>
+</html>
