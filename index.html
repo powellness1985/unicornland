@@ -349,6 +349,7 @@
   <div id="character-details-name"></div>
   <div id="character-details-bio"></div>
   <button class="voice-button" id="voice-button" onclick="speakBio()">🔊 Speak Bio</button>
+  <button class="voice-button" id="select-button" onclick="selectCharacterForGame(currentCharacter)" style="background: #9B59B6; border-color: #fff;">🎮 Play as This Unicorn</button>
 </div>
 
 <!-- Tutorial Screen -->
@@ -458,12 +459,22 @@ function generateGallery() {
 
 // Character Details Modal
 let currentCharacter = null;
+let selectedGameCharacter = JSON.parse(localStorage.getItem('selectedCharacter')) || { name: 'Waverly', variation: 'idle' };
+
 function showCharacterDetails(char) {
   currentCharacter = char;
   document.getElementById('character-details').classList.add('active');
   document.getElementById('character-details-image').src = `/assets/characters/${char.name.toLowerCase()}-${char.variation}.png`;
   document.getElementById('character-details-name').textContent = char.name;
   document.getElementById('character-details-bio').textContent = char.bio;
+}
+
+function selectCharacterForGame(char) {
+  selectedGameCharacter = char;
+  localStorage.setItem('selectedCharacter', JSON.stringify(char));
+  // Close modal and return to game
+  closeCharacterDetails();
+  switchScreen('game');
 }
 
 function closeCharacterDetails() {
@@ -585,14 +596,22 @@ function render() {
     ctx.fillText('☁️', cloud.x, cloud.y + 5);
   });
 
-  // Draw Fruity
+  // Draw Fruity (character image)
   ctx.save();
   if (!gameState.fruity.facingRight) ctx.scale(-1, 1);
   const fruityX = gameState.fruity.facingRight ? gameState.fruity.x : -gameState.fruity.x;
-  ctx.font = '80px Arial';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText('🦄', fruityX, gameState.fruity.y);
+
+  // Try to draw character image, fall back to emoji
+  const charImg = window.characterImages && window.characterImages[`${selectedGameCharacter.name.toLowerCase()}-${selectedGameCharacter.variation}`];
+  if (charImg && charImg.complete) {
+    const imgSize = 80;
+    ctx.drawImage(charImg, fruityX - imgSize / 2, gameState.fruity.y - imgSize / 2, imgSize, imgSize);
+  } else {
+    ctx.font = '80px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('🦄', fruityX, gameState.fruity.y);
+  }
   ctx.restore();
 
   // Draw glow
@@ -714,13 +733,17 @@ canvas.addEventListener('click', (e) => {
 });
 
 let lastTapTime = 0;
+let lastTapX = 0, lastTapY = 0;
+
 function handleTap(x, y) {
   const now = Date.now();
   const doubleTap = now - lastTapTime < 300;
   lastTapTime = now;
+  lastTapX = x;
+  lastTapY = y;
 
   if (doubleTap && gameState.magic.meter >= 50) {
-    // Magic beam
+    // DOUBLE TAP: Magic beam ONLY (no movement, no rotation)
     gameState.magic.meter -= 50;
     const dx = x - gameState.fruity.x;
     const dy = y - gameState.fruity.y;
@@ -747,8 +770,8 @@ function handleTap(x, y) {
     }
     gameState.balloons = gameState.balloons.filter(b => !b.popped);
     gameState.messageQueue.push({ text: ENCOURAGEMENT_MESSAGES[Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length)], life: 100 });
-  } else {
-    // Move
+  } else if (!doubleTap) {
+    // SINGLE TAP: Move ONLY (no magic, no extra rotation changes)
     gameState.fruity.targetX = x;
     gameState.fruity.targetY = y;
     gameState.fruity.facingRight = x > gameState.fruity.x;
@@ -818,6 +841,16 @@ function gameLoop() {
 
   requestAnimationFrame(gameLoop);
 }
+
+// Preload character images
+window.characterImages = {};
+CHARACTERS.forEach(char => {
+  const key = `${char.name.toLowerCase()}-${char.variation}`;
+  const img = new Image();
+  img.src = `/assets/characters/${key}.png`;
+  img.onerror = () => console.log(`Could not load ${key}`);
+  window.characterImages[key] = img;
+});
 
 // Initialize
 for (let i = 0; i < 3; i++) spawnBalloon();
