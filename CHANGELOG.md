@@ -1,5 +1,69 @@
 # CHANGELOG — Unicorn Land
 
+## v3.0.0 — April 25, 2026 — The Full Magic Upgrade
+
+> Enhanced by Perplexity Computer for Chris Powell.
+> All items from the "what would make this even more amazing" session are implemented in this version.
+
+---
+
+### ✨ New in v3.0
+
+#### 1. Character Select Screen (before gameplay)
+A full-screen character picker appears after loading, before the game starts. All 17 unicorns are shown in a grid with their portraits. Waverly taps the one she wants, then hits "🦄 Let's Go!" to launch. The canvas renders a starfield behind the picker screen so the world is visible from the first moment.
+
+#### 2. Personalized speechSynthesis Welcome Greeting
+When the game launches, the selected character's name is used in the spoken welcome:
+> *"Welcome to Unicorn Land! Waverly is ready to spread magic! Tap to fly, double-tap to shoot rainbow beams and pop the balloons!"*
+Victory speech also uses the character name in the message.
+
+#### 3. Tinkerbell Sparkle Trail (5x denser, color-cycling)
+The sparkle trail behind the player was a single golden puff per frame. v3.0 deposits **4 particles per movement frame** (1 main puff + 3 offset micro-sparkles), each with a color-cycling hue that rotates 8° per frame through the full spectrum. Each trail dot also emits a soft canvas `shadowBlur` glow. The result looks like Tinkerbell fairy dust — a continuous rainbow ribbon behind every flight path.
+
+#### 4. Balloon Hit Zones 2× Bigger for Small Fingers
+Balloon hit radius increased from `b.r + 58` to `b.r + 90` — giving approximately **180px of diameter forgiveness** per balloon. On a phone or iPad, this means the magic beam only needs to point roughly in the direction of the balloon. Near-misses that look like hits now register as hits.
+
+#### 5. Giant Glitter Burst + Candy Shower on Every Pop (`bigPopBurst`)
+The old `popBalloon()` used a small `burst()` call (16 particles). v3.0 replaces this with `bigPopBurst()`:
+- **32 glitter particles** in a full ring burst (every 11.25°) at 4–13px/frame speed
+- **10 emoji particles** (⭐ ✨ 💫 🌟 💕 🎉) flying outward
+- **CSS pop ring overlay** — a `<div>` with radial gradient and `popout` keyframe animation that scales from 0→1.6× over 0.55s, then removes itself
+- **3 candy pieces** always drop (up from 1), candy balloons drop 6
+This makes every single pop feel like a celebration.
+
+#### 6. Dramatic Sky: Pink/Orange Cloud Bloom as World Fills
+When `wShift > 0.12`, the sky now gains:
+- A warm **orange/pink horizon glow band** (linear gradient across H*30%–H*65%)
+- **4 fluffy elliptical cloud puffs** in orange, pink, and gold tones that drift slowly across the sky
+- The sky top lerps from deep purple toward **warm orange** (not plain blue) — a true sunrise feel
+The effect is subtle at low progress and vivid at full paint, matching Waverly's "the whole day is actually a morning."
+
+#### 7. Improved BGM: Full Pentatonic Flute with Harmonics + Reverb Feel
+The background music was a single sine wave oscillator. v3.0 uses **three oscillators per note**:
+- Primary: sine wave at the note frequency with natural envelope (attack 80ms, sustain, decay 650ms)
+- 2nd harmonic: octave-up sine at lower gain for warmth and richness
+- Reverb tail: a delayed copy of the primary at 60ms offset, lower gain, longer decay (850ms) for a room/cave echo
+The scale is C major pentatonic (C4 D4 E4 G4 A4 C5), which sounds inherently magical and never dissonant. A master gain node controls overall BGM volume.
+
+#### 8. Improved Balloon Pop SFX (thicker, more satisfying)
+The pop sound was a thin sine wave drop. v3.0 uses **two oscillators**:
+- Primary: triangle wave, 1100Hz → 380Hz → 120Hz (two-stage drop) over 0.3s — full and resonant
+- Crack layer: brief sawtooth wave at 280Hz, 0.08s — adds the "snap" of the balloon skin
+
+#### 9. Victory Confetti Increased (80 → 120 pieces)
+More confetti, faster spawn interval (55ms → 40ms). Also varied sizes (7–21px vs 7–19px).
+
+#### 10. Victory SFX — Triumphant Arpeggio
+A new `sfx('victory')` plays on world completion: a 7-note C major arpeggio (C5 E5 G5 C6 G5 C6 E6) played as individual oscillators at 120ms intervals — sparkly and celebratory.
+
+#### 11. Victory Message Uses Selected Character Name
+Victory screen `#vicm` now reads:
+> *"[Character Name] never gives up, just like you! You're magical, Waverly! 💕"*
+Works for any of the 17 selectable characters.
+
+---
+
+
 ## v2.0.0 — April 2026 — Full Magic Rebuild
 
 > This version was authored by Perplexity Computer based on Chris Powell's request to make the game
