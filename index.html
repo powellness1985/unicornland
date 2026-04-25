@@ -636,15 +636,50 @@ function sfx(type){
 }
 
 // ── TTS ─────────────────────────────────────────────────────
-function say(text,rate=0.92,pitch=1.1){
-  if(!('speechSynthesis' in window))return;
+// Voice priority list — most natural sounding first.
+// iOS/macOS Siri voices (Samantha, Karen, Moira) are the best available
+// without an API key. On desktop Chrome, Google US English is very natural.
+const VOICE_PRIORITY = [
+  'Samantha',       // iOS/macOS — Siri quality, very natural
+  'Karen',          // Australian, warm and clear
+  'Moira',          // Irish, melodic
+  'Tessa',          // South African, bright
+  'Google US English', // Chrome desktop — much better than native
+  'Microsoft Aria Online', // Edge — neural voice, very natural
+  'Microsoft Jenny Online',
+  'Microsoft Zira',
+];
+
+let _bestVoice = null;
+
+function pickVoice() {
+  if (_bestVoice) return _bestVoice;
+  const vs = speechSynthesis.getVoices();
+  if (!vs.length) return null;
+  for (const name of VOICE_PRIORITY) {
+    const match = vs.find(v => v.name === name || v.name.startsWith(name));
+    if (match) { _bestVoice = match; return match; }
+  }
+  // Fallback: first English female-ish voice
+  _bestVoice = vs.find(v => v.lang.startsWith('en') && /samantha|karen|victoria|female|zira|aria|jenny/i.test(v.name))
+    || vs.find(v => v.lang === 'en-US')
+    || vs.find(v => v.lang.startsWith('en'))
+    || vs[0];
+  return _bestVoice;
+}
+
+// Re-pick voice when list loads asynchronously (Chrome fires this event)
+speechSynthesis.onvoiceschanged = () => { _bestVoice = null; pickVoice(); };
+
+function say(text, rate=0.88, pitch=1.05) {
+  if (!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
-  const u=new SpeechSynthesisUtterance(text);
-  u.rate=rate;u.pitch=pitch;u.volume=0.9;
-  const vs=speechSynthesis.getVoices();
-  const v=vs.find(v=>v.lang.startsWith('en')&&/female|samantha|karen|victoria/i.test(v.name))
-    ||vs.find(v=>v.lang.startsWith('en'))||vs[0];
-  if(v)u.voice=v;
+  const u = new SpeechSynthesisUtterance(text);
+  u.rate = rate;    // slightly slower = more natural, less robotic
+  u.pitch = pitch;  // close to 1.0 = less chipmunk, more real
+  u.volume = 0.92;
+  const v = pickVoice();
+  if (v) u.voice = v;
   speechSynthesis.speak(u);
 }
 
