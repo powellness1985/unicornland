@@ -272,8 +272,7 @@
   <div id="tut-inner">
     <div class="tcard">
       <div class="mtitle" style="margin-bottom:18px">🎮 How to Play!</div>
-      <div class="tsec"><h3>👆 Tap to Move</h3><p>Tap anywhere and your unicorn flies there, leaving a sparkle trail behind her!</p></div>
-      <div class="tsec"><h3>✨ Double-Tap for Magic!</h3><p>Tap twice quickly to shoot a rainbow magic beam from your unicorn's horn. Pop those balloons!</p></div>
+      <div class="tsec"><h3>👆 Tap Anywhere!</h3><p>Tap anywhere and your unicorn flies there AND shoots a rainbow magic beam — every single tap!</p></div>
       <div class="tsec"><h3>🎈 Pop Balloons!</h3><p>Each balloon pops with a giant glitter explosion and candy shower! Watch the 🌈 bar fill up!</p></div>
       <div class="tsec"><h3>🍭 Rainbow Popsicle Power-Up!</h3><p>Fly into the rainbow unicorn sparkle popsicle to instantly refill your magic!</p></div>
       <div class="tsec"><h3>🐉 Find Firey!</h3><p>Tap the little red dragon 3 times to push him away and make him silly and friendly!</p></div>
@@ -936,20 +935,12 @@ function trailPuff(x,y){
 }
 
 // ── INPUT ────────────────────────────────────────────────────
-let lastTap=0,tapTO=null;
-
+// Every tap instantly shoots magic AND moves the unicorn toward that spot.
+// No double-tap delay — zero wait, zero frustration for small fingers.
 function handleTap(x,y){
   initAudio();
-  const now=Date.now();
-  const dbl=now-lastTap<340;
-  lastTap=now;
-  if(dbl){
-    clearTimeout(tapTO);tapTO=null;
-    fireMagic(x,y);
-  }else{
-    clearTimeout(tapTO);
-    tapTO=setTimeout(()=>{ movePlayer(x,y); tapTO=null; },310);
-  }
+  fireMagic(x,y);
+  movePlayer(x,y);
 }
 
 canvas.addEventListener('click',e=>{
@@ -1175,7 +1166,7 @@ function startGame(){
   // Welcome greeting with selected character name
   const charName=CHARS[selChar].name;
   setTimeout(()=>{
-    say(`Welcome to Unicorn Land! ${charName} is ready to spread magic! Tap to fly, double-tap to shoot rainbow beams and pop the balloons!`);
+    say(`Welcome to Unicorn Land! ${charName} is ready to spread magic! Tap anywhere to fly and shoot rainbow beams — pop all the balloons!`);
   },400);
   requestAnimationFrame(loop);
 }
