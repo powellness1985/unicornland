@@ -59,7 +59,7 @@
       transition:all .2s;backdrop-filter:blur(4px);-webkit-tap-highlight-color:transparent}
     .cs-card:hover,.cs-card:active{background:rgba(167,139,250,.22);border-color:var(--lavender);
       transform:translateY(-5px) scale(1.06);box-shadow:0 10px 26px rgba(167,139,250,.35)}
-    .cs-card img{width:80px;height:80px;object-fit:contain;border-radius:10px;margin-bottom:7px;mix-blend-mode:multiply}
+    .cs-card img{width:80px;height:80px;object-fit:contain;border-radius:10px;margin-bottom:7px}
     .cs-cname{font-size:12px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55)}
     #cs-start{padding:16px 46px;background:linear-gradient(135deg,var(--pink),var(--purple));
       border:none;border-radius:50px;font-family:var(--font);font-size:20px;font-weight:900;
@@ -110,7 +110,7 @@
     .gcard:hover{background:rgba(167,139,250,.18);border-color:var(--lavender);
       transform:translateY(-4px) scale(1.04);box-shadow:0 8px 22px rgba(167,139,250,.3)}
     .gcard img{width:84px;height:84px;object-fit:contain;border-radius:8px;margin-bottom:7px;
-      image-rendering:auto;mix-blend-mode:multiply}
+      image-rendering:auto}
     .gcname{font-size:12px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 
     /* detail */
@@ -123,7 +123,7 @@
       padding:34px 30px;max-width:440px;width:100%;text-align:center;position:relative;
       box-shadow:0 0 60px rgba(155,89,182,.38);animation:slideUp .28s ease}
     .dcard img{width:150px;height:150px;object-fit:contain;margin-bottom:14px;
-      mix-blend-mode:multiply;filter:drop-shadow(0 0 14px rgba(255,111,216,.5))}
+      filter:drop-shadow(0 0 14px rgba(255,111,216,.5))}
     .dname{font-size:30px;font-weight:900;color:var(--gold);
       text-shadow:0 0 14px rgba(255,215,0,.5);margin-bottom:9px}
     .dbio{font-size:16px;font-weight:700;color:rgba(255,255,255,.9);line-height:1.6;margin-bottom:20px}
@@ -184,7 +184,7 @@
     #pa{position:fixed;bottom:18px;left:14px;display:flex;align-items:center;gap:7px;
       background:rgba(0,0,0,.45);border:2px solid rgba(255,255,255,.18);border-radius:22px;
       padding:5px 12px 5px 7px;z-index:50;pointer-events:none;backdrop-filter:blur(6px)}
-    #pa img{width:34px;height:34px;object-fit:contain;border-radius:50%;mix-blend-mode:multiply}
+    #pa img{width:34px;height:34px;object-fit:contain;border-radius:50%}
     #pa span{font-size:12px;font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.55)}
 
     /* ─── MAGIC READY ─────────────────────────── */
@@ -443,13 +443,13 @@ function removeBackground(srcImg, threshold = 68) {
   return oc;
 }
 
-// Detect iOS / iPadOS — skip canvas bg-removal on these devices to avoid
-// Safari's canvas security restrictions blocking the preloader
+// Detect iOS / iPadOS (kept for any future device-specific logic)
 const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
   (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 
 function preload(onProg, onDone) {
-  // Safety net: if something stalls, unblock after 14 seconds
+  // All PNGs now have proper RGBA transparency baked in at the file level.
+  // No canvas background removal needed on any device — just load and draw.
   let done = false;
   const finish = () => { if(!done){ done=true; onDone(); } };
   const safetyTimer = setTimeout(finish, 14000);
@@ -462,20 +462,7 @@ function preload(onProg, onDone) {
       onProg(loaded / TOTAL);
       if (loaded >= TOTAL) { clearTimeout(safetyTimer); finish(); }
     };
-    img.onload = () => {
-      // On iOS/iPad, skip removeBackground — Safari's canvas security
-      // restrictions taint the canvas and throw, stalling the loader.
-      // On desktop/Android, full bg removal runs as normal.
-      if (IS_IOS || NO_BG_REMOVE.has(key)) {
-        advance(img);
-      } else {
-        try {
-          advance(removeBackground(img, 58));
-        } catch(e) {
-          advance(img); // fallback if anything goes wrong
-        }
-      }
-    };
+    img.onload = () => advance(img);
     img.onerror = () => advance(null);
     img.src = src;
   });
@@ -1208,7 +1195,7 @@ function drawAsset(key,dx,dy,dw,dh,alpha=1,flipX=false){
   if(!asset)return false;
   ctx.save();
   if(alpha!==1) ctx.globalAlpha=alpha;
-  if(IS_IOS) ctx.globalCompositeOperation='multiply';
+  
   if(flipX){ ctx.translate(dx+dw,0); ctx.scale(-1,1); dx=0; }
   ctx.drawImage(asset,dx,dy,dw,dh);
   ctx.restore();
@@ -1462,7 +1449,7 @@ function draw(){
     const aImg=gi(a.key);
     if(!aImg)return;
     ctx.save();
-    if(IS_IOS) ctx.globalCompositeOperation='multiply';
+    
     ctx.drawImage(aImg,a.x-22,a.y-22,44,44);
     ctx.restore();
   });
@@ -1470,7 +1457,7 @@ function draw(){
   // ── RAIN CLOUDS ──
   g2.rainClouds.forEach(c=>{
     const rcImg=gi('world/rain');
-    if(rcImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(rcImg,c.x-c.r,c.y-c.r*.55,c.r*2,c.r*1.1); ctx.restore(); }
+    if(rcImg){ ctx.save();  ctx.drawImage(rcImg,c.x-c.r,c.y-c.r*.55,c.r*2,c.r*1.1); ctx.restore(); }
     else{
       ctx.fillStyle='rgba(110,90,150,.8)';
       ctx.beginPath();ctx.ellipse(c.x,c.y,c.r,c.r*.48,0,0,Math.PI*2);ctx.fill();
@@ -1500,7 +1487,7 @@ function draw(){
     const fKey=f.type;
     ctx.save();ctx.translate(f.x,f.y);ctx.scale(pulse,pulse);
     const fImg=gi(fKey);
-    if(fImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(fImg,-26,-26,52,52); ctx.restore(); }
+    if(fImg){ ctx.save();  ctx.drawImage(fImg,-26,-26,52,52); ctx.restore(); }
     else{ ctx.font='40px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍭',0,0); }
     ctx.restore();
     ctx.strokeStyle=`rgba(255,215,0,${0.38+.28*Math.sin(t*.09)})`;
@@ -1514,7 +1501,7 @@ function draw(){
     ctx.strokeStyle='rgba(255,255,255,.42)';ctx.lineWidth=1.8;
     ctx.beginPath();ctx.moveTo(b.x+wx,b.y+b.r);
     ctx.quadraticCurveTo(b.x+wx*1.8,b.y+b.r+22,b.x,b.y+b.r+46);ctx.stroke();
-    if(bImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(bImg,b.x+wx-b.r,b.y-b.r,b.r*2,b.r*2); ctx.restore(); }
+    if(bImg){ ctx.save();  ctx.drawImage(bImg,b.x+wx-b.r,b.y-b.r,b.r*2,b.r*2); ctx.restore(); }
     else{
       ctx.fillStyle=b.soggy?'rgba(160,160,190,.65)':'#a78bfa';
       ctx.beginPath();ctx.arc(b.x+wx,b.y,b.r,0,Math.PI*2);ctx.fill();
@@ -1525,7 +1512,7 @@ function draw(){
   g2.candies.forEach(c=>{
     const cImg=gi(c.type);
     ctx.globalAlpha=Math.min(1,c.life/40);
-    if(cImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(cImg,c.x-16,c.y-16,32,32); ctx.restore(); }
+    if(cImg){ ctx.save();  ctx.drawImage(cImg,c.x-16,c.y-16,32,32); ctx.restore(); }
     else{ ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍭',c.x,c.y); }
   });
   ctx.globalAlpha=1;
@@ -1555,7 +1542,7 @@ function draw(){
     }else{
       const gImg=gi(p.gk);
       ctx.globalAlpha=a;
-      if(gImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(gImg,p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz); ctx.restore(); }
+      if(gImg){ ctx.save();  ctx.drawImage(gImg,p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz); ctx.restore(); }
       else{ ctx.fillStyle=`rgba(255,215,0,${a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.sz/2,0,Math.PI*2);ctx.fill(); }
       ctx.globalAlpha=1;
     }
@@ -1569,7 +1556,7 @@ function draw(){
     const fb=Math.sin(t*.14)*6;
     ctx.save();
     if(FI.dir<0){ctx.scale(-1,1);ctx.translate(-FI.x*2,0);}
-    if(fImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(fImg,FI.x-fw/2,FI.y-fh/2+fb,fw,fh); ctx.restore(); }
+    if(fImg){ ctx.save();  ctx.drawImage(fImg,FI.x-fw/2,FI.y-fh/2+fb,fw,fh); ctx.restore(); }
     else{ ctx.font=`${fw}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🐉',FI.x,FI.y+fb); }
     ctx.restore();
     if(FI.taps<3&&Math.sin(t*.08)>.5){
@@ -1603,7 +1590,7 @@ function draw(){
   if(!g2.pFace){ctx.scale(-1,1);ctx.translate(-g2.px*2,0);}
   const ps=92;
   const pb=moving?Math.sin(t*.28)*5:Math.sin(t*.07)*3;
-  if(pImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(pImg,g2.px-ps/2,g2.py-ps/2+pb,ps,ps); ctx.restore(); }
+  if(pImg){ ctx.save();  ctx.drawImage(pImg,g2.px-ps/2,g2.py-ps/2+pb,ps,ps); ctx.restore(); }
   else{ ctx.font=`${ps}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🦄',g2.px,g2.py+pb); }
   ctx.restore();
 
