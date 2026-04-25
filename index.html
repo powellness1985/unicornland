@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-  <title>Unicorn Land — Wave's Game</title>
+  <title>Unicorn Land</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -66,10 +66,10 @@
     #loading-bar-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, #FF6B6B, #FFD93D, #4ECDC4, #A78BFA, #FF6B6B);
-      background-size: 200% 100%;
-      animation: shimmer 1.5s ease-in-out infinite;
+      background: linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3);
+      background-size: 100% 100%;
       border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255, 100, 200, 0.6);
     }
     @keyframes shimmer {
       0% { background-position: -200% 0; }
@@ -333,6 +333,7 @@
   <button class="ui-button active" id="btn-game" onclick="switchScreen('game')">🎮 Play</button>
   <button class="ui-button" id="btn-gallery" onclick="switchScreen('gallery')">🦄 Friends</button>
   <button class="ui-button" id="btn-tutorial" onclick="switchScreen('tutorial')">❓ How to Play</button>
+  <button class="ui-button" id="btn-audio" onclick="toggleAudio()" style="background: #f44336;">🔇 Audio Off</button>
 </div>
 
 <!-- Game Canvas -->
@@ -402,19 +403,19 @@
 // Character Data with Bios
 const CHARACTERS = [
   {
-    name: 'Wave', variation: 'idle', bio: 'The brave rainbow unicorn! Wave loves spreading joy and magic everywhere. She never gives up, no matter what challenges she faces.'
+    name: 'Sparkle', variation: 'idle', bio: 'The brave rainbow unicorn! Sparkle loves spreading joy and magic everywhere. She never gives up, no matter what challenges she faces.'
   },
-  { name: 'Fifi', variation: 'idle', bio: 'The fancy cupcake unicorn! Fifi creates sweet magic and loves sharing treats with her friends. She\'s always ready for a celebration!' },
-  { name: 'CharChar', variation: 'idle', bio: 'The glitter dash unicorn! CharChar is super fast and fabulous, wearing beautiful tutus and sparkly tiaras. She races through the world leaving glitter trails!' },
-  { name: 'Sweetie', variation: 'idle', bio: 'The sweet heart unicorn! Sweetie spreads kindness and gentle love everywhere. Her heart is as big as the whole unicorn world!' },
-  { name: 'Luna', variation: 'idle', bio: 'The wise moon unicorn! Luna is calm, peaceful, and full of wisdom. She watches over everyone like the moon watches over the night sky.' },
-  { name: 'Blaze', variation: 'idle', bio: 'The brave flame unicorn! Blaze has a warm, glowing spirit and is always ready to protect and help friends. Brave and strong!' },
-  { name: 'Pappa', variation: 'idle', bio: 'The builder unicorn! Pappa creates amazing magical structures with love and care. He\'s silly, warm, and always building something wonderful.' },
-  { name: 'MaeMae', variation: 'idle', bio: 'The warm heart grandma unicorn! MaeMae spreads comfort, hugs, and cozy love. She makes everyone feel safe and loved.' },
-  { name: 'Grandpa', variation: 'idle', bio: 'The strong earth unicorn! Grandpa is wise, strong, and reliable. He\'s the rock that everyone can count on for strength and wisdom.' },
-  { name: 'KK', variation: 'idle', bio: 'The golden heart grandma unicorn! KK spreads warmth, healing, and gentle care. Her love shines like golden sunshine!' },
-  { name: 'Odie', variation: 'idle', bio: 'The zoom unicorn pup! Odie is tiny, fast, and full of playful energy. This little pup brings joy and zoom to every moment!' },
-  { name: 'Cloudy', variation: 'idle', bio: 'The cloud unicorn! Cloudy floats gently through the sky, bringing peace and coziness. Slow, gentle, and always floating.' },
+  { name: 'Fizzy', variation: 'idle', bio: 'The fancy cupcake unicorn! Fizzy creates sweet magic and loves sharing treats with her friends. She\'s always ready for a celebration!' },
+  { name: 'Chase', variation: 'idle', bio: 'The glitter dash unicorn! Chase is super fast and fabulous, wearing beautiful tutus and sparkly tiaras. She races through the world leaving glitter trails!' },
+  { name: 'Clementine', variation: 'idle', bio: 'The sweet heart unicorn! Clementine spreads kindness and gentle love everywhere. Her heart is as big as the whole unicorn world!' },
+  { name: 'Stella', variation: 'idle', bio: 'The wise moon unicorn! Stella is calm, peaceful, and full of wisdom. She watches over everyone like the moon watches over the night sky.' },
+  { name: 'River', variation: 'idle', bio: 'The brave flame unicorn! River has a warm, glowing spirit and is always ready to protect and help friends. Brave and strong!' },
+  { name: 'Palmer', variation: 'idle', bio: 'The builder unicorn! Palmer creates amazing magical structures with love and care. He\'s silly, warm, and always building something wonderful.' },
+  { name: 'Marina', variation: 'idle', bio: 'The warm heart grandma unicorn! Marina spreads comfort, hugs, and cozy love. She makes everyone feel safe and loved.' },
+  { name: 'Grover', variation: 'idle', bio: 'The strong earth unicorn! Grover is wise, strong, and reliable. He\'s the rock that everyone can count on for strength and wisdom.' },
+  { name: 'Keegan', variation: 'idle', bio: 'The golden heart grandma unicorn! Keegan spreads warmth, healing, and gentle care. Her love shines like golden sunshine!' },
+  { name: 'Ollie', variation: 'idle', bio: 'The zoom unicorn pup! Ollie is tiny, fast, and full of playful energy. This little pup brings joy and zoom to every moment!' },
+  { name: 'Wesley', variation: 'idle', bio: 'The cloud unicorn! Wesley floats gently through the sky, bringing peace and coziness. Slow, gentle, and always floating.' },
   { name: 'Mommy', variation: 'sky', bio: 'The starlight guardian! Mommy watches over from the sky with love and light. Always present, always guiding, always loving.' },
   { name: 'Daddy', variation: 'idle', bio: 'The strong protective unicorn! Daddy is brave, caring, and always there when needed. A loving guide who brings warmth and security.' }
 ];
@@ -459,7 +460,7 @@ function generateGallery() {
 
 // Character Details Modal
 let currentCharacter = null;
-let selectedGameCharacter = JSON.parse(localStorage.getItem('selectedCharacter')) || { name: 'Wave', variation: 'idle' };
+let selectedGameCharacter = JSON.parse(localStorage.getItem('selectedCharacter')) || { name: 'Sparkle', variation: 'idle' };
 
 function showCharacterDetails(char) {
   currentCharacter = char;
@@ -483,8 +484,13 @@ function closeCharacterDetails() {
   currentCharacter = null;
 }
 
+// Audio toggle state - OFF by default
+let audioEnabled = false;
+
 // Text-to-Speech Functions
 function speakText(text) {
+  // Check if audio is enabled before speaking
+  if (!audioEnabled) return;
   if (!('speechSynthesis' in window)) return;
   window.speechSynthesis.cancel();
   const utterance = new SpeechSynthesisUtterance(text);
@@ -497,6 +503,20 @@ function speakText(text) {
                           voices[0];
   if (preferredVoice) utterance.voice = preferredVoice;
   window.speechSynthesis.speak(utterance);
+}
+
+// Audio toggle function
+function toggleAudio() {
+  audioEnabled = !audioEnabled;
+  const btn = document.getElementById('btn-audio');
+  if (audioEnabled) {
+    btn.style.background = '#4CAF50';
+    btn.textContent = '🔊 Audio On';
+    speakText('Audio enabled! Now you can hear fun sounds and messages!');
+  } else {
+    btn.style.background = '#f44336';
+    btn.textContent = '🔇 Audio Off';
+  }
 }
 
 function speakBio() {
@@ -535,6 +555,7 @@ const gameState = {
   particles: [],
   beams: [],
   rainClouds: [],
+  groundColorMap: new Map(),
   firey: { x: canvas.width / 2 + 200, y: 100, state: 'shy', taps: 0 },
   animals: [
     { name: 'fee', x: 150, y: 300, emoji: '🦋' },
@@ -568,11 +589,11 @@ function spawnBalloon() {
 function spawnRainCloud() {
   gameState.rainClouds.push({
     x: Math.random() * canvas.width,
-    y: Math.random() * (canvas.height / 2),
-    vx: Math.random() * 1 - 0.5,
-    vy: Math.random() * 0.5,
-    radius: 40,
-    width: 80
+    y: Math.random() * (canvas.height / 3) + 20,
+    vx: (Math.random() - 0.5) * 0.3,
+    vy: 0,
+    radius: 60,
+    width: 120
   });
 }
 
@@ -588,19 +609,77 @@ function render() {
   ctx.fillStyle = gradient;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  // Draw sun
+  const sunX = canvas.width * 0.85;
+  const sunY = canvas.height * 0.15;
+  const sunHue = shift * 60;
+  ctx.fillStyle = `hsl(${sunHue}, 100%, 60%)`;
+  ctx.beginPath();
+  ctx.arc(sunX, sunY, 40, 0, Math.PI * 2);
+  ctx.fill();
+  if (shift > 0) {
+    ctx.strokeStyle = `hsl(${sunHue}, 100%, 70%)`;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(sunX, sunY, 55, 0, Math.PI * 2);
+    ctx.stroke();
+  }
+
+  // Draw rainbow bands (all colors always visible, intensity increases with progress)
+  const rainbowColors = ['#FF0000', '#FF7F00', '#FFFF00', '#00FF00', '#0000FF', '#4B0082', '#9400D3'];
+  const bandHeight = 28;
+  const rainbowY = 20;
+  const rainbowAlpha = 0.25 + shift * 0.75;
+
+  for (let i = 0; i < rainbowColors.length; i++) {
+    ctx.fillStyle = rainbowColors[i];
+    ctx.globalAlpha = rainbowAlpha;
+    ctx.fillRect(0, rainbowY + i * bandHeight, canvas.width, bandHeight);
+  }
+  ctx.globalAlpha = 1.0;
+
   // Draw world elements (hills, houses, tree)
   drawWorldElements();
 
-  // Draw rain clouds
-  gameState.rainClouds.forEach(cloud => {
-    ctx.fillStyle = '#B8A0D9';
+  // Draw colored ground areas from glitter particles
+  gameState.groundColorMap.forEach((color, key) => {
+    const [x, y] = key.split(',').map(Number);
+    ctx.fillStyle = color;
+    ctx.globalAlpha = 0.6;
     ctx.beginPath();
-    ctx.ellipse(cloud.x, cloud.y, cloud.width / 2, cloud.radius / 2, 0, 0, Math.PI * 2);
+    ctx.arc(x, y, 8, 0, Math.PI * 2);
     ctx.fill();
-    ctx.fillStyle = '#000';
-    ctx.font = '20px Arial';
-    ctx.textAlign = 'center';
-    ctx.fillText('☁️', cloud.x, cloud.y + 5);
+    ctx.globalAlpha = 1.0;
+  });
+
+  // Draw rain clouds with real cloud images
+  gameState.rainClouds.forEach((cloud, index) => {
+    // Load cloud images if available
+    if (!cloud.image) {
+      const cloudNames = ['cloud-fluffy-1', 'cloud-fluffy-2', 'cloud-fluffy-3', 'cloud-wispy-1', 'cloud-wispy-2'];
+      const cloudName = cloudNames[index % cloudNames.length];
+      const img = new Image();
+      img.src = `./assets/world/${cloudName}.png`;
+      img.onload = () => { cloud.image = img; };
+      cloud.image = img;
+    }
+
+    // Draw cloud image if loaded
+    if (cloud.image && cloud.image.complete) {
+      ctx.globalAlpha = 0.7 + gameState.world.colorShift / gameState.world.maxColorShift * 0.3;
+      ctx.drawImage(cloud.image, cloud.x - 64, cloud.y - 32, 128, 64);
+      ctx.globalAlpha = 1.0;
+    } else {
+      // Fallback to drawn cloud
+      ctx.fillStyle = `hsl(0, 0%, ${80 - gameState.world.colorShift / gameState.world.maxColorShift * 20}%)`;
+      ctx.beginPath();
+      ctx.ellipse(cloud.x, cloud.y, cloud.width / 2, cloud.radius / 2, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#FFF';
+      ctx.font = '28px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText('☁️', cloud.x, cloud.y + 5);
+    }
   });
 
   // Draw Fruity (character image)
@@ -653,20 +732,7 @@ function render() {
     }
   });
 
-  // Draw magic meter
-  const meterWidth = 150;
-  const meterX = gameState.fruity.x - meterWidth / 2;
-  const meterY = gameState.fruity.y + 70;
-  ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
-  ctx.fillRect(meterX, meterY, meterWidth, 15);
-  ctx.fillStyle = '#FFD700';
-  ctx.fillRect(meterX, meterY, (gameState.magic.meter / gameState.magic.maxMeter) * meterWidth, 15);
-  if (gameState.magic.meter >= gameState.magic.maxMeter) {
-    ctx.font = '20px Arial';
-    ctx.fillStyle = '#FFD700';
-    ctx.textAlign = 'center';
-    ctx.fillText('⚡', gameState.fruity.x, meterY - 15);
-  }
+  // Magic meter removed - magic is always available for kids!
 
   // Draw world progress bar
   const progressWidth = 300;
@@ -702,8 +768,16 @@ function render() {
     ctx.font = `${20 + p.life / 5}px Arial`;
     ctx.textAlign = 'center';
     ctx.fillText(p.emoji, p.x, p.y);
-    p.x += p.vx;
+    p.x += p.vx * 0.98;
     p.y += p.vy;
+    p.vy += 0.3;
+
+    // Color ground when particle lands
+    if (p.y > canvas.height - 120 && p.life < 100) {
+      const colorKey = `${Math.floor(p.x / 10) * 10},${canvas.height - 80}`;
+      const colors = ['#FF6B6B', '#4ECDC4', '#FFE66D', '#A78BFA'];
+      gameState.groundColorMap.set(colorKey, colors[Math.floor(Math.random() * colors.length)]);
+    }
     p.life--;
   });
 
@@ -732,27 +806,214 @@ function render() {
 }
 
 function drawWorldElements() {
-  // Hill
-  ctx.fillStyle = '#888';
+  const shift = gameState.world.colorShift / gameState.world.maxColorShift;
+
+  // ===== SKY AND BACKGROUND =====
+  // Sky gradient (darker to lighter)
+  const skyGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+  const skyTopColor = shift > 0 ? `hsl(${200 + shift * 40}, ${shift * 50}%, ${60 + shift * 20}%)` : '#7799CC';
+  const skyBottomColor = shift > 0 ? `hsl(${180 + shift * 60}, ${shift * 60}%, ${75 + shift * 15}%)` : '#AACCFF';
+  skyGradient.addColorStop(0, skyTopColor);
+  skyGradient.addColorStop(1, skyBottomColor);
+  ctx.fillStyle = skyGradient;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  // ===== SUN WITH GLOW =====
+  // Sun glow (large circle)
+  const sunGradient = ctx.createRadialGradient(canvas.width - 120, 80, 10, canvas.width - 120, 80, 80);
+  sunGradient.addColorStop(0, `rgba(255, 200, 100, ${0.3 + shift * 0.5})`);
+  sunGradient.addColorStop(1, `rgba(255, 150, 0, 0)`);
+  ctx.fillStyle = sunGradient;
+  ctx.beginPath();
+  ctx.arc(canvas.width - 120, 80, 80, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Sun body
+  const sunColor = shift > 0 ? `hsl(${shift * 30}, ${shift * 100}%, ${60 + shift * 20}%)` : '#FFD700';
+  ctx.fillStyle = sunColor;
+  ctx.beginPath();
+  ctx.arc(canvas.width - 120, 80, 40, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Sun highlight (glossy effect)
+  ctx.fillStyle = `rgba(255, 255, 255, ${0.6 + shift * 0.3})`;
+  ctx.beginPath();
+  ctx.arc(canvas.width - 100, 60, 12, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ===== GROUND/TERRAIN =====
+  // Rolling hills with gradient
+  const hillGradient = ctx.createLinearGradient(0, canvas.height - 250, 0, canvas.height);
+  const hillColor = shift > 0 ? `hsl(${60 + shift * 100}, ${shift * 70}%, ${40 + shift * 25}%)` : '#6B8E23';
+  hillGradient.addColorStop(0, hillColor);
+  hillGradient.addColorStop(1, `hsl(${50 + shift * 110}, ${shift * 60}%, ${30 + shift * 20}%)`);
+
+  ctx.fillStyle = hillGradient;
   ctx.beginPath();
   ctx.moveTo(0, canvas.height - 100);
-  ctx.quadraticCurveTo(canvas.width / 2, canvas.height - 200, canvas.width, canvas.height - 100);
+  // Multiple rolling curves for more natural hills
+  ctx.quadraticCurveTo(canvas.width * 0.25, canvas.height - 180, canvas.width * 0.5, canvas.height - 140);
+  ctx.quadraticCurveTo(canvas.width * 0.75, canvas.height - 100, canvas.width, canvas.height - 120);
   ctx.lineTo(canvas.width, canvas.height);
   ctx.lineTo(0, canvas.height);
   ctx.fill();
 
-  // Houses
-  ctx.fillStyle = '#999';
-  ctx.fillRect(50, canvas.height - 180, 100, 80);
-  ctx.fillRect(canvas.width - 150, canvas.height - 180, 100, 80);
-
-  // Tree
-  ctx.fillStyle = '#666';
-  ctx.fillRect(canvas.width / 2 - 15, canvas.height - 150, 30, 80);
-  ctx.fillStyle = '#888';
+  // Hill shadow for depth
+  ctx.fillStyle = `rgba(0, 0, 0, ${0.1 + shift * 0.1})`;
   ctx.beginPath();
-  ctx.arc(canvas.width / 2, canvas.height - 120, 50, 0, Math.PI * 2);
+  ctx.moveTo(0, canvas.height - 100);
+  ctx.quadraticCurveTo(canvas.width * 0.25, canvas.height - 180, canvas.width * 0.5, canvas.height - 140);
+  ctx.lineTo(canvas.width * 0.5, canvas.height);
+  ctx.lineTo(0, canvas.height);
   ctx.fill();
+
+  // ===== HELPER FUNCTION FOR BUILDINGS =====
+  function drawBuilding(x, y, width, height, hueBase, windowRows = 2, windowCols = 3) {
+    const bldgColor = shift > 0 ? `hsl(${hueBase + shift * 40}, ${shift * 80}%, ${50 + shift * 20}%)` : `hsl(${hueBase}, 50%, 55%)`;
+    ctx.fillStyle = bldgColor;
+    ctx.fillRect(x, y, width, height);
+
+    // Building outline for definition
+    ctx.strokeStyle = `rgba(0, 0, 0, ${0.2 + shift * 0.1})`;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(x, y, width, height);
+
+    // Door
+    const doorWidth = width * 0.2;
+    const doorHeight = height * 0.4;
+    ctx.fillStyle = shift > 0 ? `hsl(${hueBase - 20}, ${shift * 100}%, ${35 + shift * 10}%)` : '#8B4513';
+    ctx.fillRect(x + width / 2 - doorWidth / 2, y + height - doorHeight, doorWidth, doorHeight);
+
+    // Door handle
+    ctx.fillStyle = '#FFD700';
+    ctx.beginPath();
+    ctx.arc(x + width / 2 + doorWidth / 3, y + height - doorHeight / 2, 4, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Windows light up with progress
+    const windowLightness = shift > 0 ? 85 : 35;
+    ctx.fillStyle = `hsl(${hueBase + shift * 60}, ${shift * 100}%, ${windowLightness}%)`;
+    ctx.globalAlpha = 0.3 + shift * 0.7;
+    const windowWidth = (width - 20) / windowCols;
+    const windowHeight = (height * 0.7 - 20) / windowRows;
+    for (let i = 0; i < windowCols; i++) {
+      for (let j = 0; j < windowRows; j++) {
+        const wx = x + 10 + i * (windowWidth + 5);
+        const wy = y + 10 + j * (windowHeight + 5);
+        ctx.fillRect(wx, wy, windowWidth, windowHeight);
+        // Window frame
+        ctx.strokeStyle = `rgba(0, 0, 0, ${0.4})`;
+        ctx.lineWidth = 1;
+        ctx.strokeRect(wx, wy, windowWidth, windowHeight);
+      }
+    }
+    ctx.globalAlpha = 1.0;
+
+    // Roof
+    ctx.fillStyle = `hsl(${hueBase - 30}, ${shift * 70}%, ${35 + shift * 15}%)`;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + width / 2, y - height * 0.3);
+    ctx.lineTo(x + width, y);
+    ctx.fill();
+
+    // Roof outline
+    ctx.strokeStyle = `rgba(0, 0, 0, ${0.2})`;
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + width / 2, y - height * 0.3);
+    ctx.lineTo(x + width, y);
+    ctx.stroke();
+  }
+
+  // ===== BUILDINGS =====
+  // Building 1 (Left)
+  drawBuilding(30, canvas.height - 180, 110, 80, 35, 2, 3);
+
+  // Building 2 (Center-Left)
+  drawBuilding(200, canvas.height - 200, 95, 100, 20, 3, 2);
+
+  // Building 3 (Center-Right)
+  drawBuilding(canvas.width - 295, canvas.height - 190, 105, 90, 10, 2, 3);
+
+  // Building 4 (Right)
+  drawBuilding(canvas.width - 150, canvas.height - 210, 120, 110, 45, 3, 3);
+
+  // ===== HELPER FUNCTION FOR TREES =====
+  function drawTree(x, y, trunkWidth, trunkHeight, foliageRadius) {
+    // Trunk with shadow
+    ctx.fillStyle = shift > 0 ? `hsl(${35 + shift * 30}, ${shift * 80}%, ${35 + shift * 15}%)` : '#8B6914';
+    ctx.fillRect(x - trunkWidth / 2, y, trunkWidth, trunkHeight);
+
+    // Trunk shadow
+    ctx.fillStyle = `rgba(0, 0, 0, ${0.15 + shift * 0.1})`;
+    ctx.fillRect(x - trunkWidth / 4, y, trunkWidth / 4, trunkHeight);
+
+    // Foliage layers for depth
+    const foliageColor1 = shift > 0 ? `hsl(${110 + shift * 40}, ${shift * 100}%, ${45 + shift * 20}%)` : '#228B22';
+    const foliageColor2 = shift > 0 ? `hsl(${100 + shift * 50}, ${shift * 95}%, ${40 + shift * 25}%)` : '#1a6b1a';
+
+    // Back foliage circle
+    ctx.fillStyle = foliageColor2;
+    ctx.globalAlpha = 0.7;
+    ctx.beginPath();
+    ctx.arc(x - foliageRadius * 0.3, y - foliageRadius * 0.2, foliageRadius * 1.1, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Front foliage circle
+    ctx.fillStyle = foliageColor1;
+    ctx.globalAlpha = 0.95;
+    ctx.beginPath();
+    ctx.arc(x, y - foliageRadius * 0.4, foliageRadius, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Top foliage accent
+    ctx.beginPath();
+    ctx.arc(x + foliageRadius * 0.2, y - foliageRadius * 0.8, foliageRadius * 0.7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.globalAlpha = 1.0;
+  }
+
+  // ===== TREES =====
+  drawTree(canvas.width / 3 - 40, canvas.height - 155, 25, 70, 55);
+  drawTree(canvas.width / 3 + 80, canvas.height - 170, 28, 80, 60);
+  drawTree(canvas.width * 2 / 3 - 50, canvas.height - 150, 24, 75, 52);
+  drawTree(canvas.width * 2 / 3 + 60, canvas.height - 165, 26, 78, 58);
+
+  // ===== BUSHES =====
+  function drawBush(x, y, size) {
+    const bushColor = shift > 0 ? `hsl(${115 + shift * 35}, ${shift * 90}%, ${50 + shift * 18}%)` : '#32CD32';
+    ctx.fillStyle = bushColor;
+    ctx.globalAlpha = 0.8 + shift * 0.2;
+
+    // Multiple overlapping circles for natural look
+    ctx.beginPath();
+    ctx.arc(x - size * 0.4, y, size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x + size * 0.4, y, size * 0.9, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.beginPath();
+    ctx.arc(x, y - size * 0.2, size * 0.95, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.globalAlpha = 1.0;
+  }
+
+  drawBush(120, canvas.height - 115, 32);
+  drawBush(canvas.width - 140, canvas.height - 120, 35);
+  drawBush(canvas.width / 2 - 180, canvas.height - 105, 28);
+  drawBush(canvas.width / 2 + 160, canvas.height - 110, 30);
+
+  // ===== GROUND DETAILS =====
+  // Grass tufts for ground texture
+  ctx.fillStyle = `rgba(0, 0, 0, ${0.08})`;
+  for (let i = 0; i < 15; i++) {
+    const grassX = (Math.sin(i * 0.7) + 1) * canvas.width / 2 + i * (canvas.width / 15);
+    const grassY = canvas.height - 5;
+    ctx.fillRect(grassX, grassY - 15, 3, 15);
+  }
 }
 
 // Input handling
@@ -761,6 +1022,14 @@ canvas.addEventListener('click', (e) => {
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
   handleTap(x, y);
+});
+
+canvas.addEventListener('dblclick', (e) => {
+  e.preventDefault();
+  const rect = canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  handleMagicBeam(x, y);
 });
 
 let lastTapTime = 0;
@@ -781,21 +1050,53 @@ function handleTap(x, y) {
   lastTapX = x;
   lastTapY = y;
 
-  if (doubleTap && gameState.magic.meter >= 50) {
-    // DOUBLE TAP: Magic beam ONLY (no movement, no rotation)
-    gameState.magic.meter -= 50;
-    const dx = x - gameState.fruity.x;
-    const dy = y - gameState.fruity.y;
-    const dist = Math.hypot(dx, dy);
-    const dirX = dx / dist;
-    const dirY = dy / dist;
+  if (doubleTap) {
+    // DOUBLE TAP: Magic beam ONLY (no movement, no rotation) - magic always available for kids!
+    // Call the dedicated handleMagicBeam function
+    handleMagicBeam(x, y);
+    return;
+  } else if (!doubleTap) {
+    // SINGLE TAP: Queue movement, execute after 300ms if no double-tap comes
+    pendingMoveTimeout = setTimeout(() => {
+      gameState.fruity.targetX = x;
+      gameState.fruity.targetY = y;
+      gameState.fruity.facingRight = x > gameState.fruity.x;
+      pendingMoveTimeout = null;
+    }, 300);
+  }
+}
 
-    gameState.beams.push({ x: gameState.fruity.x, y: gameState.fruity.y, dirX, dirY, life: 20 });
+function handleMagicBeam(x, y) {
+  // Magic is always available for kids - no meter requirement!
+  const dx = x - gameState.fruity.x;
+  const dy = y - gameState.fruity.y;
+  const dist = Math.hypot(dx, dy);
+  if (dist === 0) return;
 
-    for (let b of gameState.balloons) {
-      const toB = { x: b.x - gameState.fruity.x, y: b.y - gameState.fruity.y };
-      const angle = Math.atan2(toB.y, toB.x) - Math.atan2(dirY, dirX);
-      if (Math.abs(angle) < 0.3 && Math.hypot(toB.x, toB.y) < 300) {
+  const dirX = dx / dist;
+  const dirY = dy / dist;
+
+  gameState.beams.push({ x: gameState.fruity.x, y: gameState.fruity.y, dirX, dirY, life: 20 });
+
+  // Check which balloons the beam line intersects (entire screen range)
+  const beamLength = Math.max(canvas.width, canvas.height) * 3;
+
+  for (let b of gameState.balloons) {
+    const balloonRadius = b.radius;
+    const dx1 = b.x - gameState.fruity.x;
+    const dy1 = b.y - gameState.fruity.y;
+
+    // Project balloon onto ray
+    const dotProduct = (dx1 * dirX + dy1 * dirY);
+
+    // Only check balloons in front of the unicorn
+    if (dotProduct > 0 && dotProduct < beamLength) {
+      const t = dotProduct;
+      const closestX = gameState.fruity.x + dirX * t;
+      const closestY = gameState.fruity.y + dirY * t;
+      const distToLine = Math.hypot(b.x - closestX, b.y - closestY);
+
+      if (distToLine < balloonRadius) {
         b.popped = true;
         gameState.world.colorShift = Math.min(gameState.world.colorShift + 5, gameState.world.maxColorShift);
         const glitterColors = ['✨', '⭐', '💫', '🌟'];
@@ -810,17 +1111,9 @@ function handleTap(x, y) {
         }
       }
     }
-    gameState.balloons = gameState.balloons.filter(b => !b.popped);
-    gameState.messageQueue.push({ text: ENCOURAGEMENT_MESSAGES[Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length)], life: 100 });
-  } else if (!doubleTap) {
-    // SINGLE TAP: Queue movement, execute after 300ms if no double-tap comes
-    pendingMoveTimeout = setTimeout(() => {
-      gameState.fruity.targetX = x;
-      gameState.fruity.targetY = y;
-      gameState.fruity.facingRight = x > gameState.fruity.x;
-      pendingMoveTimeout = null;
-    }, 300);
   }
+  gameState.balloons = gameState.balloons.filter(b => !b.popped);
+  gameState.messageQueue.push({ text: ENCOURAGEMENT_MESSAGES[Math.floor(Math.random() * ENCOURAGEMENT_MESSAGES.length)], life: 100 });
 }
 
 // Game loop
@@ -849,8 +1142,7 @@ function gameLoop() {
   gameState.fruity.x = Math.max(50, Math.min(canvas.width - 50, gameState.fruity.x));
   gameState.fruity.y = Math.max(50, Math.min(canvas.height - 150, gameState.fruity.y));
 
-  // Regen magic
-  gameState.magic.meter = Math.min(gameState.magic.meter + gameState.magic.regenRate / 60, gameState.magic.maxMeter);
+  // Magic meter removed - magic is always available for kids!
 
   // Update balloons
   gameState.balloons.forEach(b => {
@@ -858,7 +1150,25 @@ function gameLoop() {
     b.y += b.vy;
     if (b.y < 50) b.vy *= -0.8;
     if (b.x < 50 || b.x > canvas.width - 50) b.vx *= -0.8;
+
+    // Contact collision with unicorn
+    const distToUnicorn = Math.hypot(b.x - gameState.fruity.x, b.y - gameState.fruity.y);
+    if (distToUnicorn < b.radius + 40) {
+      b.popped = true;
+      gameState.world.colorShift = Math.min(gameState.world.colorShift + 5, gameState.world.maxColorShift);
+      const glitterColors = ['✨', '⭐', '💫', '🌟'];
+      for (let i = 0; i < 20; i++) {
+        gameState.particles.push({
+          x: b.x, y: b.y,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6 - 2,
+          emoji: glitterColors[Math.floor(Math.random() * glitterColors.length)],
+          life: 150
+        });
+      }
+    }
   });
+  gameState.balloons = gameState.balloons.filter(b => !b.popped);
 
   // Cloud interaction
   gameState.rainClouds.forEach(cloud => {
@@ -870,9 +1180,9 @@ function gameLoop() {
     });
   });
 
-  // Spawn mechanics
-  if (gameState.balloons.length < 15 && Math.random() < 0.04) spawnBalloon();
-  if (gameState.rainClouds.length < 2 && Math.random() < 0.005) spawnRainCloud();
+  // Spawn mechanics (truly unlimited balloons - no cap, keep spawning!)
+  if (Math.random() < 0.15) spawnBalloon();
+  if (gameState.rainClouds.length < 4 && Math.random() < 0.01) spawnRainCloud();
 
   // Completion check
   if (gameState.world.colorShift >= gameState.world.maxColorShift) {
@@ -890,7 +1200,7 @@ function gameLoop() {
 // Preload character images
 window.characterImages = {};
 CHARACTERS.forEach(char => {
-  const sanitizedName = char.name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const sanitizedName = char.name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
   const key = `${sanitizedName}-${char.variation}`;
   const img = new Image();
   img.src = `/assets/characters/${key}.png`;
@@ -905,7 +1215,7 @@ gameLoop();
 
 // Announce welcome
 setTimeout(() => {
-  speakText('Welcome to Unicorn Land! Tap to move Wave and double-tap to shoot magic beams at the balloons!');
+  speakText(`Welcome to Unicorn Land! Tap to move ${selectedGameCharacter.name} and double-tap to shoot magic beams at the balloons!`);
 }, 2500);
 </script>
 
