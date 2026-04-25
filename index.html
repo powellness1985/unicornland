@@ -675,12 +675,22 @@ function say(text, rate=0.88, pitch=1.05) {
   if (!('speechSynthesis' in window)) return;
   speechSynthesis.cancel();
   const u = new SpeechSynthesisUtterance(text);
-  u.rate = rate;    // slightly slower = more natural, less robotic
-  u.pitch = pitch;  // close to 1.0 = less chipmunk, more real
+  u.rate = rate;
+  u.pitch = pitch;
   u.volume = 0.92;
-  const v = pickVoice();
-  if (v) u.voice = v;
-  speechSynthesis.speak(u);
+  // On iOS, voices may not be ready yet — re-pick and retry once if needed
+  const trySpeak = () => {
+    _bestVoice = null; // force re-check in case list just populated
+    const v = pickVoice();
+    if (v) u.voice = v;
+    speechSynthesis.speak(u);
+  };
+  if (speechSynthesis.getVoices().length === 0) {
+    // iOS: voices not loaded yet, wait for the event then speak
+    speechSynthesis.onvoiceschanged = () => { trySpeak(); };
+  } else {
+    trySpeak();
+  }
 }
 
 // ── GAME STATE ───────────────────────────────────────────────
@@ -1191,11 +1201,14 @@ function lc(a,b,t){
 }
 
 // ── DRAW HELPER ───────────────────────────────────────────────
+// On iOS, images have white backgrounds (no canvas bg removal).
+// Use 'multiply' composite to burn out white pixels against the scene.
 function drawAsset(key,dx,dy,dw,dh,alpha=1,flipX=false){
   const asset=gi(key);
   if(!asset)return false;
   ctx.save();
   if(alpha!==1) ctx.globalAlpha=alpha;
+  if(IS_IOS) ctx.globalCompositeOperation='multiply';
   if(flipX){ ctx.translate(dx+dw,0); ctx.scale(-1,1); dx=0; }
   ctx.drawImage(asset,dx,dy,dw,dh);
   ctx.restore();
@@ -1448,13 +1461,16 @@ function draw(){
   g2.animals.forEach(a=>{
     const aImg=gi(a.key);
     if(!aImg)return;
+    ctx.save();
+    if(IS_IOS) ctx.globalCompositeOperation='multiply';
     ctx.drawImage(aImg,a.x-22,a.y-22,44,44);
+    ctx.restore();
   });
 
   // ── RAIN CLOUDS ──
   g2.rainClouds.forEach(c=>{
     const rcImg=gi('world/rain');
-    if(rcImg){ ctx.drawImage(rcImg,c.x-c.r,c.y-c.r*.55,c.r*2,c.r*1.1); }
+    if(rcImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(rcImg,c.x-c.r,c.y-c.r*.55,c.r*2,c.r*1.1); ctx.restore(); }
     else{
       ctx.fillStyle='rgba(110,90,150,.8)';
       ctx.beginPath();ctx.ellipse(c.x,c.y,c.r,c.r*.48,0,0,Math.PI*2);ctx.fill();
@@ -1484,7 +1500,7 @@ function draw(){
     const fKey=f.type;
     ctx.save();ctx.translate(f.x,f.y);ctx.scale(pulse,pulse);
     const fImg=gi(fKey);
-    if(fImg){ ctx.drawImage(fImg,-26,-26,52,52); }
+    if(fImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(fImg,-26,-26,52,52); ctx.restore(); }
     else{ ctx.font='40px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍭',0,0); }
     ctx.restore();
     ctx.strokeStyle=`rgba(255,215,0,${0.38+.28*Math.sin(t*.09)})`;
@@ -1498,7 +1514,7 @@ function draw(){
     ctx.strokeStyle='rgba(255,255,255,.42)';ctx.lineWidth=1.8;
     ctx.beginPath();ctx.moveTo(b.x+wx,b.y+b.r);
     ctx.quadraticCurveTo(b.x+wx*1.8,b.y+b.r+22,b.x,b.y+b.r+46);ctx.stroke();
-    if(bImg){ ctx.drawImage(bImg,b.x+wx-b.r,b.y-b.r,b.r*2,b.r*2); }
+    if(bImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(bImg,b.x+wx-b.r,b.y-b.r,b.r*2,b.r*2); ctx.restore(); }
     else{
       ctx.fillStyle=b.soggy?'rgba(160,160,190,.65)':'#a78bfa';
       ctx.beginPath();ctx.arc(b.x+wx,b.y,b.r,0,Math.PI*2);ctx.fill();
@@ -1509,7 +1525,7 @@ function draw(){
   g2.candies.forEach(c=>{
     const cImg=gi(c.type);
     ctx.globalAlpha=Math.min(1,c.life/40);
-    if(cImg){ ctx.drawImage(cImg,c.x-16,c.y-16,32,32); }
+    if(cImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(cImg,c.x-16,c.y-16,32,32); ctx.restore(); }
     else{ ctx.font='26px serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🍭',c.x,c.y); }
   });
   ctx.globalAlpha=1;
@@ -1539,7 +1555,7 @@ function draw(){
     }else{
       const gImg=gi(p.gk);
       ctx.globalAlpha=a;
-      if(gImg){ ctx.drawImage(gImg,p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz); }
+      if(gImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(gImg,p.x-p.sz/2,p.y-p.sz/2,p.sz,p.sz); ctx.restore(); }
       else{ ctx.fillStyle=`rgba(255,215,0,${a})`;ctx.beginPath();ctx.arc(p.x,p.y,p.sz/2,0,Math.PI*2);ctx.fill(); }
       ctx.globalAlpha=1;
     }
@@ -1553,7 +1569,7 @@ function draw(){
     const fb=Math.sin(t*.14)*6;
     ctx.save();
     if(FI.dir<0){ctx.scale(-1,1);ctx.translate(-FI.x*2,0);}
-    if(fImg){ ctx.drawImage(fImg,FI.x-fw/2,FI.y-fh/2+fb,fw,fh); }
+    if(fImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(fImg,FI.x-fw/2,FI.y-fh/2+fb,fw,fh); ctx.restore(); }
     else{ ctx.font=`${fw}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🐉',FI.x,FI.y+fb); }
     ctx.restore();
     if(FI.taps<3&&Math.sin(t*.08)>.5){
@@ -1587,7 +1603,7 @@ function draw(){
   if(!g2.pFace){ctx.scale(-1,1);ctx.translate(-g2.px*2,0);}
   const ps=92;
   const pb=moving?Math.sin(t*.28)*5:Math.sin(t*.07)*3;
-  if(pImg){ ctx.drawImage(pImg,g2.px-ps/2,g2.py-ps/2+pb,ps,ps); }
+  if(pImg){ ctx.save(); if(IS_IOS) ctx.globalCompositeOperation='multiply'; ctx.drawImage(pImg,g2.px-ps/2,g2.py-ps/2+pb,ps,ps); ctx.restore(); }
   else{ ctx.font=`${ps}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🦄',g2.px,g2.py+pb); }
   ctx.restore();
 
