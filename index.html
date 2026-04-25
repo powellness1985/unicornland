@@ -272,7 +272,7 @@
 ═══════════════════════════════════════════════════════════ */
 
 // ── ASSET BASE ──────────────────────────────────────────────
-const BASE = '/assets';
+const BASE = './assets';
 
 // ── CHARACTER ROSTER ────────────────────────────────────────
 // fileKey = exact filename prefix. variation = suffix.
@@ -297,10 +297,10 @@ const CHARS = [
   { id:'onero',       fk:'onero',        v:'idle', name:'Onero',        bio:'A magical unicorn with a mysterious moonlit glow. Wise and gentle, Onero brings calm to every adventure.' },
 ];
 
-// ── IMAGE CACHE + BACKGROUND REMOVAL ───────────────────────
-// All PNGs are RGB (no alpha). We remove the background at draw-time
-// using an offscreen canvas with 'destination-out' compositing based on
-// the dominant background color (grey checker or solid near-white/near-grey).
+// ── IMAGE CACHE ─────────────────────────────────────────────
+// All PNGs are RGB (no alpha). Background removal uses offscreen canvas
+// getImageData() with crossOrigin='anonymous' — works because S3 sends CORS headers.
+// World/scenery assets (hill, houses, etc.) draw fully without processing.
 const imgs = {};
 let loaded = 0;
 const TOTAL_ASSETS = 0; // computed below after manifest
@@ -349,43 +349,70 @@ const manifest = [
 ];
 const TOTAL = manifest.length;
 
-// Offscreen canvas background removal:
-// Detects the dominant corner color (the bg) and removes pixels close to it.
-function removeBackground(srcImg, threshold = 60) {
+// Background removal via offscreen canvas + corner-color detection.
+// crossOrigin = 'anonymous' works because the S3 proxy sends CORS headers.
+// Assets that should NOT have background removal.
+// Only the hill grass (background element) and cloud (sky blend) are exempt.
+// All sprites including world buildings/trees need bg removal for clean transparency.
+const NO_BG_REMOVE = new Set(['world/hill','world/cloud']);
+
+function removeBackground(srcImg, threshold = 68) {
   const oc = document.createElement('canvas');
-  oc.width = srcImg.naturalWidth || 256;
-  oc.height = srcImg.naturalHeight || 256;
+  const W = srcImg.naturalWidth || 256;
+  const H = srcImg.naturalHeight || 256;
+  oc.width = W; oc.height = H;
   const octx = oc.getContext('2d', { willReadFrequently: true });
   octx.drawImage(srcImg, 0, 0);
-  const d = octx.getImageData(0, 0, oc.width, oc.height);
-  const px = d.data;
+  try {
+    const d = octx.getImageData(0, 0, W, H);
+    const px = d.data;
 
-  // Sample corners to find the background color
-  const corners = [[0,0],[oc.width-1,0],[0,oc.height-1],[oc.width-1,oc.height-1]];
-  let bgR=0,bgG=0,bgB=0;
-  corners.forEach(([x,y])=>{
-    const i=(y*oc.width+x)*4;
-    bgR+=px[i]; bgG+=px[i+1]; bgB+=px[i+2];
-  });
-  bgR=bgR/4|0; bgG=bgG/4|0; bgB=bgB/4|0;
+    // Fast alpha check — if image already has transparency, return as-is
+    if (px[3] < 10) return oc;
 
-  // For each pixel: if close to bg color, make transparent
-  for (let i=0; i<px.length; i+=4) {
-    const dr=px[i]-bgR, dg=px[i+1]-bgG, db=px[i+2]-bgB;
-    const dist = Math.sqrt(dr*dr+dg*dg+db*db);
-    if (dist < threshold) {
-      // Feather the edges: smooth transition
-      const alpha = Math.min(255, (dist / threshold) * 255 * 2.5 | 0);
-      px[i+3] = alpha;
+    // Build background color palette by sampling the outer 8px border ring.
+    // Sample every 4th pixel to keep palette small (~200 colors max).
+    // This captures checkerboard both shades and gradient backgrounds.
+    const BORDER = 8, STEP = 4;
+    const bucket = (r,g,b) => (((r>>3)<<10)|((g>>3)<<5)|(b>>3)); // 5-bit buckets
+    const bgPalette = new Map();
+    const addPx = (x,y) => {
+      const i=(y*W+x)*4;
+      const r=px[i],g=px[i+1],b=px[i+2];
+      const k=bucket(r,g,b);
+      if(!bgPalette.has(k)) bgPalette.set(k,[r,g,b]);
+    };
+    for(let x=0;x<W;x+=STEP){
+      for(let y=0;y<BORDER;y+=STEP) addPx(x,y);
+      for(let y=H-BORDER;y<H;y+=STEP) addPx(x,y);
     }
-  }
-  octx.putImageData(d, 0, 0);
-  return oc; // return offscreen canvas — draw this instead of original
-}
+    for(let y=BORDER;y<H-BORDER;y+=STEP){
+      for(let x=0;x<BORDER;x+=STEP) addPx(x,y);
+      for(let x=W-BORDER;x<W;x+=STEP) addPx(x,y);
+    }
 
-// Keys that should NOT have background removal (world backgrounds, hills, etc.)
-const NO_BG_REMOVE = new Set(['world/hill','world/hL','world/hR','world/tree',
-  'world/school','world/cloud','world/rain','world/flag','p/rainbow','p/impact']);
+    const bgList = [...bgPalette.values()];
+
+    // For each pixel, find minimum distance to any bg palette color
+    const thr2 = threshold * threshold;
+    for (let i=0; i<px.length; i+=4) {
+      const pr=px[i], pg=px[i+1], pb2=px[i+2];
+      let minD2 = Infinity;
+      for(const [br,bg,bb] of bgList){
+        const d2=(pr-br)**2+(pg-bg)**2+(pb2-bb)**2;
+        if(d2<minD2) minD2=d2;
+      }
+      if (minD2 < thr2) {
+        const minDist = Math.sqrt(minD2);
+        px[i+3] = Math.min(255, (minDist / threshold) * 255 * 2.5 | 0);
+      }
+    }
+    octx.putImageData(d, 0, 0);
+  } catch(e) {
+    return srcImg;
+  }
+  return oc;
+}
 
 function preload(onProg, onDone) {
   manifest.forEach(([key, src]) => {
@@ -394,9 +421,7 @@ function preload(onProg, onDone) {
       if (NO_BG_REMOVE.has(key)) {
         imgs[key] = img;
       } else {
-        // Remove background, store as offscreen canvas
-        try { imgs[key] = removeBackground(img, 55); }
-        catch(e) { imgs[key] = img; }
+        imgs[key] = removeBackground(img, 58);
       }
       loaded++;
       onProg(loaded / TOTAL);
@@ -940,7 +965,9 @@ function lc(a,b,t){
   return `rgb(${Math.round(r1+(r2-r1)*t)},${Math.round(g1+(g2p-g1)*t)},${Math.round(b1+(b2-b1)*t)})`;
 }
 
-// ── DRAW HELPER: draw an image or offscreen canvas ───────────
+// ── DRAW HELPER ───────────────────────────────────────────────
+// Assets in imgs are either <img> elements (world scenery) or
+// offscreen <canvas> elements with backgrounds removed. Both draw identically.
 function drawAsset(key,dx,dy,dw,dh,alpha=1,flipX=false){
   const asset=gi(key);
   if(!asset)return false;
