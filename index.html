@@ -444,16 +444,30 @@ function removeBackground(srcImg, threshold = 68) {
 }
 
 function preload(onProg, onDone) {
+  // Safety net: if something stalls, unblock after 12 seconds
+  let done = false;
+  const finish = () => { if(!done){ done=true; onDone(); } };
+  const safetyTimer = setTimeout(finish, 12000);
+
   manifest.forEach(([key, src]) => {
     const img = new Image();
-    img.onload = () => {
-      imgs[key] = NO_BG_REMOVE.has(key) ? img : removeBackground(img, 58);
+    const advance = (result) => {
+      imgs[key] = result || img;
       loaded++;
       onProg(loaded / TOTAL);
-      if (loaded >= TOTAL) onDone();
+      if (loaded >= TOTAL) { clearTimeout(safetyTimer); finish(); }
     };
-    img.onerror = () => { loaded++; onProg(loaded/TOTAL); if(loaded>=TOTAL) onDone(); };
-    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      // Wrap in try/catch — iOS Safari can taint the canvas and throw
+      try {
+        advance(NO_BG_REMOVE.has(key) ? img : removeBackground(img, 58));
+      } catch(e) {
+        advance(img);
+      }
+    };
+    img.onerror = () => advance(null);
+    // No crossOrigin attribute — same-origin Vercel assets don't need it
+    // and setting it incorrectly causes CORS failures on iOS Safari
     img.src = src;
   });
 }
