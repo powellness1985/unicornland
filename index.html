@@ -272,8 +272,8 @@
   <div id="tut-inner">
     <div class="tcard">
       <div class="mtitle" style="margin-bottom:18px">🎮 How to Play!</div>
-      <div class="tsec"><h3>👆 Tap to Fly!</h3><p>Tap anywhere and your unicorn flies right there, leaving a sparkle trail behind her!</p></div>
-      <div class="tsec"><h3>✨ Double-Tap to Shoot!</h3><p>Tap twice quickly to shoot a rainbow magic beam from your unicorn's horn — pop those balloons!</p></div>
+      <div class="tsec"><h3>✨ Tap to Shoot!</h3><p>Tap anywhere to shoot a rainbow magic beam from your unicorn's horn — pop those balloons!</p></div>
+      <div class="tsec"><h3>👆 Double-Tap to Fly!</h3><p>Tap twice quickly and your unicorn flies right there, leaving a sparkle trail behind her!</p></div>
       <div class="tsec"><h3>🎈 Pop Balloons!</h3><p>Each balloon pops with a giant glitter explosion and candy shower! Watch the 🌈 bar fill up!</p></div>
       <div class="tsec"><h3>🍭 Rainbow Popsicle Power-Up!</h3><p>Fly into the rainbow unicorn sparkle popsicle to instantly refill your magic!</p></div>
       <div class="tsec"><h3>🐉 Find Firey!</h3><p>Tap the little red dragon 3 times to push him away and make him silly and friendly!</p></div>
@@ -936,8 +936,8 @@ function trailPuff(x,y){
 }
 
 // ── INPUT ────────────────────────────────────────────────────
-// Single tap = fly there immediately (no delay).
-// Double tap (within 280ms) = cancel the fly and shoot magic instead.
+// Single tap = shoot magic instantly (no delay).
+// Double tap (within 280ms) = fly there instead.
 let lastTap=0, lastTapX=0, lastTapY=0;
 
 function handleTap(x,y){
@@ -946,11 +946,11 @@ function handleTap(x,y){
   const dbl=now-lastTap<280;
   lastTap=now;
   if(dbl){
-    // Double tap — shoot toward where the first tap landed
-    fireMagic(lastTapX, lastTapY);
-  } else {
-    // Single tap — fly immediately, no waiting
+    // Double tap — fly to that spot
     movePlayer(x,y);
+  } else {
+    // Single tap — shoot magic instantly, no waiting
+    fireMagic(x,y);
     lastTapX=x; lastTapY=y;
   }
 }
@@ -1178,7 +1178,7 @@ function startGame(){
   // Welcome greeting with selected character name
   const charName=CHARS[selChar].name;
   setTimeout(()=>{
-    say(`Welcome to Unicorn Land! ${charName} is ready to spread magic! Tap to fly, double tap to shoot rainbow beams and pop the balloons!`);
+    say(`Welcome to Unicorn Land! ${charName} is ready to spread magic! Tap to shoot rainbow beams and pop the balloons! Double tap to fly!`);
   },400);
   requestAnimationFrame(loop);
 }
