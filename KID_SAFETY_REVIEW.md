@@ -1,7 +1,7 @@
-# 🚨 Kid-Safety Review: Unicorn Land for Waverly (Age 6)
+# 🚨 Kid-Safety Review: Unicorn Land for Wave 
 
 ## Summary
-✅ **SAFE FOR 6-YEAR-OLD** with minor flags noted below. No losing states, no pressure, no scary elements. Designed for joy and agency.
+✅ **SAFE FOR YOUNG CHILD** with minor flags noted below. No losing states, no pressure, no scary elements. Designed for joy and agency.
 
 ---
 
@@ -16,7 +16,7 @@
 | Score anxiety | ✅ SAFE | Progress bar is visual, not numerical/scoring |
 | Restart friction | ✅ SAFE | World resets automatically after completion, soft transition |
 
-**Why It's Good:** Waverly can play as long as she wants. Walking away is always OK. No anxiety.
+**Why It's Good:** Wave can play as long as she wants. Walking away is always OK. No anxiety.
 
 ---
 
@@ -31,7 +31,7 @@
 | Emojis | ✅ GOOD | Cute, happy, non-threatening animals/expressions |
 
 **Flags:**
-- Rain clouds are darker than other elements. They're intentionally "soft" in code, but watch Waverly's reaction. If she recoils, could change to lighter purple or make them have smiley faces.
+- Rain clouds are darker than other elements. They're intentionally "soft" in code, but watch Wave's reaction. If she recoils, could change to lighter purple or make them have smiley faces.
 - Soggy balloon visual (grayed out) might feel sad. Could add cute raindrops on it instead of desaturation.
 
 ---
@@ -48,7 +48,7 @@
 | Bonus fruits | ✅ GOOD | Random "surprise gift" feels magical, no pressure |
 
 **Flags:**
-- Magic meter might confuse a 6-year-old: "Why can't I tap twice?" Consider: (a) Adding tooltip on first double-tap with no magic, (b) Making meter more obvious, (c) Adding encouraging sound ("ding!" when full).
+- Magic meter might confuse a young child: "Why can't I tap twice?" Consider: (a) Adding tooltip on first double-tap with no magic, (b) Making meter more obvious, (c) Adding encouraging sound ("ding!" when full).
 - Soggy balloons add strategy but might frustrate young kids. Could make clearing clouds feel more like "helping balloons" than "blocking them."
 
 ---
@@ -60,7 +60,7 @@
 | World completion message | ✅ GOOD | "You made the whole world beautiful!" + "Fruity never gives up, just like you!" |
 | No scary words | ✅ GOOD | No "fail," "lost," "dead," "try again," "game over" |
 | Font sizes | ⚠️ CAUTION | Some UI text might be small on iPad Mini (check: magic meter, progress bar labels) |
-| Reading level | ✅ GOOD | Simple 2-3 word messages (6-year-olds can read or get the gist from emoji) |
+| Reading level | ✅ GOOD | Simple 2-3 word messages (young children can read or get the gist from emoji) |
 
 **Flags:**
 - Double-check font sizes on smallest iPad (test on device).
@@ -78,7 +78,7 @@
 | Cumulative reward | ✅ GOOD | "X rainbows painted today" celebrates total effort, not pressure |
 
 **Flags:**
-- None - difficulty progression is solid for 6-year-old.
+- None - difficulty progression is solid for young child.
 
 ---
 
@@ -117,7 +117,7 @@
 |-------|--------|-----------|
 | Resilience | ✅ GOOD | "Fruity never gives up, even in the rain" - growth mindset |
 | Collaboration | ✅ GOOD | Friends' names in animals (Fee, Char, Mae, Sage) - they're "in the game" |
-| School pride | ✅ GOOD | Carpenter Hill Easter egg celebrates her school |
+| School pride | ✅ GOOD | Sparkle Hill Easter egg celebrates her school |
 | Celebration over winning | ✅ GOOD | World painting is co-creation, not competition |
 | No comparison | ✅ GOOD | No leaderboards, no "you did worse than," no social pressure |
 
@@ -136,7 +136,7 @@
 2. **Rain Cloud Visuals** (visual feedback)
    - Current: Dark purple/gray clouds
    - Flag: Might feel sad/scary for some kids
-   - Action: Test with Waverly. If she recoils: (a) make clouds lighter, or (b) add smiley faces, or (c) reframe as "friendly clouds that need help"
+   - Action: Test with Wave. If she recoils: (a) make clouds lighter, or (b) add smiley faces, or (c) reframe as "friendly clouds that need help"
    - Alternative: Change name from "rain clouds" to "silly clouds" to make them playful
 
 3. **Soggy Balloon Feedback** (visual clarity)
@@ -147,8 +147,8 @@
 
 4. **Magic Meter Confusion** (UX clarity)
    - Current: Rainbow bar under Fruity, regenerates in 4 seconds
-   - Flag: 6-year-old might not understand "why can't I tap twice?"
-   - Action: (a) Test on Waverly, (b) if confused, add visual/sound feedback when magic is full ("ding!"), (c) add tutorial tooltip first time player hits empty meter
+   - Flag: young child might not understand "why can't I tap twice?"
+   - Action: (a) Test on Wave, (b) if confused, add visual/sound feedback when magic is full ("ding!"), (c) add tutorial tooltip first time player hits empty meter
    - Alternative: Make meter bigger/more obvious
 
 ### Priority: MEDIUM
@@ -173,7 +173,7 @@
 ### Priority: LOW
 8. **Celebration Timing** (pacing)
    - Current: Celebration lasts 8 seconds, then resets
-   - Flag: Might be too fast or too slow - depends on Waverly's play style
+   - Flag: Might be too fast or too slow - depends on Wave's play style
    - Action: Test and adjust based on play session feedback
    - Tweak: If 8 seconds feels rushed, increase to 12s
 
@@ -181,12 +181,12 @@
 
 ## ✅ WHAT'S WORKING WELL
 
-1. **No pressure** - Waverly can play forever, walk away anytime, no penalties
+1. **No pressure** - Wave can play forever, walk away anytime, no penalties
 2. **Clear feedback loops** - Every action has immediate visual+verbal response
 3. **Visible progress** - World painting bar shows her impact in real-time
 4. **Celebration culture** - Completion feels like a joy, not an obligation to repeat
 5. **Friend integration** - Her friends are literally in the game (animals), making it personal
-6. **School pride** - Carpenter Hill Easter egg honors her real school
+6. **School pride** - Sparkle Hill Easter egg honors her real school
 7. **Resilience message** - "Fruity never gives up" mirrors growth mindset parenting
 8. **Touch-friendly** - Large buttons, forgiving tap targets, responsive design
 
@@ -194,7 +194,7 @@
 
 ## FINAL RECOMMENDATION
 
-🟢 **READY FOR TESTING WITH WAVERLY** with these caveats:
+🟢 **READY FOR TESTING WITH WAVE** with these caveats:
 1. Watch her reaction to rain clouds (adjust if scary)
 2. Watch her reaction to soggy balloons (adjust if sad)
 3. Test on actual iPad for font sizes
@@ -202,7 +202,7 @@
 5. When adding audio, test volume levels (gentle, not jarring)
 6. Add more encouragement message variety before final launch
 
-**Estimated work to address flags:** 30-60 minutes of tweaks based on Waverly's feedback.
+**Estimated work to address flags:** 30-60 minutes of tweaks based on Wave's feedback.
 
 ---
 

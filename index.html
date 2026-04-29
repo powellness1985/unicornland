@@ -2,11 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Unicorn Land 🦄</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
+    /* Self-hosted Nunito (variable font, latin subset) — no third-party request */
+    @font-face{
+      font-family:'Nunito';
+      font-style:normal;
+      font-weight:700 900;
+      font-display:swap;
+      src:url('./assets/fonts/nunito-latin.woff2') format('woff2');
+    }
     *{margin:0;padding:0;box-sizing:border-box}
     :root{
       --pink:#FF6FD8;--purple:#9B59B6;--dpurple:#7D3C98;
@@ -208,7 +214,7 @@
 <div id="ls">
   <div id="ls-uni">🦄</div>
   <div id="ls-title">Unicorn Land</div>
-  <div id="ls-sub">Waverly's Magical World ✨</div>
+  <div id="ls-sub">Wave's Magical World ✨</div>
   <div id="ls-wrap"><div id="ls-bar"></div></div>
   <div id="ls-msg">Waking up the unicorns…</div>
 </div>
@@ -216,9 +222,9 @@
 <!-- CHARACTER SELECT -->
 <div id="charsel" class="hidden">
   <div id="cs-title">✨ Who are you playing as? ✨</div>
-  <div id="cs-sub">Pick your magical unicorn, Waverly!</div>
+  <div id="cs-sub">Pick your magical unicorn, Wave!</div>
   <div id="cs-grid"></div>
-  <button id="cs-start" onclick="launchGame()">🦄 Let's Go!</button>
+  <button id="cs-start">🦄 Let's Go!</button>
 </div>
 
 <!-- HUD -->
@@ -230,8 +236,8 @@
   <div id="rbcount">🌈 0 rainbows</div>
 </div>
 <div id="btns">
-  <button class="ubtn" onclick="openModal('gal')">🦄 Friends</button>
-  <button class="ubtn" onclick="openModal('tut')">❓ How to Play</button>
+  <button id="btn-gal" class="ubtn">🦄 Friends</button>
+  <button id="btn-tut" class="ubtn">❓ How to Play</button>
 </div>
 
 <!-- CANVAS -->
@@ -247,8 +253,7 @@
     <div class="mtitle">✨ Meet the Unicorns ✨</div>
     <div class="ggrid" id="ggrid"></div>
     <div style="text-align:center">
-      <button class="ubtn" style="pointer-events:all;font-size:15px;padding:11px 26px"
-        onclick="closeModal('gal')">🎮 Back to Game!</button>
+      <button id="btn-gal-close" class="ubtn" style="pointer-events:all;font-size:15px;padding:11px 26px">🎮 Back to Game!</button>
     </div>
   </div>
 </div>
@@ -256,13 +261,13 @@
 <!-- DETAIL -->
 <div id="detail">
   <div class="dcard">
-    <button class="cx" onclick="closeDetail()">✕</button>
+    <button id="btn-detail-close" class="cx">✕</button>
     <img id="d-img" src="" alt="">
     <div class="dname" id="d-name"></div>
     <div class="dbio"  id="d-bio"></div>
     <div class="dbtns">
-      <button class="dbtn sp" onclick="speakBio()">🔊 Hear Bio</button>
-      <button class="dbtn pl" onclick="pickChar()">🎮 Play as Me!</button>
+      <button id="btn-detail-speak" class="dbtn sp">🔊 Hear Bio</button>
+      <button id="btn-detail-play"  class="dbtn pl">🎮 Play as Me!</button>
     </div>
   </div>
 </div>
@@ -280,8 +285,7 @@
       <div class="tsec"><h3>🐰 Feed the Animals!</h3><p>When balloons pop, candy falls! Animals rush over to eat it — watch them go!</p></div>
       <div class="tsec"><h3>☔ Rain Every Day!</h3><p>It rains in Unicorn Land, but Fruity never gives up — and neither do you! 💕</p></div>
       <div style="text-align:center;margin-top:18px">
-        <button class="ubtn" style="pointer-events:all;font-size:15px;padding:11px 26px"
-          onclick="closeModal('tut')">🎮 Let's Play!</button>
+        <button id="btn-tut-close" class="ubtn" style="pointer-events:all;font-size:15px;padding:11px 26px">🎮 Let's Play!</button>
       </div>
     </div>
   </div>
@@ -291,29 +295,17 @@
 <div id="vic">
   <div id="vicuni">🦄</div>
   <div id="vict">You painted the<br>whole world! 🌈</div>
-  <div id="vicm">Fruity never gives up, just like you!<br>You're magical, Waverly! 💕</div>
+  <div id="vicm">Fruity never gives up, just like you!<br>You're magical, Wave! 💕</div>
   <div id="vicc"></div>
-  <button id="vicbtn" onclick="continueGame()">🌈 Paint Again!</button>
+  <button id="vicbtn">🌈 Paint Again!</button>
 </div>
 
 <script>
 'use strict';
 /* ═══════════════════════════════════════════════════════════
-   UNICORN LAND — v3.0 — Waverly's Magical World
-   Enhanced April 2026 by Perplexity Computer for Chris Powell
+   UNICORN LAND — v3.0 — Wave's Magical World
 
-   NEW IN v3.0:
-   ✦ Character Select screen before gameplay
-   ✦ speechSynthesis welcome greeting by name
-   ✦ Tinkerbell sparkle trail (5x denser, color cycling)
-   ✦ Balloon hit zones 2x bigger for small fingers
-   ✦ Giant glitter burst + candy shower on every pop
-   ✦ Dramatic sky: pink/orange clouds bloom as world fills
-   ✦ Real procedural flute BGM (pentatonic, harmonics, reverb)
-   ✦ Balloon pop sound improved (thicker, satisfying crack)
-   ✦ Victory screen speaks character name aloud
-
-   CORE PHILOSOPHY (Waverly's words):
+   CORE PHILOSOPHY (from the kid who designed it):
    "The unicorn doesn't give up if she sees rain. She never gives up."
    "It's just about playing and having fun."
    "Fruity, cause she loves fruit."
@@ -328,22 +320,22 @@ const BASE = './assets';
 // ── CHARACTER ROSTER ────────────────────────────────────────
 const CHARS = [
   { id:'fruity',      fk:'fruity',       v:'idle', name:'Fruity',       bio:'The original magical rainbow unicorn! Fruity loves fruit and never gives up, even in the rain. She has beautiful wings and a heart full of sparkles!' },
-  { id:'waverly',     fk:'waverly',      v:'idle', name:'Waverly',      bio:'The brave rainbow unicorn! Waverly spreads joy and magic everywhere she flies. She never gives up, no matter what!' },
+  { id:'wave',        fk:'wave',         v:'idle', name:'Wave',         bio:'The brave rainbow unicorn! Wave spreads joy and magic everywhere she flies. She never gives up, no matter what!' },
   { id:'charchar',    fk:'charchar',     v:'idle', name:'Char Char',    bio:'The glitter dash unicorn! Char Char is super fast and fabulous, leaving glitter trails everywhere she goes!' },
   { id:'fifi',        fk:'fifi',         v:'idle', name:'Fifi',         bio:'The fancy cupcake unicorn! Fifi creates sweet magic and loves sharing treats. Always ready for a celebration!' },
-  { id:'charlottemae',fk:'charlotte-mae',v:'idle', name:'Charlotte Mae',bio:'The sweet heart unicorn! Charlotte Mae spreads kindness and gentle love everywhere. Her heart is as big as the whole world!' },
-  { id:'sadie',       fk:'sadie',        v:'idle', name:'Sadie',        bio:'The wise moon unicorn! Sadie is calm and full of wisdom. She watches over everyone like the moon watches the night sky.' },
-  { id:'riley',       fk:'riley',        v:'idle', name:'Riley',        bio:'The brave flame unicorn! Riley has a warm spirit and is always ready to protect friends. Brave and strong!' },
+  { id:'sweetie',fk:'sweetie',v:'idle', name:'Sweetie',bio:'The sweet heart unicorn! Sweetie spreads kindness and gentle love everywhere. Her heart is as big as the whole world!' },
+  { id:'luna',       fk:'luna',        v:'idle', name:'Luna',        bio:'The wise moon unicorn! Luna is calm and full of wisdom. She watches over everyone like the moon watches the night sky.' },
+  { id:'blaze',       fk:'blaze',        v:'idle', name:'Blaze',        bio:'The brave flame unicorn! Blaze has a warm spirit and is always ready to protect friends. Brave and strong!' },
   { id:'pappa',       fk:'pappa',        v:'idle', name:'Pappa',        bio:'The builder unicorn! Pappa creates amazing magical things with love and care. Silly, warm, and always building something wonderful.' },
   { id:'maemae',      fk:'maemae',       v:'idle', name:'MaeMae',       bio:'The warm heart grandma unicorn! MaeMae spreads comfort, hugs, and cozy love. She makes everyone feel safe.' },
   { id:'grandpa',     fk:'grandpa',      v:'idle', name:'Grandpa',      bio:'The strong earth unicorn! Grandpa is wise and reliable. He\'s the rock that everyone counts on.' },
   { id:'kk',          fk:'kk',           v:'idle', name:'KK',           bio:'The golden heart grandma unicorn! KK spreads warmth and gentle care. Her love shines like golden sunshine!' },
   { id:'odie',        fk:'odie',         v:'idle', name:'Odie',         bio:'The zoom unicorn pup! Odie is tiny, fast, and full of energy. This little pup brings joy to every moment!' },
-  { id:'walter',      fk:'walter',       v:'idle', name:'Walter',       bio:'The cloud unicorn! Walter floats gently through the sky, bringing peace and coziness everywhere.' },
-  { id:'daddy',       fk:'damon',        v:'idle', name:'Daddy',        bio:'The strong protective unicorn! Daddy is brave and caring — always there when needed. A loving guide who brings warmth.' },
-  { id:'mommy',       fk:'blythe',       v:'sky',  name:'Mommy',        bio:'The starlight guardian! Mommy watches over from the sky with love and light. Always present, always guiding.' },
+  { id:'cloudy',      fk:'cloudy',       v:'idle', name:'Cloudy',       bio:'The cloud unicorn! Cloudy floats gently through the sky, bringing peace and coziness everywhere.' },
+  { id:'daddy',       fk:'daddy',        v:'idle', name:'Daddy',        bio:'The strong protective unicorn! Daddy is brave and caring — always there when needed. A loving guide who brings warmth.' },
+  { id:'mommy',       fk:'mommy',        v:'sky',  name:'Mommy',        bio:'The starlight guardian! Mommy watches over from the sky with love and light. Always present, always guiding.' },
   { id:'jj',          fk:'jj',           v:'idle', name:'JJ',           bio:'Full of sparkle and good vibes! JJ brings joy and laughter to every adventure in Unicorn Land.' },
-  { id:'vinny',       fk:'vinny',        v:'idle', name:'Vinny',        bio:'The cool adventurer unicorn! Vinny is bold, fun, and always ready for the next great adventure. Full of energy and heart!' },
+  { id:'comet',       fk:'comet',        v:'idle', name:'Comet',        bio:'The cool adventurer unicorn! Comet is bold, fun, and always ready for the next great adventure. Full of energy and heart!' },
 ];
 
 // ── IMAGE CACHE ─────────────────────────────────────────────
@@ -355,7 +347,7 @@ const manifest = [
   ['fruity/flying',  `${BASE}/characters/fruity-flying.png`],
   ['fruity/crowned', `${BASE}/characters/fruity-crowned.png`],
   ['fruity/happy',   `${BASE}/characters/fruity-happy.png`],
-  ['waverly/flying', `${BASE}/characters/waverly-flying.png`],
+  ['wave/flying',    `${BASE}/characters/wave-flying.png`],
   ['firey/shy',      `${BASE}/characters/firey-shy.png`],
   ['firey/playful',  `${BASE}/characters/firey-playful.png`],
   ['firey/silly',    `${BASE}/characters/firey-silly.png`],
@@ -363,10 +355,10 @@ const manifest = [
   ['world/hL',       `${BASE}/world/house-left.png`],
   ['world/hR',       `${BASE}/world/house-right.png`],
   ['world/tree',     `${BASE}/world/tree-center.png`],
-  ['world/school',   `${BASE}/world/carpenter-hill-school.png`],
+  ['world/school',   `${BASE}/world/school.png`],
   ['world/cloud',    `${BASE}/world/cloud-fluffy.png`],
   ['world/rain',     `${BASE}/world/rain-cloud-soft.png`],
-  ['world/flag',     `${BASE}/world/carpenter-hill-flag.png`],
+  ['world/flag',     `${BASE}/world/school-flag.png`],
   ['b/blue',    `${BASE}/interactive/balloon-blue.png`],
   ['b/purple',  `${BASE}/interactive/balloon-purple.png`],
   ['b/red',     `${BASE}/interactive/balloon-red.png`],
@@ -1058,7 +1050,7 @@ function tapFirey(){
     g2.firey.state='silly';
     burst(g2.firey.x,g2.firey.y,30);
     burst(g2.firey.x,g2.firey.y,12,'🌈');
-    say('Firey ran away! He was scared of all that magic, Waverly! You did it!');
+    say('Firey ran away! He was scared of all that magic, Wave! You did it!');
     for(let i=0;i<18;i++) setTimeout(()=>spawnCandy(g2.firey.x+(Math.random()-.5)*160,g2.firey.y),i*70);
     g2.firey.vy=-8;
   }
@@ -1114,14 +1106,14 @@ function triggerVictory(){
   vicm.replaceChildren(
     document.createTextNode(`${charName} never gives up, just like you!`),
     document.createElement('br'),
-    document.createTextNode("You're magical, Waverly! 💕")
+    document.createTextNode("You're magical, Wave! 💕")
   );
   document.getElementById('vicc').textContent=`🌈 ${rbCount} beautiful rainbow${rbCount!==1?'s':''} today!`;
   document.getElementById('vic').classList.add('show');
   fireConfetti();
   sfx('victory');
   setTimeout(()=>{
-    say(`Wonderful! You painted the whole world beautiful! You've made ${rbCount} rainbow${rbCount!==1?'s':''} today! ${charName} never gives up, just like you, Waverly!`);
+    say(`Wonderful! You painted the whole world beautiful! You've made ${rbCount} rainbow${rbCount!==1?'s':''} today! ${charName} never gives up, just like you, Wave!`);
   },600);
 }
 
@@ -1578,6 +1570,17 @@ function draw(){
     ctx.textAlign='center';ctx.fillText('⚡ RAINBOW POWER!',g2.px,my-5);
   }
 }
+
+// ── EVENT WIRING (replaces inline onclick handlers; required for strict CSP) ──
+document.getElementById('cs-start')        .addEventListener('click', launchGame);
+document.getElementById('btn-gal')         .addEventListener('click', () => openModal('gal'));
+document.getElementById('btn-tut')         .addEventListener('click', () => openModal('tut'));
+document.getElementById('btn-gal-close')   .addEventListener('click', () => closeModal('gal'));
+document.getElementById('btn-tut-close')   .addEventListener('click', () => closeModal('tut'));
+document.getElementById('btn-detail-close').addEventListener('click', closeDetail);
+document.getElementById('btn-detail-speak').addEventListener('click', speakBio);
+document.getElementById('btn-detail-play') .addEventListener('click', pickChar);
+document.getElementById('vicbtn')          .addEventListener('click', continueGame);
 </script>
 </body>
 </html>

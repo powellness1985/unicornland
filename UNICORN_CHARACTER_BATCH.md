@@ -8,27 +8,27 @@ ultra cute magical children's game art, unicorn character, soft rounded shapes, 
 
 ---
 
-# 1️⃣ WAVERLY (Main Hero - 3 Forms)
+# 1️⃣ WAVE (Main Hero - 3 Forms)
 
-## Variation 1: Waverly the Rainbow Unicorn (Idle/Home)
+## Variation 1: Wave the Rainbow Unicorn (Idle/Home)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Waverly the Rainbow Unicorn, lavender and pink pastel unicorn with iridescent wings, soft flowing mane with golden accents, kind magical expression, sitting peacefully with gentle magical sparkles and subtle golden glow, big friendly eyes, perfect for 6-year-old's game, bright friendly non-threatening, cartoon style, game-ready icon
+Wave the Rainbow Unicorn, lavender and pink pastel unicorn with iridescent wings, soft flowing mane with golden accents, kind magical expression, sitting peacefully with gentle magical sparkles and subtle golden glow, big friendly eyes, perfect for young child's game, bright friendly non-threatening, cartoon style, game-ready icon
 ```
 
-## Variation 2: Waverly the Flying Star Unicorn (Action/Flying)
-```
-ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
-
-Waverly the Flying Star Unicorn, joyful pastel unicorn in flight with wings spread wide, lavender wings with gradient shimmer, pink and gold mane flowing majestically, surrounded by twinkling sparkles and stardust trails, magical aura mid-flight, bright cheerful celebratory mood, game-ready icon
-```
-
-## Variation 3: Waverly the Dream Unicorn (Magic/Dreamy)
+## Variation 2: Wave the Flying Star Unicorn (Action/Flying)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Waverly the Dream Unicorn, soft glowing unicorn with dreamy pastel colors, surrounded by floating magical sparkles and dreamy clouds, soft ethereal appearance, creating magic from imagination, gentle peaceful expression, big kind eyes, whimsical and magical mood, game-ready icon
+Wave the Flying Star Unicorn, joyful pastel unicorn in flight with wings spread wide, lavender wings with gradient shimmer, pink and gold mane flowing majestically, surrounded by twinkling sparkles and stardust trails, magical aura mid-flight, bright cheerful celebratory mood, game-ready icon
+```
+
+## Variation 3: Wave the Dream Unicorn (Magic/Dreamy)
+```
+ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
+
+Wave the Dream Unicorn, soft glowing unicorn with dreamy pastel colors, surrounded by floating magical sparkles and dreamy clouds, soft ethereal appearance, creating magic from imagination, gentle peaceful expression, big kind eyes, whimsical and magical mood, game-ready icon
 ```
 
 ---
@@ -83,77 +83,77 @@ CharChar the Glitter Dash Unicorn, surrounded by swirling glitter and sparkle au
 
 ---
 
-# 4️⃣ CHARLOTTE MAE (Friend - Sweet Heart Unicorn)
+# 4️⃣ SWEETIE (Friend - Sweet Heart Unicorn)
 
-## Variation 1: Charlotte Mae the Sweet Heart Unicorn (Idle - Gentle)
+## Variation 1: Sweetie the Sweet Heart Unicorn (Idle - Gentle)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Charlotte Mae the Sweet Heart Unicorn, gentle pastel unicorn with soft lavender and pink coloring, sweet kind expression, big gentle eyes, surrounded by soft sparkles and hearts, peaceful calm appearance, sitting peacefully, loving and gentle energy, game-ready icon
+Sweetie the Sweet Heart Unicorn, gentle pastel unicorn with soft lavender and pink coloring, sweet kind expression, big gentle eyes, surrounded by soft sparkles and hearts, peaceful calm appearance, sitting peacefully, loving and gentle energy, game-ready icon
 ```
 
-## Variation 2: Charlotte Mae the Sweet Heart Unicorn (Action - Dancing/Playing)
-```
-ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
-
-Charlotte Mae the Sweet Heart Unicorn, doing a joyful happy dance or jump, surrounded by floating hearts and sparkles, happy playful expression, bright cheerful mood, gentle movement, creating heart magic as she plays, kind and joyful, game-ready icon
-```
-
-## Variation 3: Charlotte Mae the Sweet Heart Unicorn (Magical - Heart Magic)
+## Variation 2: Sweetie the Sweet Heart Unicorn (Action - Dancing/Playing)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Charlotte Mae the Sweet Heart Unicorn, surrounded by glowing hearts and love magic, horn shining with heart sparkles, creating healing or loving magic, peaceful magical expression, surrounded by pink and lavender heart energy, caring and magical, game-ready icon
+Sweetie the Sweet Heart Unicorn, doing a joyful happy dance or jump, surrounded by floating hearts and sparkles, happy playful expression, bright cheerful mood, gentle movement, creating heart magic as she plays, kind and joyful, game-ready icon
+```
+
+## Variation 3: Sweetie the Sweet Heart Unicorn (Magical - Heart Magic)
+```
+ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
+
+Sweetie the Sweet Heart Unicorn, surrounded by glowing hearts and love magic, horn shining with heart sparkles, creating healing or loving magic, peaceful magical expression, surrounded by pink and lavender heart energy, caring and magical, game-ready icon
 ```
 
 ---
 
-# 5️⃣ SADIE (Friend - Wise Moon Unicorn)
+# 5️⃣ LUNA (Friend - Wise Moon Unicorn)
 
-## Variation 1: Sadie the Wise Moon Unicorn (Idle - Calm)
+## Variation 1: Luna the Wise Moon Unicorn (Idle - Calm)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Sadie the Wise Moon Unicorn, deep blue and purple toned unicorn, calm peaceful expression, big kind eyes, surrounded by soft moon glow and stars, quiet gentle appearance, wise and knowing look, peaceful magical sparkles, serene and calm, game-ready icon
+Luna the Wise Moon Unicorn, deep blue and purple toned unicorn, calm peaceful expression, big kind eyes, surrounded by soft moon glow and stars, quiet gentle appearance, wise and knowing look, peaceful magical sparkles, serene and calm, game-ready icon
 ```
 
-## Variation 2: Sadie the Wise Moon Unicorn (Action - Gliding/Flying)
-```
-ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
-
-Sadie the Wise Moon Unicorn, gliding gracefully through night sky, surrounded by moon glow and star trails, peaceful floating motion, calm happy expression, glowing horn illuminating the way, surrounded by nighttime magic sparkles, serene and gentle, game-ready icon
-```
-
-## Variation 3: Sadie the Wise Moon Unicorn (Magical - Moon Magic)
+## Variation 2: Luna the Wise Moon Unicorn (Action - Gliding/Flying)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Sadie the Wise Moon Unicorn, surrounded by moon magic and star energy, horn glowing with celestial light, creating calm magic and wisdom sparkles, surrounded by crescent moons and twinkling stars, wise peaceful expression, magical nighttime energy, game-ready icon
+Luna the Wise Moon Unicorn, gliding gracefully through night sky, surrounded by moon glow and star trails, peaceful floating motion, calm happy expression, glowing horn illuminating the way, surrounded by nighttime magic sparkles, serene and gentle, game-ready icon
+```
+
+## Variation 3: Luna the Wise Moon Unicorn (Magical - Moon Magic)
+```
+ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
+
+Luna the Wise Moon Unicorn, surrounded by moon magic and star energy, horn glowing with celestial light, creating calm magic and wisdom sparkles, surrounded by crescent moons and twinkling stars, wise peaceful expression, magical nighttime energy, game-ready icon
 ```
 
 ---
 
-# 6️⃣ RILEY (Friend - Brave Flame Unicorn)
+# 6️⃣ BLAZE (Friend - Brave Flame Unicorn)
 
-## Variation 1: Riley the Brave Flame Unicorn (Idle - Confident)
+## Variation 1: Blaze the Brave Flame Unicorn (Idle - Confident)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Riley the Brave Flame Unicorn, confident strong unicorn with warm glowing red and orange mane like flames, brave proud expression, big determined kind eyes, surrounded by warm glowing sparkles, warm golden light, strong and protective energy, game-ready icon
+Blaze the Brave Flame Unicorn, confident strong unicorn with warm glowing red and orange mane like flames, brave proud expression, big determined kind eyes, surrounded by warm glowing sparkles, warm golden light, strong and protective energy, game-ready icon
 ```
 
-## Variation 2: Riley the Brave Flame Unicorn (Action - Protecting/Strong)
-```
-ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
-
-Riley the Brave Flame Unicorn, in protective heroic pose, surrounded by warm glowing flame aura, red hair flowing with energy, brave determined expression, surrounded by warm golden sparkles and protective light, strong and courageous, game-ready icon
-```
-
-## Variation 3: Riley the Brave Flame Unicorn (Magical - Flame Magic)
+## Variation 2: Blaze the Brave Flame Unicorn (Action - Protecting/Strong)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Riley the Brave Flame Unicorn, surrounded by warm flame magic and protective fire energy, horn glowing with warm light, creating brave protective magic, surrounded by orange and gold flame sparkles, courageous magical expression, warm protective power, game-ready icon
+Blaze the Brave Flame Unicorn, in protective heroic pose, surrounded by warm glowing flame aura, red hair flowing with energy, brave determined expression, surrounded by warm golden sparkles and protective light, strong and courageous, game-ready icon
+```
+
+## Variation 3: Blaze the Brave Flame Unicorn (Magical - Flame Magic)
+```
+ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
+
+Blaze the Brave Flame Unicorn, surrounded by warm flame magic and protective fire energy, horn glowing with warm light, creating brave protective magic, surrounded by orange and gold flame sparkles, courageous magical expression, warm protective power, game-ready icon
 ```
 
 ---
@@ -283,27 +283,27 @@ Odie the Zoom Unicorn Pup, surrounded by speed and zoom magic sparkles, tiny hor
 
 ---
 
-# 1️⃣2️⃣ WALTER (Pet - Cloud Unicorn)
+# 1️⃣2️⃣ CLOUDY (Pet - Cloud Unicorn)
 
-## Variation 1: Walter the Cloud Unicorn (Idle - Cozy)
+## Variation 1: Cloudy the Cloud Unicorn (Idle - Cozy)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Walter the Cloud Unicorn, soft fluffy unicorn with cloud-like coloring, gentle calm expression, big kind eyes, surrounded by soft cloud sparkles and fluffy light, peaceful cozy appearance, slow and gentle energy, game-ready icon
+Cloudy the Cloud Unicorn, soft fluffy unicorn with cloud-like coloring, gentle calm expression, big kind eyes, surrounded by soft cloud sparkles and fluffy light, peaceful cozy appearance, slow and gentle energy, game-ready icon
 ```
 
-## Variation 2: Walter the Cloud Unicorn (Action - Floating/Drifting)
-```
-ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
-
-Walter the Cloud Unicorn, floating gently and drifting slowly, surrounded by soft cloud magic and sparkles, peaceful happy expression, creating cloud trails, gentle slow movement, cozy safe energy, game-ready icon
-```
-
-## Variation 3: Walter the Cloud Unicorn (Magical - Cloud Magic)
+## Variation 2: Cloudy the Cloud Unicorn (Action - Floating/Drifting)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Walter the Cloud Unicorn, surrounded by soft cloud magic and gentle sparkles, horn glowing with cloud light, creating soft fluffy cloud magic, surrounded by clouds and peaceful light, calm gentle magical expression, cozy magic, game-ready icon
+Cloudy the Cloud Unicorn, floating gently and drifting slowly, surrounded by soft cloud magic and sparkles, peaceful happy expression, creating cloud trails, gentle slow movement, cozy safe energy, game-ready icon
+```
+
+## Variation 3: Cloudy the Cloud Unicorn (Magical - Cloud Magic)
+```
+ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
+
+Cloudy the Cloud Unicorn, surrounded by soft cloud magic and gentle sparkles, horn glowing with cloud light, creating soft fluffy cloud magic, surrounded by clouds and peaceful light, calm gentle magical expression, cozy magic, game-ready icon
 ```
 
 ---
@@ -358,52 +358,52 @@ O'Nero the Shadow Unicorn, surrounded by dark sparkle magic and shadow energy, h
 
 ---
 
-# 1️⃣5️⃣ DAMON (Extended - Ember Unicorn)
+# 1️⃣5️⃣ DADDY (Extended - Ember Unicorn)
 
-## Variation 1: Damon the Ember Unicorn (Idle - Brave)
+## Variation 1: Daddy the Ember Unicorn (Idle - Brave)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Damon the Ember Unicorn, brave strong unicorn with warm orange and red ember coloring, confident brave expression, big determined eyes, surrounded by glowing warm sparkles, courageous strong appearance, brave and warm energy, game-ready icon
+Daddy the Ember Unicorn, brave strong unicorn with warm orange and red ember coloring, confident brave expression, big determined eyes, surrounded by glowing warm sparkles, courageous strong appearance, brave and warm energy, game-ready icon
 ```
 
-## Variation 2: Damon the Ember Unicorn (Action - Standing Strong/Active)
-```
-ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
-
-Damon the Ember Unicorn, standing strong and ready, surrounded by warm ember sparkles and glow, brave determined expression, creating strong protective energy, surrounded by warm glowing embers, courageous and strong, game-ready icon
-```
-
-## Variation 3: Damon the Ember Unicorn (Magical - Ember Power)
+## Variation 2: Daddy the Ember Unicorn (Action - Standing Strong/Active)
 ```
 ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
 
-Damon the Ember Unicorn, surrounded by ember and flame magic, horn glowing with warm ember light, creating brave courageous magic, surrounded by orange and red ember sparkles, strong magical expression, brave power magic, game-ready icon
+Daddy the Ember Unicorn, standing strong and ready, surrounded by warm ember sparkles and glow, brave determined expression, creating strong protective energy, surrounded by warm glowing embers, courageous and strong, game-ready icon
+```
+
+## Variation 3: Daddy the Ember Unicorn (Magical - Ember Power)
+```
+ultra cute magical children's game art, unicorn character, soft rounded shapes, pastel rainbow colors, sparkly glitter accents, glowing horn, soft lighting, whimsical fantasy style, clean edges, centered, transparent background
+
+Daddy the Ember Unicorn, surrounded by ember and flame magic, horn glowing with warm ember light, creating brave courageous magic, surrounded by orange and red ember sparkles, strong magical expression, brave power magic, game-ready icon
 ```
 
 ---
 
-# 1️⃣6️⃣ BLYTHE (Sky Guardian - Starlight Unicorn)
+# 1️⃣6️⃣ MOMMY (Sky Guardian - Starlight Unicorn)
 
-## Variation 1: Blythe the Starlight Unicorn (Sky Form - Gentle Guardian)
+## Variation 1: Mommy the Starlight Unicorn (Sky Form - Gentle Guardian)
 ```
 ultra cute magical children's game art, celestial unicorn, soft glowing light, pastel gold and white colors, sparkly stardust particles, soft clouds, warm light rays, whimsical fantasy style, transparent background
 
-Blythe the Starlight Unicorn, a gentle glowing celestial unicorn made of light and stars, floating peacefully among soft clouds, flowing mane like stardust, kind peaceful expression, surrounded by soft twinkling stars and warm light, magical sky guardian watching over, comforting loving presence, game-ready icon
+Mommy the Starlight Unicorn, a gentle glowing celestial unicorn made of light and stars, floating peacefully among soft clouds, flowing mane like stardust, kind peaceful expression, surrounded by soft twinkling stars and warm light, magical sky guardian watching over, comforting loving presence, game-ready icon
 ```
 
-## Variation 2: Blythe the Starlight Unicorn (Companion Light Form - Close Guidance)
+## Variation 2: Mommy the Starlight Unicorn (Companion Light Form - Close Guidance)
 ```
 ultra cute magical children's game art, celestial unicorn, soft glowing light, pastel gold and white colors, sparkly stardust particles, whimsical fantasy style, transparent background
 
-Blythe the Starlight Unicorn, smaller glowing companion unicorn made of soft light and starlight, appearing beside Waverly with gentle guidance, kind protective expression, surrounded by soft warm light trails and sparkles, appearing as a guiding presence, loving and protective energy, game-ready icon
+Mommy the Starlight Unicorn, smaller glowing companion unicorn made of soft light and starlight, appearing beside Wave with gentle guidance, kind protective expression, surrounded by soft warm light trails and sparkles, appearing as a guiding presence, loving and protective energy, game-ready icon
 ```
 
-## Variation 3: Blythe the Starlight Unicorn (Star Form - Night Guardian)
+## Variation 3: Mommy the Starlight Unicorn (Star Form - Night Guardian)
 ```
 ultra cute magical children's game art, celestial unicorn, soft glowing light, pastel gold and white colors, sparkly stardust particles, soft clouds, whimsical fantasy style, transparent background
 
-Blythe the Starlight Unicorn, transformed into a glowing star with soft unicorn silhouette inside, shining brightly in the night sky, surrounded by constellation sparkles and starlight, creating a guiding light from above, peaceful watching expression, always present and loving, game-ready icon
+Mommy the Starlight Unicorn, transformed into a glowing star with soft unicorn silhouette inside, shining brightly in the night sky, surrounded by constellation sparkles and starlight, creating a guiding light from above, peaceful watching expression, always present and loving, game-ready icon
 ```
 
 ---
@@ -424,26 +424,26 @@ Blythe the Starlight Unicorn, transformed into a glowing star with soft unicorn 
 ```
 
 **Quick names reference for YAML:**
-- waverly-idle, waverly-flying, waverly-dream
+- wave-idle, wave-flying, wave-dream
 - fifi-idle, fifi-action, fifi-magical
 - charchar-idle, charchar-action, charchar-magical
-- charlotte-mae-idle, charlotte-mae-action, charlotte-mae-magical
-- sadie-idle, sadie-action, sadie-magical
-- riley-idle, riley-action, riley-magical
+- sweetie-idle, sweetie-action, sweetie-magical
+- luna-idle, luna-action, luna-magical
+- blaze-idle, blaze-action, blaze-magical
 - pappa-idle, pappa-action, pappa-magical
 - maemae-idle, maemae-action, maemae-magical
 - grandpa-idle, grandpa-action, grandpa-magical
 - kk-idle, kk-action, kk-magical
 - odie-idle, odie-action, odie-magical
-- walter-idle, walter-action, walter-magical
+- cloudy-idle, cloudy-action, cloudy-magical
 - jj-idle, jj-action, jj-magical
 - onero-idle, onero-action, onero-magical
-- damon-idle, damon-action, damon-magical
-- blythe-sky, blythe-companion, blythe-star
+- daddy-idle, daddy-action, daddy-magical
+- mommy-sky, mommy-companion, mommy-star
 
 **Personal touches included:**
-✅ Riley has red/flame-colored mane
+✅ Blaze has red/flame-colored mane
 ✅ CharChar wears tutus and tiaras
-✅ Blythe as celestial sky guardian (3 forms)
+✅ Mommy as celestial sky guardian (3 forms)
 ✅ All characters consistent magical unicorn style
 ✅ Mix of idle, action, and magical variations

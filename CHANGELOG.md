@@ -2,7 +2,7 @@
 
 ## v3.0.0 — April 25, 2026 — The Full Magic Upgrade
 
-> Enhanced by Perplexity Computer for Chris Powell.
+> Enhanced by Perplexity Computer for the developer.
 > All items from the "what would make this even more amazing" session are implemented in this version.
 
 ---
@@ -10,11 +10,11 @@
 ### ✨ New in v3.0
 
 #### 1. Character Select Screen (before gameplay)
-A full-screen character picker appears after loading, before the game starts. All 17 unicorns are shown in a grid with their portraits. Waverly taps the one she wants, then hits "🦄 Let's Go!" to launch. The canvas renders a starfield behind the picker screen so the world is visible from the first moment.
+A full-screen character picker appears after loading, before the game starts. All 17 unicorns are shown in a grid with their portraits. Wave taps the one she wants, then hits "🦄 Let's Go!" to launch. The canvas renders a starfield behind the picker screen so the world is visible from the first moment.
 
 #### 2. Personalized speechSynthesis Welcome Greeting
 When the game launches, the selected character's name is used in the spoken welcome:
-> *"Welcome to Unicorn Land! Waverly is ready to spread magic! Tap to fly, double-tap to shoot rainbow beams and pop the balloons!"*
+> *"Welcome to Unicorn Land! Wave is ready to spread magic! Tap to fly, double-tap to shoot rainbow beams and pop the balloons!"*
 Victory speech also uses the character name in the message.
 
 #### 3. Tinkerbell Sparkle Trail (5x denser, color-cycling)
@@ -36,7 +36,7 @@ When `wShift > 0.12`, the sky now gains:
 - A warm **orange/pink horizon glow band** (linear gradient across H*30%–H*65%)
 - **4 fluffy elliptical cloud puffs** in orange, pink, and gold tones that drift slowly across the sky
 - The sky top lerps from deep purple toward **warm orange** (not plain blue) — a true sunrise feel
-The effect is subtle at low progress and vivid at full paint, matching Waverly's "the whole day is actually a morning."
+The effect is subtle at low progress and vivid at full paint, matching Wave's "the whole day is actually a morning."
 
 #### 7. Improved BGM: Full Pentatonic Flute with Harmonics + Reverb Feel
 The background music was a single sine wave oscillator. v3.0 uses **three oscillators per note**:
@@ -58,7 +58,7 @@ A new `sfx('victory')` plays on world completion: a 7-note C major arpeggio (C5 
 
 #### 11. Victory Message Uses Selected Character Name
 Victory screen `#vicm` now reads:
-> *"[Character Name] never gives up, just like you! You're magical, Waverly! 💕"*
+> *"[Character Name] never gives up, just like you! You're magical, Wave! 💕"*
 Works for any of the 17 selectable characters.
 
 ---
@@ -66,15 +66,15 @@ Works for any of the 17 selectable characters.
 
 ## v2.0.0 — April 2026 — Full Magic Rebuild
 
-> This version was authored by Perplexity Computer based on Chris Powell's request to make the game
-> more magical, fix all bugs, honor Waverly's original voice transcript, and document all changes
+> This version was authored by Perplexity Computer based on the developer's request to make the game
+> more magical, fix all bugs, honor Wave's original voice transcript, and document all changes
 > for future Claude Code sessions.
 
 ---
 
-## 🌟 Waverly's Original Vision (from voice recording transcript)
+## 🌟 Wave's Original Vision (from voice recording transcript)
 
-Waverly Powell, age 6, designed this game entirely by talking into a voice memo. Here is what she asked for — verbatim — and why it matters:
+A young child, designed this game entirely by talking into a voice memo. Here is what she asked for — verbatim — and why it matters:
 
 ### What she described (her exact words)
 
@@ -102,17 +102,17 @@ Ground animals (butterfly, chameleon, bunny, owl) react to candy falling. They w
 
 Fruity is the default playable character. Fruit power-ups exist specifically because Fruity loves fruit.
 
-> *"Waverly also wanted to be in the game."*
+> *"Wave also wanted to be in the game."*
 
-Waverly is a selectable character in the gallery, listed first. Playing as Waverly puts her name in the "Playing As" indicator and uses her character assets.
+Wave is a selectable character in the gallery, listed first. Playing as Wave puts her name in the "Playing As" indicator and uses her character assets.
 
-> *Friends: Char Char, Fifi, Charlotte Mae, and more.*
+> *Friends: Char Char, Fifi, Sweetie, and more.*
 
-The character roster includes CharChar, Fifi, and Charlotte Mae as full playable characters with bios.
+The character roster includes CharChar, Fifi, and Sweetie as full playable characters with bios.
 
-> *"The school Carpenter Hill Elementary should be in the world."*
+> *"The school Sparkle Hill Elementary should be in the world."*
 
-Carpenter Hill Elementary School appears as a world element, rendered as a whimsical building. It glows gold when the world is fully painted.
+Sparkle Hill Elementary School appears as a world element, rendered as a whimsical building. It glows gold when the world is fully painted.
 
 > *"Fruity's favorite fruit: 'rainbow unicorn sparkle popsicle'."*
 
@@ -120,7 +120,7 @@ Carpenter Hill Elementary School appears as a world element, rendered as a whims
 
 > *"Dragon is named Firey — 'Firey cause he blows fire' — colored RED, small, blows fire."*
 
-Firey's name is implemented. **KNOWN ISSUE**: the current Firey assets are purple, not red per Waverly's description. See Known Limitations.
+Firey's name is implemented. **KNOWN ISSUE**: the current Firey assets are purple, not red per Wave's description. See Known Limitations.
 
 > *"The unicorn doesn't give up if she sees rain. She never gives up." — this is the core philosophy.*
 
@@ -144,7 +144,7 @@ There is no game over. There is no failure state. There is no score. The only pr
 
 ### The philosophy, one sentence
 
-> **Fruity never gives up, even in the rain. Neither does Waverly.**
+> **Fruity never gives up, even in the rain. Neither does Wave.**
 
 Every design decision flows from this. If a proposed change creates anxiety, pressure, punishment, or losing — it doesn't belong in this game.
 
@@ -166,16 +166,16 @@ Additionally, images are drawn at their natural size ratios using proper `ctx.dr
 
 ### 2. Character name mismatches — every character showed as emoji fallback
 
-**Root cause**: The original JavaScript used guessed filenames like `daddy-idle.png`, `mommy-idle.png`, `sadie-idle.png`. The actual generated asset files are named `damon-idle.png`, `blythe-sky.png`, etc. The image preloader silently failed on every character, leaving emoji fallbacks everywhere.
+**Root cause**: The original JavaScript used guessed filenames like `daddy-idle.png`, `mommy-idle.png`, `luna-idle.png`. The actual generated asset files are named `daddy-idle.png`, `mommy-sky.png`, etc. The image preloader silently failed on every character, leaving emoji fallbacks everywhere.
 
 **Fix**: The `CHARACTERS` array now has an explicit `fileKey` field separate from the display `name`. For example:
 
 ```js
-{ id:'damon', fileKey:'damon', variation:'idle', name:'Daddy', bio:'...' }
-{ id:'blythe', fileKey:'blythe', variation:'sky', name:'Mommy', bio:'...' }
+{ id:'daddy', fileKey:'daddy', variation:'idle', name:'Daddy', bio:'...' }
+{ id:'mommy', fileKey:'mommy', variation:'sky',  name:'Mommy', bio:'...' }
 ```
 
-The `variation` field handles cases like Blythe (who uses `blythe-sky.png` instead of `blythe-idle.png`). The image manifest is constructed from `fileKey` and `variation`, not from `name`. No more guessing.
+The `variation` field handles cases like Mommy (who uses `mommy-sky.png` instead of `mommy-idle.png`). The image manifest is constructed from `fileKey` and `variation`, not from `name`. No more guessing.
 
 **Complete character roster** (see Asset Map section below for all filenames).
 
@@ -196,7 +196,7 @@ let rainbowCount    = 0; // session count — resets on page reload
 
 ---
 
-### 4. Double-tap movement delay — game felt sluggish for a 6-year-old
+### 4. Double-tap movement delay — game felt sluggish for a young child
 
 **Root cause**: The original tap handler waited 300ms on every single tap before executing movement, to allow time to detect whether a second tap would come. This meant every tap to move had a 300ms lag — which is imperceptible to adults but very noticeable to a child expecting immediate response.
 
@@ -226,7 +226,7 @@ The perceived responsiveness on double-tap (magic) is now zero delay. On single 
 
 ---
 
-### 5. Font was Arial — a unicorn game for a 6-year-old was using Arial
+### 5. Font was Arial — a unicorn game for a young child was using Arial
 
 **Root cause**: The original `index.html` used the browser default `font-family: sans-serif` throughout.
 
@@ -241,13 +241,13 @@ The perceived responsiveness on double-tap (magic) is now zero delay. On single 
 html, body { font-family: var(--font); }
 ```
 
-Nunito is rounded, playful, and highly legible — the right typographic energy for a magical kids' game. The fallback chain `'Comic Sans MS', cursive` is intentional: if Nunito fails to load, Comic Sans is actually appropriate for this context (a 6-year-old's game) and never Times New Roman.
+Nunito is rounded, playful, and highly legible — the right typographic energy for a magical kids' game. The fallback chain `'Comic Sans MS', cursive` is intentional: if Nunito fails to load, Comic Sans is actually appropriate for this context (a young child's game) and never Times New Roman.
 
 ---
 
 ### 6. World elements were plain grey rectangles — beautiful AI assets never used
 
-**Root cause**: The original game loop drew hills, houses, and trees as grey `ctx.fillRect()` calls and polygon fills. The actual AI-generated asset images (`hill-grass.png`, `house-left.png`, `house-right.png`, `tree-center.png`, `carpenter-hill-school.png`, `carpenter-hill-flag.png`) existed in the `/assets/world/` folder but were never referenced in any `ctx.drawImage()` call.
+**Root cause**: The original game loop drew hills, houses, and trees as grey `ctx.fillRect()` calls and polygon fills. The actual AI-generated asset images (`hill-grass.png`, `house-left.png`, `house-right.png`, `tree-center.png`, `school.png`, `school-flag.png`) existed in the `/assets/world/` folder but were never referenced in any `ctx.drawImage()` call.
 
 **Fix**: Every world element is now drawn using `ctx.drawImage()`, with fallback to canvas shapes if the image hasn't loaded:
 
@@ -288,7 +288,7 @@ Background music uses an HTML `<audio>` element (not Web Audio API) to bypass CO
 </audio>
 ```
 
-Volume is set to `0.25` (quiet under the SFX). Waverly specified "magical flute" — the high-register sine/triangle oscillators honor this by staying in the 440–1047Hz range (flute territory).
+Volume is set to `0.25` (quiet under the SFX). Wave specified "magical flute" — the high-register sine/triangle oscillators honor this by staying in the 440–1047Hz range (flute territory).
 
 Audio context and BGM are initialized on first user gesture (`initAudio()` is called inside `handleTap()`), which is required by browser autoplay policy.
 
@@ -296,7 +296,7 @@ Audio context and BGM are initialized on first user gesture (`initAudio()` is ca
 
 ### 8. No victory screen — silent reset with no celebration
 
-**Root cause**: When the world paint counter reached `maxPaint`, the original game silently reset the counter to zero. No animation, no sound, no message, no acknowledgment that Waverly had accomplished anything.
+**Root cause**: When the world paint counter reached `maxPaint`, the original game silently reset the counter to zero. No animation, no sound, no message, no acknowledgment that Wave had accomplished anything.
 
 **Fix**: Full victory celebration sequence:
 
@@ -305,9 +305,9 @@ Audio context and BGM are initialized on first user gesture (`initAudio()` is ca
 3. `#victory-screen` div appears with animated gradient background cycling through the full color spectrum
 4. 60 confetti pieces rain down (`fireConfetti()`) — CSS animated, varied colors, random sizes
 5. A bouncing animated unicorn emoji anchors the screen
-6. Personalized message: "You painted the whole world! 🌈" + "Fruity never gives up, and neither do you! You're magical, Waverly! 💕"
+6. Personalized message: "You painted the whole world! 🌈" + "Fruity never gives up, and neither do you! You're magical, Wave! 💕"
 7. Session counter displayed: "🌈 N beautiful rainbows painted today!"
-8. Web Speech API TTS reads the victory message aloud, naming Waverly directly
+8. Web Speech API TTS reads the victory message aloud, naming Wave directly
 9. Player taps "🌈 Paint Again!" to reset and continue
 
 ```js
@@ -340,7 +340,7 @@ The `+55px` means the hit zone is `balloon.radius + 55` from the balloon center 
 
 ### 10. Gallery showed broken images — wrong path format
 
-**Root cause**: The character gallery modal (`#gallery-modal`) and character detail modal (`#char-detail`) constructed image paths using the character's display `name` field. Since `name` is "Daddy" but the file is `damon-idle.png`, every gallery image was broken.
+**Root cause**: The character gallery modal (`#gallery-modal`) and character detail modal (`#char-detail`) constructed image paths using the character's display `name` field. Since `name` is "Daddy" but the file is `daddy-idle.png`, every gallery image was broken.
 
 **Fix**: Gallery and detail now use `fileKey` and `variation` directly:
 
@@ -358,7 +358,7 @@ Graceful fallback: if an image fails to load (`onerror`), the `<img>` element te
 Every frame the player is moving toward a target, a `sparkleTrailPuff(x, y)` is deposited at the current position. These small golden circles fade and shrink over 35 frames, leaving a glowing trail of breadcrumbs behind Fruity's flight path. Controlled by `gs.sparkleTrail` array (filtered each frame by `life--`).
 
 ### World Color Shift — Sky Changes with Progress
-The sky itself transforms as Waverly paints the world. At `colorShift = 0` (no progress), the sky is deep night purple (`#1a0a2e` → `#3d0066` → `#c8b6ff`). At `colorShift = 1.0` (fully painted), the sky is morning blue (`#87CEEB` → `#b0e0ff` → `#ffd6e0`). Every intermediate state is a smooth lerp via `lerpColor()`. The world waking up mirrors the "whole day is actually a morning" quote.
+The sky itself transforms as Wave paints the world. At `colorShift = 0` (no progress), the sky is deep night purple (`#1a0a2e` → `#3d0066` → `#c8b6ff`). At `colorShift = 1.0` (fully painted), the sky is morning blue (`#87CEEB` → `#b0e0ff` → `#ffd6e0`). Every intermediate state is a smooth lerp via `lerpColor()`. The world waking up mirrors the "whole day is actually a morning" quote.
 
 ### Animated Stars that Fade Out
 40 deterministic star positions (calculated via prime-multiple sampling so they don't cluster) twinkle with `Math.sin(t * 0.05 + i)` variation. Stars are visible when `colorShift < 0.8` and their alpha lerps toward zero as the world brightens. Stars fully disappear before the sky reaches full morning blue.
@@ -370,10 +370,10 @@ When `colorShift > 0.2`, a rainbow arc appears in the upper sky. If `particle/ra
 Every magic beam fire emits a floating text message from the `ENCOURAGEMENTS` pool (15 messages). Messages appear at the top-center of the screen and animate upward via CSS `@keyframes floatUp`. They fade out over 2 seconds and are removed from the DOM automatically. Messages are also shown on: fruit collection ("Rainbow Power! 🌈⚡"), cloud clearing ("You cleared the rain! ⛅"), magic not ready ("Almost ready! ✨"), Firey tap events.
 
 ### Animals on the Ground
-Four named animals live at fixed ground positions and gently bob up and down via `Math.sin(t * 0.04 + wobble)`. Named after Waverly's friends:
+Four named animals live at fixed ground positions and gently bob up and down via `Math.sin(t * 0.04 + wobble)`. Named after Wave's friends:
 - `animal/butterfly` → Fee (Fifi) — positioned left side
 - `animal/chameleon` → Char (Char Char) — positioned right side  
-- `animal/bunny` → Mae (Charlotte Mae) — positioned center-left
+- `animal/bunny` → Mae (Sweetie) — positioned center-left
 - `animal/owl` → Sage — positioned center-right
 
 They don't currently pathfind toward candy (see Known Limitations), but they visually animate at their ground stations throughout gameplay.
@@ -384,7 +384,7 @@ They don't currently pathfind toward candy (see Known Limitations), but they vis
 - Shows "Tap me! 👆" hint above his head on first appearance
 - 3-tap transformation sequence: `shy` → `playful` → `silly` (state maps to Firey asset variant)
 - On third tap: 30 particle burst + 10 rainbow emoji burst + 15 candy pieces rain down over 1.2 seconds via staggered `setTimeout()` calls
-- TTS announces "Firey is SO SILLY now! He loves you, Waverly!" by name
+- TTS announces "Firey is SO SILLY now! He loves you, Wave!" by name
 - Exits the far side of screen and resets `fireyTimer`
 
 ### Fruit Power-Ups
@@ -418,7 +418,7 @@ Friends button opens a modal grid of all 17 characters, each with their portrait
 ### Web Speech API TTS Bio Reading
 `speak(text)` selects an English-language female voice (or any English voice as fallback) from `window.speechSynthesis.getVoices()` and reads the given text at `rate: 0.95, pitch: 1.1`. Used for: welcome message on game start, character bios, fruit collection, Firey transformation, and victory announcement.
 
-### Carpenter Hill School Glows Gold at Victory
+### Sparkle Hill School Glows Gold at Victory
 The `world/school` image is drawn at 60% of the way across the screen, right side. When `colorShift > 0.7`, `ctx.shadowColor = '#ffd700'` and `ctx.shadowBlur = 30` are applied before drawing, giving the school a gold glow — it "celebrates" when the world is nearly or fully painted.
 
 ### Animated Loading Screen
@@ -432,7 +432,7 @@ When `gs.magic.boosted > 0`, magic beams are drawn at 12px stroke width (vs 8px)
 ## 🎨 Visual Upgrades
 
 ### Sky Gradient: Night Purple → Morning Blue
-The sky dynamically lerps between two palettes based on `colorShift`. Start: deep purple night (`#1a0a2e`, `#3d0066`, `#c8b6ff`). End: bright morning (`#87CEEB`, `#b0e0ff`, `#ffd6e0`). Every shade in between is a smooth `lerpColor()` interpolation. The world waking up as Waverly paints is the visual core of the entire game.
+The sky dynamically lerps between two palettes based on `colorShift`. Start: deep purple night (`#1a0a2e`, `#3d0066`, `#c8b6ff`). End: bright morning (`#87CEEB`, `#b0e0ff`, `#ffd6e0`). Every shade in between is a smooth `lerpColor()` interpolation. The world waking up as Wave paints is the visual core of the entire game.
 
 ### Stars Fade as Morning Arrives
 Stars are procedurally placed using `(i * 137 + 50) % W` (golden-ratio-adjacent prime sampling to avoid clustering), twinkle with sine-based alpha, and linearly fade from `alpha * 0.6` to 0 as `colorShift` approaches 0.8.
@@ -444,7 +444,7 @@ Appears at `shift > 0.2`. Opacity is `(shift - 0.2) / 0.8`, so it eases in from 
 Three decorative cloud positions scroll slowly across the sky at different speeds (`t * 0.15`, `t * 0.1`, `t * 0.08`), using modulo wrapping to loop seamlessly. Their opacity increases from `0.4` to `0.75` as the world brightens — more visible in the daytime sky.
 
 ### School Glows Gold
-Canvas `shadowBlur = 30` with `shadowColor = '#ffd700'` creates a radiant gold halo around Carpenter Hill Elementary when `colorShift > 0.7`. The glow is the visual signal that the school is "celebrating."
+Canvas `shadowBlur = 30` with `shadowColor = '#ffd700'` creates a radiant gold halo around Sparkle Hill Elementary when `colorShift > 0.7`. The glow is the visual signal that the school is "celebrating."
 
 ### Glow Aura Around Player
 A radial gradient centered on the player (`gold → purple → transparent`) pulses in radius via `50 + 8 * Math.sin(t * 0.07)`. This makes the active character feel alive and magical at all times, even when standing still.
@@ -471,7 +471,7 @@ Firey's direction is tracked (`dir = 1` or `-1`). When moving left, `ctx.scale(-
 ### Single HTML File — No Build Step Required
 The entire game is `index.html`: 502 lines of CSS, all HTML structure, and ~1,200 lines of JavaScript in one `<script>` block. No webpack, no npm, no build pipeline. Open the file in a browser and it runs. Deploy to Vercel by pointing at the root of the repo.
 
-**Why**: Chris built this in a single day with Claude Code. Build tooling adds friction. A 6-year-old's birthday game should be openable by double-clicking a file.
+**Why**: Chris built this in a single day with Claude Code. Build tooling adds friction. A young child's birthday game should be openable by double-clicking a file.
 
 ### All Assets via Relative Paths
 ```js
@@ -488,7 +488,7 @@ No `localStorage`, no `sessionStorage`, no IndexedDB, no server calls. All game 
 State resets on page refresh. This is a deliberate choice, not a limitation — each play session is a fresh adventure with no saved baggage.
 
 ### Web Audio API for SFX
-Procedurally generated sound effects using `OscillatorNode + GainNode`. No audio files to host, no CORS issues, no preloading required. Five distinct sounds cover all game events. The oscillator types (`sine`, `triangle`) stay in the high-frequency range to honor Waverly's "magical flute" request.
+Procedurally generated sound effects using `OscillatorNode + GainNode`. No audio files to host, no CORS issues, no preloading required. Five distinct sounds cover all game events. The oscillator types (`sine`, `triangle`) stay in the high-frequency range to honor Wave's "magical flute" request.
 
 ### HTML Audio Element for BGM
 Background music uses `<audio id="bgm">` rather than Web Audio API. Reason: fetching cross-origin audio (from `incompetech.com`) through Web Audio API's `decodeAudioData` would require CORS headers that the remote server doesn't provide. The `<audio>` element bypasses this restriction. Volume is kept low (`0.25`) so it sits under the SFX.
@@ -522,9 +522,9 @@ All assets live under `/assets/`. No asset files are embedded in HTML.
 
 | File | Character | Used For |
 |---|---|---|
-| `waverly-idle.png` | Waverly | Default player sprite, gallery |
-| `waverly-flying.png` | Waverly | (preloaded, not yet used in draw loop) |
-| `waverly-dream.png` | Waverly | (preloaded, reserved for future) |
+| `wave-idle.png` | Wave | Default player sprite, gallery |
+| `wave-flying.png` | Wave | (preloaded, not yet used in draw loop) |
+| `wave-dream.png` | Wave | (preloaded, reserved for future) |
 | `fruity-idle.png` | Fruity | Player sprite when Fruity selected |
 | `fruity-flying.png` | Fruity | (preloaded, not yet used in draw loop) |
 | `fruity-happy.png` | Fruity | (preloaded, reserved for future) |
@@ -535,15 +535,15 @@ All assets live under `/assets/`. No asset files are embedded in HTML.
 | `charchar-idle.png` | CharChar | Gallery + playable |
 | `charchar-action.png` | CharChar | (preloaded) |
 | `charchar-magical.png` | CharChar | (preloaded) |
-| `charlotte-mae-idle.png` | Charlotte Mae | Gallery + playable |
-| `charlotte-mae-action.png` | Charlotte Mae | (preloaded) |
-| `charlotte-mae-magical.png` | Charlotte Mae | (preloaded) |
-| `sadie-idle.png` | Sadie | Gallery + playable |
-| `sadie-action.png` | Sadie | (preloaded) |
-| `sadie-magical.png` | Sadie | (preloaded) |
-| `riley-idle.png` | Riley | Gallery + playable |
-| `riley-action.png` | Riley | (preloaded) |
-| `riley-magical.png` | Riley | (preloaded) |
+| `sweetie-idle.png` | Sweetie | Gallery + playable |
+| `sweetie-action.png` | Sweetie | (preloaded) |
+| `sweetie-magical.png` | Sweetie | (preloaded) |
+| `luna-idle.png` | Luna | Gallery + playable |
+| `luna-action.png` | Luna | (preloaded) |
+| `luna-magical.png` | Luna | (preloaded) |
+| `blaze-idle.png` | Blaze | Gallery + playable |
+| `blaze-action.png` | Blaze | (preloaded) |
+| `blaze-magical.png` | Blaze | (preloaded) |
 | `pappa-idle.png` | Pappa | Gallery + playable |
 | `pappa-action.png` | Pappa | (preloaded) |
 | `pappa-magical.png` | Pappa | (preloaded) |
@@ -559,15 +559,15 @@ All assets live under `/assets/`. No asset files are embedded in HTML.
 | `odie-idle.png` | Odie | Gallery + playable |
 | `odie-action.png` | Odie | (preloaded) |
 | `odie-magical.png` | Odie | (preloaded) |
-| `walter-idle.png` | Walter | Gallery + playable |
-| `walter-action.png` | Walter | (preloaded) |
-| `walter-magical.png` | Walter | (preloaded) |
-| `damon-idle.png` | Daddy (Damon) | Gallery + playable |
-| `damon-action.png` | Daddy | (preloaded) |
-| `damon-magical.png` | Daddy | (preloaded) |
-| `blythe-sky.png` | Mommy (Blythe) | Gallery + playable — note: uses `-sky` variant |
-| `blythe-companion.png` | Mommy | (preloaded) |
-| `blythe-star.png` | Mommy | (preloaded) |
+| `cloudy-idle.png` | Cloudy | Gallery + playable |
+| `cloudy-action.png` | Cloudy | (preloaded) |
+| `cloudy-magical.png` | Cloudy | (preloaded) |
+| `daddy-idle.png` | Daddy | Gallery + playable |
+| `daddy-action.png` | Daddy | (preloaded) |
+| `daddy-magical.png` | Daddy | (preloaded) |
+| `mommy-sky.png` | Mommy | Gallery + playable — note: uses `-sky` variant |
+| `mommy-companion.png` | Mommy | (preloaded) |
+| `mommy-star.png` | Mommy | (preloaded) |
 | `jj-idle.png` | JJ | Gallery + playable |
 | `jj-action.png` | JJ | (preloaded) |
 | `jj-magical.png` | JJ | (preloaded) |
@@ -586,19 +586,19 @@ All assets live under `/assets/`. No asset files are embedded in HTML.
 | `house-left.png` | Left-side house (W * 0.04) |
 | `house-right.png` | Right-side house (W * 0.82) |
 | `tree-center.png` | Center tree (W * 0.44) |
-| `carpenter-hill-school.png` | School building (W * 0.6), glows gold at high colorShift |
-| `carpenter-hill-flag.png` | School flag (preloaded, currently not drawn separately — flag is part of school building) |
+| `school.png` | School building (W * 0.6), glows gold at high colorShift |
+| `school-flag.png` | School flag (preloaded, currently not drawn separately — flag is part of school building) |
 | `cloud-fluffy.png` | Decorative scrolling clouds (3 instances) |
 | `cloud-wispy.png` | (preloaded, not currently used — available for future variety) |
 | `rain-cloud-soft.png` | Active rain clouds that make balloons soggy |
 
-### `/assets/animals/` — Ground animals (Waverly's friends)
+### `/assets/animals/` — Ground animals (Wave's friends)
 
 | File | Friend | Ground Position |
 |---|---|---|
 | `fee-butterfly.png` | Fee (Fifi) | W * 0.10 |
 | `char-chameleon.png` | Char (CharChar) | W * 0.78 |
-| `mae-bunny.png` | Mae (Charlotte Mae) | W * 0.25 |
+| `mae-bunny.png` | Mae (Sweetie) | W * 0.25 |
 | `sage-owl.png` | Sage | W * 0.65 |
 
 ### `/assets/interactive/` — Gameplay objects
@@ -641,31 +641,31 @@ An asset manifest file exists but is not currently consumed by the game code. Th
 ## 🔮 Known Limitations & Future Ideas
 
 ### Firey Should Be Red, Not Purple
-Waverly explicitly said: *"Firey cause he blows fire — colored RED, small."* The current Firey assets (`firey-shy.png`, `firey-playful.png`, `firey-silly.png`) are purple dragons, not red. This is a visual mismatch with the original design intent. **Fix**: Generate new red Firey assets, or apply a canvas `hue-rotate(130deg)` CSS filter to the existing ones as a quick workaround.
+Wave explicitly said: *"Firey cause he blows fire — colored RED, small."* The current Firey assets (`firey-shy.png`, `firey-playful.png`, `firey-silly.png`) are purple dragons, not red. This is a visual mismatch with the original design intent. **Fix**: Generate new red Firey assets, or apply a canvas `hue-rotate(130deg)` CSS filter to the existing ones as a quick workaround.
 
 ### Animals Don't Pathfind Toward Candy
-Waverly described animals walking "faster and faster" toward the candy. Current implementation: animals bob at fixed positions. They do not move or pathfind toward candy pieces. **Fix**: When `spawnCandy()` is called, emit an event that temporarily sets each animal's velocity toward the nearest candy's X position, then let them drift back to their base position.
+Wave described animals walking "faster and faster" toward the candy. Current implementation: animals bob at fixed positions. They do not move or pathfind toward candy pieces. **Fix**: When `spawnCandy()` is called, emit an event that temporarily sets each animal's velocity toward the nearest candy's X position, then let them drift back to their base position.
 
 ### Audio Requires a User Gesture to Start
 Web Audio API (and the HTML `<audio>` element) cannot start playing before the first user interaction. `initAudio()` is called inside `handleTap()`, which means: the first tap starts audio, the welcome TTS voice, and the background music simultaneously. This is unavoidable — it's a browser policy, not a bug. On iOS especially, the BGM may not play on first tap; the user may need to interact twice.
 
 ### No Cross-Session Save
-`rainbowCount` resets to 0 on page refresh. There is no persistent record of how many times Waverly has painted the world. The original code intended to use `localStorage` for this, but that was removed due to sandboxing issues. **Fix options**: (a) use a server-side counter via a simple Vercel serverless function (API exists in the repo as a placeholder), (b) use a cookie instead of localStorage (less likely to be blocked), (c) accept it — each play session is its own rainbow.
+`rainbowCount` resets to 0 on page refresh. There is no persistent record of how many times Wave has painted the world. The original code intended to use `localStorage` for this, but that was removed due to sandboxing issues. **Fix options**: (a) use a server-side counter via a simple Vercel serverless function (API exists in the repo as a placeholder), (b) use a cookie instead of localStorage (less likely to be blocked), (c) accept it — each play session is its own rainbow.
 
 ### Underwater Adventure Not Yet Implemented
-Waverly mentioned an underwater scene. Not in v2.0. Would be a mode or level variant — the world painting mechanic could reset into an underwater theme with different assets.
+Wave mentioned an underwater scene. Not in v2.0. Would be a mode or level variant — the world painting mechanic could reset into an underwater theme with different assets.
 
 ### Racing / Jumping Obstacle Section Not Yet Implemented
-Waverly described a section where the unicorn races and jumps over obstacles. Not implemented. This would be a different game mode (side-scroller vs. the current free-flying format).
+Wave described a section where the unicorn races and jumps over obstacles. Not implemented. This would be a different game mode (side-scroller vs. the current free-flying format).
 
-### Waverly's Classmates Not Added as Characters
-Waverly referenced classmates and friends by name. Some are included (Char Char, Fifi, Charlotte Mae) but others from her class are not yet characters in the roster.
+### Wave's Classmates Not Added as Characters
+Wave referenced classmates and friends by name. Some are included (Char Char, Fifi, Sweetie) but others from her class are not yet characters in the roster.
 
 ### `fruity-crowned.png` Not Used in Victory
 The `fruity-crowned` asset is preloaded but not drawn during victory. The original design intended Fruity to appear wearing a sparkly crown during the victory screen. Currently the victory screen shows a unicorn emoji. **Fix**: During victory, draw `fruity-crowned` on the canvas centered on screen, or swap the `#victory-unicorn` emoji for the actual image.
 
-### `waverly-flying.png` and Action Variants Not Used
-Each character has `-action` and `-magical` variants, and Waverly has a `-flying` variant. The draw loop currently uses only `-idle` (or `-sky` for Blythe) regardless of movement state. A better implementation would swap to `-action` or `-flying` variants when `gs.player.state === 'flying'`.
+### `wave-flying.png` and Action Variants Not Used
+Each character has `-action` and `-magical` variants, and Wave has a `-flying` variant. The draw loop currently uses only `-idle` (or `-sky` for Mommy) regardless of movement state. A better implementation would swap to `-action` or `-flying` variants when `gs.player.state === 'flying'`.
 
 ### No Firey Fire Breath → Candy Balloon Mechanic
 The game design document specified that Firey could breathe fire on balloons to create candy balloons (which drop 3x candy). The candy balloon asset (`balloon-candy.png`) exists. Firey traversal and the `b.candy = true` property exist. But the fire breath event itself is not implemented — Firey currently just drifts across the screen without affecting balloons. **Fix**: During Firey's `active` phase, periodically tag the nearest balloon as `candy` and emit a fire breath particle from Firey's position.
@@ -674,7 +674,7 @@ The game design document specified that Firey could breathe fire on balloons to 
 Soggy balloons track their desoggy timer as `b.soggyTimer--` per frame, and un-soggy when `b.soggyTimer < 0`. However, the timer is initialized to `200` on contact but the decrement happens every frame regardless of whether the balloon is currently soggy. If a balloon re-enters a cloud while still soggy, `soggyTimer` resets to `200` but the countdown continues from the moment the update loop processes it — no compounding. This is benign but worth cleaning up.
 
 ### BGM Track Is a Placeholder
-The background music links to Kevin MacLeod's "Pixelland" from `incompetech.com`, which is royalty-free but generic. Waverly asked for "magical flute." A more thematically appropriate royalty-free track (e.g., from freemusicarchive.org or musopen.org — a real flute piece) would better honor the request. The `<audio>` element's `src` can be swapped without any other code changes.
+The background music links to Kevin MacLeod's "Pixelland" from `incompetech.com`, which is royalty-free but generic. Wave asked for "magical flute." A more thematically appropriate royalty-free track (e.g., from freemusicarchive.org or musopen.org — a real flute piece) would better honor the request. The `<audio>` element's `src` can be swapped without any other code changes.
 
 ---
 
@@ -734,7 +734,7 @@ Follow the pattern:
   manifest.json  — Asset catalog (not consumed by game, for tooling only)
 ```
 
-### What Waverly Still Wants That Hasn't Been Built Yet
+### What Wave Still Wants That Hasn't Been Built Yet
 
 In priority order based on how clearly she described them:
 
@@ -753,17 +753,17 @@ Specific rules that must never be violated:
 - **No timer countdown** that creates pressure
 - **No "Game Over" screen** of any kind
 - **No score** that could feel competitive or shameful
-- **Magic always regenerates** — Waverly is never permanently stuck
+- **Magic always regenerates** — Wave is never permanently stuck
 - **Encouragement on failure** — if magic isn't ready, say "Almost ready! ✨", not "Out of magic!"
-- **Rain is always present** (because Waverly said it rains every day) but **never blocking** (the unicorn perseveres)
+- **Rain is always present** (because Wave said it rains every day) but **never blocking** (the unicorn perseveres)
 - **Every completion loops back to play** — the victory screen has exactly one button: "Paint Again!"
 
-Waverly's exact words: *"The unicorn doesn't give up if she sees rain. She never gives up."*
+Wave's exact words: *"The unicorn doesn't give up if she sees rain. She never gives up."*
 
 That's the game. Everything else is decoration.
 
 ---
 
-*Built with love for Waverly's 6th birthday. April 2026. 🦄🌧️🌈✨*
+*Built with love for Wave's birthday. April 2026. 🦄🌧️🌈✨*
 
-*Authored by Perplexity Computer. For Chris Powell.*
+*Authored by Perplexity Computer. For the developer.*

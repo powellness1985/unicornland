@@ -1,11 +1,11 @@
 # Unicorn Land — Complete Game Design & Implementation Plan
-## A Birthday Game for Waverly Powell (age 6)
+## A Birthday Game for Wave
 
 ---
 
 ## OVERVIEW
 
-**Unicorn Land** is an interactive sandbox game where Waverly uses magic to paint a grayscale world into vibrant rainbow colors. The game celebrates her school (Carpenter Hill Elementary), her friends, and the resilience philosophy: *"Fruity never gives up, even in the rain."*
+**Unicorn Land** is an interactive sandbox game where Wave uses magic to paint a grayscale world into vibrant rainbow colors. The game celebrates her school (Sparkle Hill Elementary), her friends, and the resilience philosophy: *"Fruity never gives up, even in the rain."*
 
 **Core Loop:** Tap to move Fruity → Double-tap to shoot rainbow magic → Paint balloons, clouds, and world → Transform Firey the dragon → Celebrate when world is complete → Reset for endless play.
 
@@ -67,7 +67,7 @@
 | **Rain Cloud** | Sparkles & drifts away, cloud clears | Rainbow burst, cloud fades | "You cleared the rain!" |
 | **Bonus Fruit** | Fruity eats it, magic refills + 3 rainbow-powered shots | Fruity does happy whinny, sparkles | "Power-up! ⚡" |
 | **Firey** | Advances transformation (tap 3x total) | Firey reacts, poses change | Varies per tap |
-| **Carpenter Hill School** | School lights up, plays celebratory chime, drops rainbow | School glows magical rainbow | "Go Carpenter Hill! 🎓✨" |
+| **Sparkle Hill School** | School lights up, plays celebratory chime, drops rainbow | School glows magical rainbow | "Go Sparkle Hill! 🎓✨" |
 
 **No-Target (Still Satisfying):**
 - If magic beam misses everything → pretty sparkle burst at the location, no penalty, no shame
@@ -92,7 +92,7 @@
 2. **All animals come out** (Fee, Char, Mae, Sage + Fruity) and do a happy dance (4-second animation)
 3. **Fruity gets a sparkly crown** for 10 seconds (special "fruity-crowned" sprite)
 4. **Big celebratory message floats up:** "You made the whole world beautiful! 🌈✨"
-5. **Encouragement message** ties back to Waverly's philosophy: "Fruity never gives up, just like you! 💕"
+5. **Encouragement message** ties back to Wave's philosophy: "Fruity never gives up, just like you! 💕"
 6. After 8 seconds: gentle fade, world resets to grayscale with **slightly different element positions** (fresh canvas, variety)
 7. **Cumulative counter increments:** "🌈 Rainbows painted today: N" (celebrates total effort)
 
@@ -190,10 +190,10 @@
 
 ---
 
-### CARPENTER HILL ELEMENTARY — MAGICAL EASTER EGG
+### SPARKLE HILL ELEMENTARY — MAGICAL EASTER EGG
 
 **Conceptual Integration:**
-This is Waverly's *actual school*, made magical and integrated into the game world. It should feel like an honor, not a gimmick.
+This is Wave's *actual school*, made magical and integrated into the game world. It should feel like an honor, not a gimmick.
 
 **Appearance & Placement:**
 - **School building sprite** appears in the world landscape
@@ -211,26 +211,26 @@ This is Waverly's *actual school*, made magical and integrated into the game wor
 
 **Option B: Unlock at Milestone**
 - School appears permanently once world reaches 50% painted
-- Acts as a milestone unlock: "You've painted enough to reveal Carpenter Hill!"
+- Acts as a milestone unlock: "You've painted enough to reveal Sparkle Hill!"
 - Creates a sense of progression beyond just world painting
 
 **Option C: Celebration Moment** (Recommended)
 - School always appears during the **world-completion celebration**
 - When world reaches 100% and rainbow arc plays, school lights up with magical rainbow glow
-- Special message: "Look! Carpenter Hill is celebrating with you! 🎓✨"
+- Special message: "Look! Sparkle Hill is celebrating with you! 🎓✨"
 - Creates an emotional peak: "My school is proud of me!"
 
 **Interactions with School Building:**
 1. **Magic beam hits school** → School illuminates with magical rainbow glow, plays celebratory chime
 2. **School drops special rewards** → "School Spirit" balloons (school colors: red/gold) fall from roof
 3. **Animals notice school** → When visible, animals occasionally look toward it (micro-animation)
-4. **Special encouragement message** → "Carpenter Hill is amazing! So are you! 🎓💕"
+4. **Special encouragement message** → "Sparkle Hill is amazing! So are you! 🎓💕"
 
 **Visual Magic Touches:**
 - **Arrival animation:** When school first appears, it shimmers into view (particle effect)
 - **Idle animation:** School has a gentle glow that pulses (breathes) slowly
 - **Interaction glow:** When hit by magic, whole building lights up rainbow for 1 second
-- **Flag animation:** Carpenter Hill flag (or pennant) on school roof waves in an invisible wind
+- **Flag animation:** Sparkle Hill flag (or pennant) on school roof waves in an invisible wind
 - **Light-up windows:** Windows glow warm yellow/golden when school is "happy"
 
 **Why This Design:**
@@ -327,8 +327,8 @@ This is Waverly's *actual school*, made magical and integrated into the game wor
 - cloud-fluffy.png ✅
 - cloud-wispy.png ✅
 - rain-cloud-soft.png (NEW - obstacle)
-- **carpenter-hill-school.png (NEW - Easter egg building)**
-- **carpenter-hill-school-flag.png (NEW - waving flag)**
+- **school.png (NEW - Easter egg building)**
+- **school-flag.png (NEW - waving flag)**
 
 **Effects & Particles:**
 - magic-beam-arc.png (NEW - rainbow beam effect)
@@ -398,7 +398,7 @@ This is Waverly's *actual school*, made magical and integrated into the game wor
 - Collision detection (magic beam or fly-into)
 - Magic refill + sparkle boost (3 shots with 2x effect)
 
-### Component 9: Carpenter Hill School Easter Egg
+### Component 9: Sparkle Hill School Easter Egg
 - School building sprite loading and positioning
 - Appearance logic (random spawn OR milestone unlock OR celebration)
 - Idle glow animation + window lighting
@@ -442,7 +442,7 @@ This is Waverly's *actual school*, made magical and integrated into the game wor
 
 ## DESIGN PHILOSOPHY
 
-**For Waverly (Age 6):**
+**For Wave :**
 - No losing states, no pressure, no scary elements
 - Clear cause-and-effect (I do X, Y happens immediately)
 - Visible progress (world paints before her eyes)
@@ -479,7 +479,7 @@ This is Waverly's *actual school*, made magical and integrated into the game wor
 - Yellow: #FFD93D (sunny, warm)
 - Purple: #A78BFA (magical, cool)
 
-**School Colors (Carpenter Hill):**
+**School Colors (Sparkle Hill):**
 - Primary Red/Maroon: #C41E3A (brick color from building)
 - Gold: #FFD700 (accent)
 - Cream: #F5E6D3 (contrast)
@@ -509,7 +509,7 @@ This is Waverly's *actual school*, made magical and integrated into the game wor
 
 ## DEPLOYMENT & SHIPPING
 
-**Live URL:** unicornland.chrispowell.ai (via Vercel)  
+**Live URL:** unicornland.the-portfolio-site (via Vercel)  
 **Backup:** wavy-unicornland.vercel.app  
 **Telemetry:** Anonymous session tracking (session ID, balloons popped, time played, device type)  
 **No PII Collected:** Names, IPs, personal data — never stored  
@@ -521,16 +521,16 @@ This is Waverly's *actual school*, made magical and integrated into the game wor
 1. **Generate all 32 assets** (16 existing ✅ + 16 new) via image-forge batch
 2. **Implement Components 1-7** (core gameplay: movement, magic, balloons, world painting, Firey)
 3. **Implement Components 8-10** (bonus pickups, animals, encouragement)
-4. **Implement Component 9** (Carpenter Hill Easter egg integration)
+4. **Implement Component 9** (Sparkle Hill Easter egg integration)
 5. **Integrate audio** (background music + sound effects)
 6. **Test on iPad** (verify touch handling, responsiveness, 60 FPS)
 7. **Deploy to Vercel**
-8. **Celebrate Waverly's birthday! 🎉🦄🌈**
+8. **Celebrate Wave's birthday! 🎉🦄🌈**
 
 ---
 
 **Status:** Design complete, ready for generation and implementation.
 
-**Birthday Goal:** Ship before Waverly's birthday party. This game will be a memory she (and you!) treasure forever.
+**Birthday Goal:** Ship before Wave's birthday party. This game will be a memory she (and you!) treasure forever.
 
-*Built with ❤️ and magic for Waverly's 6th birthday. 🦄✨🌈*
+*Built with ❤️ and magic for Wave's birthday. 🦄✨🌈*

@@ -1,12 +1,12 @@
 # UnicornLand Image Generation Plan
-## With Creative Options & Character Roster Based on Waverly's Friends
+## With Creative Options & Character Roster Based on Wave's Friends
 
 ---
 
 ## CHARACTER ROSTER (Friend-Inspired)
 
 **Core Characters:**
-1. **Fruity the Unicorn** (Waverly's main character) - Magical winged unicorn, leader of the crew
+1. **Fruity the Unicorn** (Wave's main character) - Magical winged unicorn, leader of the crew
 2. **Firey the Dragon** - Shy→Silly transformer, colorful dragon buddy
 
 **Friend-Inspired Animal Characters:**
@@ -14,11 +14,11 @@ Each friend has a corresponding animal mascot with a name variation of theirs:
 
 | Friend Name | Character Name | Species | Role | Color Palette |
 |---|---|---|---|---|
-| Waverly (daughter) | Fruity | Unicorn | Main playable | Pastel rainbow, gold mane |
+| Wave (daughter) | Fruity | Unicorn | Main playable | Pastel rainbow, gold mane |
 | Fifi | Fee | Fairy Butterfly | Magical helper, sparkle effects | Pink & magenta |
 | CharChar | Char | Chameleon | Color-shifter, changes colors | Rainbow gradient |
-| Charlotte Mae | Mae or Maisy | Bunny | Gentle collector | Soft pastels (mint, lavender) |
-| Sadie | Sage | Wise Owl | Encourager, giver of compliments | Warm gold/orange |
+| Sweetie | Mae or Maisy | Bunny | Gentle collector | Soft pastels (mint, lavender) |
+| Luna | Sage | Wise Owl | Encourager, giver of compliments | Warm gold/orange |
 
 **How They Appear in Game:**
 - **Fruity:** Main character player controls
@@ -179,7 +179,7 @@ When a balloon is popped, instead of just disappearing:
 
 ### F. ENCOURAGEMENT MESSAGES - "Celebratory Callouts"
 
-**Message Set (Waverly's game):**
+**Message Set (Wave's game):**
 
 | Event | Message | Color |
 |---|---|---|
@@ -211,7 +211,7 @@ When a balloon is popped, instead of just disappearing:
 **Wow Factor:**
 - Kids feel seen and celebrated
 - Messages are EMPOWERING (focus on "you're doing it" not "you failed")
-- Ties back to Waverly's design philosophy ("Fruity never gives up")
+- Ties back to Wave's design philosophy ("Fruity never gives up")
 
 ---
 
@@ -238,8 +238,8 @@ When a balloon is popped, instead of just disappearing:
 |---|---|---|---|---|---|
 | `fee-butterfly.png` | Fifi | Fee | Magical fairy butterfly, pink/magenta, delicate wings | DALL-E 2 | 256×256 |
 | `char-chameleon.png` | CharChar | Char | Colorful chameleon, rainbow scales, curious expression | DALL-E 2 | 256×256 |
-| `mae-bunny.png` | Charlotte Mae | Mae | Cute bunny, soft pastels, floppy ears, adorable | DALL-E 2 | 256×256 |
-| `sage-owl.png` | Sadie | Sage | Wise owl, warm gold/orange, kind expression, perched | DALL-E 2 | 256×256 |
+| `mae-bunny.png` | Sweetie | Mae | Cute bunny, soft pastels, floppy ears, adorable | DALL-E 2 | 256×256 |
+| `sage-owl.png` | Luna | Sage | Wise owl, warm gold/orange, kind expression, perched | DALL-E 2 | 256×256 |
 
 **Storage:** `assets/animals/`
 
@@ -459,7 +459,7 @@ unicornland-game/
 - Glitter variants (4×, DALL-E 2): $0.020 × 4 = $0.080
 - **Subtotal: $0.40**
 
-### TOTAL MVP: **$0.96** (~$1 to colorize Waverly's birthday game)
+### TOTAL MVP: **$0.96** (~$1 to colorize Wave's birthday game)
 
 ---
 
@@ -471,7 +471,7 @@ Each image generation will use specific, kid-friendly prompts:
 ```
 A whimsical pastel-colored unicorn with delicate iridescent wings, 
 soft golden mane, kind expression, surrounded by gentle magical sparkles 
-and a subtle glow. Side view, sitting peacefully. Perfect for a 6-year-old's game. 
+and a subtle glow. Side view, sitting peacefully. Perfect for a young child's game. 
 Colorful, friendly, non-threatening. Isolated on transparent background.
 ```
 
@@ -487,7 +487,7 @@ Isolated on transparent background.
 ```
 A magical pink fairy butterfly with delicate wings, sparkly details, 
 cute face with happy expression, hovering gracefully. Pastel magenta and pink colors. 
-Perfect for a 6-year-old. Whimsical, cute, non-threatening. 
+Perfect for a young child. Whimsical, cute, non-threatening. 
 Isolated on transparent background.
 ```
 
@@ -495,7 +495,7 @@ Isolated on transparent background.
 
 ## 9. NEXT STEPS (READY TO EXECUTE)
 
-1. ✅ **Review updated plan** - Does this feel right for Waverly?
+1. ✅ **Review updated plan** - Does this feel right for Wave?
 2. ✅ **Approve character roster** - Are Fee, Char, Mae, Sage good representations of her friends?
 3. ✅ **Approve mechanics** - Does the balloon/Firey/candy/color system wow you?
 4. ⏳ **Create batch YAML** - I'll write detailed prompts for all 24 assets
@@ -510,11 +510,11 @@ Isolated on transparent background.
 
 | Name | Friend | Why | Game Role |
 |---|---|---|---|
-| **Fruity** | Waverly (you) | Magical, whimsical, main character energy | Player controls this unicorn |
+| **Fruity** | Wave (you) | Magical, whimsical, main character energy | Player controls this unicorn |
 | **Fee** | Fifi | "Fee" is softer version of "Fifi" | Butterfly companion (magical, helpful) |
 | **Char** | CharChar | "Char" is shortened form | Chameleon buddy (colorful, changeable) |
-| **Mae** | Charlotte Mae | Direct reference to last name | Bunny pal (sweet, gentle) |
-| **Sage** | Sadie | Phonetically similar, means "wise" | Owl friend (encouraging, supportive) |
+| **Mae** | Sweetie | Direct reference to last name | Bunny pal (sweet, gentle) |
+| **Sage** | Luna | Phonetically similar, means "wise" | Owl friend (encouraging, supportive) |
 
 ---
 
