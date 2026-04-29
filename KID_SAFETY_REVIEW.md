@@ -101,13 +101,14 @@
 ### 7. PERSONAL DATA & PRIVACY ✅
 | Aspect | Status | Details |
 |--------|--------|---------|
-| Session ID | ✅ SAFE | Random UUID, anonymous, not linked to name/email |
-| Tracking | ✅ SAFE | Only counts: balloons popped, time played, device type |
-| Storage | ✅ SAFE | localStorage only (on device, not cloud) |
-| Server calls | ✅ SAFE | None currently (fully local game) |
-| Future telemetry | ✅ SAFE | Plan: Firebase analytics, no PII ever collected |
+| Session ID | ✅ SAFE | Not generated — game holds no per-user identity |
+| Tracking | ✅ SAFE | None — no analytics, no telemetry calls |
+| Storage | ✅ SAFE | None — no localStorage, sessionStorage, or cookies used |
+| Server calls | ✅ SAFE | None — fully static client-side game |
+| Third-party requests | ⚠️ NOTE | Google Fonts CSS + woff2 are fetched at load, exposing visitor IP/UA to Google. Self-host the font to remove this |
+| Future telemetry | ✅ SAFE | If added later: keep PII out, anonymize, document here |
 
-**Why It's Good:** Zero risk of data leakage. No ads. No third-party tracking.
+**Why It's Good:** Zero first-party data collection. No ads, no third-party trackers. Only outbound request is Google Fonts.
 
 ---
 

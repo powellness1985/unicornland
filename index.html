@@ -394,59 +394,6 @@ const manifest = [
 ];
 const TOTAL = manifest.length;
 
-const NO_BG_REMOVE = new Set(['world/hill','world/cloud']);
-
-function removeBackground(srcImg, threshold = 68) {
-  const oc = document.createElement('canvas');
-  const W = srcImg.naturalWidth || 256;
-  const H = srcImg.naturalHeight || 256;
-  oc.width = W; oc.height = H;
-  const octx = oc.getContext('2d', { willReadFrequently: true });
-  octx.drawImage(srcImg, 0, 0);
-  try {
-    const d = octx.getImageData(0, 0, W, H);
-    const px = d.data;
-    if (px[3] < 10) return oc;
-    const BORDER = 8, STEP = 4;
-    const bucket = (r,g,b) => (((r>>3)<<10)|((g>>3)<<5)|(b>>3));
-    const bgPalette = new Map();
-    const addPx = (x,y) => {
-      const i=(y*W+x)*4;
-      const r=px[i],g=px[i+1],b=px[i+2];
-      const k=bucket(r,g,b);
-      if(!bgPalette.has(k)) bgPalette.set(k,[r,g,b]);
-    };
-    for(let x=0;x<W;x+=STEP){
-      for(let y=0;y<BORDER;y+=STEP) addPx(x,y);
-      for(let y=H-BORDER;y<H;y+=STEP) addPx(x,y);
-    }
-    for(let y=BORDER;y<H-BORDER;y+=STEP){
-      for(let x=0;x<BORDER;x+=STEP) addPx(x,y);
-      for(let x=W-BORDER;x<W;x+=STEP) addPx(x,y);
-    }
-    const bgList = [...bgPalette.values()];
-    const thr2 = threshold * threshold;
-    for (let i=0; i<px.length; i+=4) {
-      const pr=px[i], pg=px[i+1], pb2=px[i+2];
-      let minD2 = Infinity;
-      for(const [br,bg,bb] of bgList){
-        const d2=(pr-br)**2+(pg-bg)**2+(pb2-bb)**2;
-        if(d2<minD2) minD2=d2;
-      }
-      if (minD2 < thr2) {
-        const minDist = Math.sqrt(minD2);
-        px[i+3] = Math.min(255, (minDist / threshold) * 255 * 2.5 | 0);
-      }
-    }
-    octx.putImageData(d, 0, 0);
-  } catch(e) { return srcImg; }
-  return oc;
-}
-
-// Detect iOS / iPadOS (kept for any future device-specific logic)
-const IS_IOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-  (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-
 function preload(onProg, onDone) {
   // All PNGs now have proper RGBA transparency baked in at the file level.
   // No canvas background removal needed on any device — just load and draw.
@@ -724,14 +671,20 @@ function showCharSelect(){
   const sel=document.getElementById('charsel');
   const grid=document.getElementById('cs-grid');
   sel.classList.remove('hidden');
-  grid.innerHTML='';
+  grid.replaceChildren();
   CHARS.forEach((c,i)=>{
     const card=document.createElement('div');
     card.className='cs-card'+(i===0?' cs-active':'');
     card.dataset.idx=i;
     const src=`${BASE}/characters/${c.fk}-${c.v}.png`;
-    card.innerHTML=`<img src="${src}" alt="${c.name}" onerror="this.style.fontSize='48px';this.style.lineHeight='80px';this.src='';this.alt='🦄'">
-      <div class="cs-cname">${c.name}</div>`;
+    const img=new Image();
+    img.src=src;
+    img.alt=c.name;
+    img.onerror=()=>{ img.style.fontSize='48px'; img.style.lineHeight='80px'; img.removeAttribute('src'); img.alt='🦄'; };
+    const label=document.createElement('div');
+    label.className='cs-cname';
+    label.textContent=c.name;
+    card.append(img, label);
     card.onclick=()=>{
       document.querySelectorAll('.cs-card').forEach(cc=>cc.style.borderColor='');
       card.style.borderColor='#FF6FD8';
@@ -791,8 +744,14 @@ function buildGal(){
     div.className='gcard';
     div.onclick=()=>openDetail(i);
     const src=`${BASE}/characters/${c.fk}-${c.v}.png`;
-    div.innerHTML=`<img src="${src}" alt="${c.name}" onerror="this.style.fontSize='48px';this.style.lineHeight='84px';this.src='';this.alt='🦄'">
-      <div class="gcname">${c.name}</div>`;
+    const img=new Image();
+    img.src=src;
+    img.alt=c.name;
+    img.onerror=()=>{ img.style.fontSize='48px'; img.style.lineHeight='84px'; img.removeAttribute('src'); img.alt='🦄'; };
+    const label=document.createElement('div');
+    label.className='gcname';
+    label.textContent=c.name;
+    div.append(img, label);
     grid.appendChild(div);
   });
 }
@@ -1145,8 +1104,18 @@ function triggerVictory(){
   rbCount++;
   document.getElementById('rbcount').textContent=`🌈 ${rbCount} rainbow${rbCount!==1?'s':''}`;
   const charName=CHARS[selChar].name;
-  document.getElementById('vict').innerHTML=`You painted the<br>whole world! 🌈`;
-  document.getElementById('vicm').innerHTML=`${charName} never gives up, just like you!<br>You're magical, Waverly! 💕`;
+  const vict=document.getElementById('vict');
+  vict.replaceChildren(
+    document.createTextNode('You painted the'),
+    document.createElement('br'),
+    document.createTextNode('whole world! 🌈')
+  );
+  const vicm=document.getElementById('vicm');
+  vicm.replaceChildren(
+    document.createTextNode(`${charName} never gives up, just like you!`),
+    document.createElement('br'),
+    document.createTextNode("You're magical, Waverly! 💕")
+  );
   document.getElementById('vicc').textContent=`🌈 ${rbCount} beautiful rainbow${rbCount!==1?'s':''} today!`;
   document.getElementById('vic').classList.add('show');
   fireConfetti();
