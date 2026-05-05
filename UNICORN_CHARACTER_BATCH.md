@@ -437,7 +437,7 @@ Mommy the Starlight Unicorn, transformed into a glowing star with soft unicorn s
 - odie-idle, odie-action, odie-magical
 - cloudy-idle, cloudy-action, cloudy-magical
 - jj-idle, jj-action, jj-magical
-- (removed-)idle, (removed-)action, (removed-)magical
+- onero-idle, onero-action, onero-magical
 - daddy-idle, daddy-action, daddy-magical
 - mommy-sky, mommy-companion, mommy-star
 

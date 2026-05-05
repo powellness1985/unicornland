@@ -1,4 +1,4 @@
-# 🚨 Kid-Safety Review: Unicorn Land for Wave ()
+# 🚨 Kid-Safety Review: Unicorn Land for Wave 
 
 ## Summary
 ✅ **SAFE FOR YOUNG CHILD** with minor flags noted below. No losing states, no pressure, no scary elements. Designed for joy and agency.
@@ -60,7 +60,7 @@
 | World completion message | ✅ GOOD | "You made the whole world beautiful!" + "Fruity never gives up, just like you!" |
 | No scary words | ✅ GOOD | No "fail," "lost," "dead," "try again," "game over" |
 | Font sizes | ⚠️ CAUTION | Some UI text might be small on iPad Mini (check: magic meter, progress bar labels) |
-| Reading level | ✅ GOOD | Simple 2-3 word messages (young childs can read or get the gist from emoji) |
+| Reading level | ✅ GOOD | Simple 2-3 word messages (young children can read or get the gist from emoji) |
 
 **Flags:**
 - Double-check font sizes on smallest iPad (test on device).

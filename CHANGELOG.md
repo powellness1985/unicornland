@@ -108,7 +108,7 @@ Additionally, images are drawn at their natural size ratios using proper `ctx.dr
 
 ```js
 { id:'daddy', fileKey:'daddy', variation:'idle', name:'Daddy', bio:'...' }
-{ id:'mommy', fileKey:'mommy', variation:'sky', name:'Mommy', bio:'...' }
+{ id:'mommy', fileKey:'mommy', variation:'sky',  name:'Mommy', bio:'...' }
 ```
 
 The `variation` field handles cases like Mommy (who uses `mommy-sky.png` instead of `mommy-idle.png`). The image manifest is constructed from `fileKey` and `variation`, not from `name`. No more guessing.
@@ -507,9 +507,9 @@ All assets live under `/assets/`. No asset files are embedded in HTML.
 | `jj-idle.png` | JJ | Gallery + playable |
 | `jj-action.png` | JJ | (preloaded) |
 | `jj-magical.png` | JJ | (preloaded) |
-| `(removed-)idle.png` | (removed) | Gallery + playable |
-| `(removed-)action.png` | (removed) | (preloaded) |
-| `(removed-)magical.png` | (removed) | (preloaded) |
+| `onero-idle.png` | Onero | Gallery + playable |
+| `onero-action.png` | Onero | (preloaded) |
+| `onero-magical.png` | Onero | (preloaded) |
 | `firey-shy.png` | Firey | Dragon state 0 |
 | `firey-playful.png` | Firey | Dragon state 1–2 |
 | `firey-silly.png` | Firey | Dragon state 3 (post-transform) |

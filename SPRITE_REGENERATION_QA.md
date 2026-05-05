@@ -124,8 +124,8 @@ Pricing:      $32/1M output tokens = $0.0338/image
 
 **Mapping (DALL-E names → UnicornLand names):**
 - sparkle → **wave** (rainbow unicorn with wings)
-- mommy → **mommy** (celestial angel unicorn)
-- daddy → **blaze** (brave flame unicorn)
+- (parent ref) → **mommy** (celestial angel unicorn)
+- (parent ref) → **daddy** (warm brown unicorn)
 - sterling → **daddy** (warm brown unicorn)
 - stella → **luna** (moon unicorn)
 - wesley → **cloudy** (cloud unicorn)
@@ -220,7 +220,7 @@ assets/
 - **Achievement system**: Collect all characters (with visual badges)
 - **Story snippets**: Character introduces itself ("Hi, I'm Wave!")
 - **Interactive tutorials**: Characters guide first play
-- *Age-Appropriate*: Non-competitive, encouraging for young childs
+- *Age-Appropriate*: Non-competitive, encouraging for young children
 
 #### 5. **Visual Polish**
 - **Breathing animation**: Characters subtly breathe (expand/contract)

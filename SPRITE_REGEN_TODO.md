@@ -51,9 +51,9 @@ left as-is; not in the regen list either way.
 
 | File | Current problem |
 |---|---|
-| `assets/characters/(removed-)idle.png` | RGB, opaque background |
-| `assets/characters/(removed-)action.png` | RGB, opaque background |
-| `assets/characters/(removed-)magical.png` | RGB, opaque background |
+| `assets/characters/onero-idle.png` | RGB, opaque background |
+| `assets/characters/onero-action.png` | RGB, opaque background |
+| `assets/characters/onero-magical.png` | RGB, opaque background |
 
 ---
 
@@ -185,9 +185,9 @@ background must be fully transparent alpha=0, NOT a checkerboard pattern,
 NOT white, NOT any color.
 ```
 
-### `assets/characters/(removed-)idle.png`
+### `assets/characters/onero-idle.png`
 ```
-A magical unicorn named (removed) with a mysterious moonlit glow — pale lavender
+A magical unicorn named Onero with a mysterious moonlit glow — pale lavender
 and silvery-blue coloring, soft flowing mane with star-like sparkles, gentle
 wise expression, big kind eyes, sitting peacefully. Whimsical, calm, magical.
 Children's game art style. Side view.
@@ -197,9 +197,9 @@ background must be fully transparent alpha=0, NOT a checkerboard pattern,
 NOT white, NOT any color.
 ```
 
-### `assets/characters/(removed-)action.png`
+### `assets/characters/onero-action.png`
 ```
-The same unicorn (removed) — pale lavender and silvery-blue, moonlit glow — now
+The same unicorn Onero — pale lavender and silvery-blue, moonlit glow — now
 standing tall and ready, mane flowing, surrounded by gentle starlight sparkles,
 calm protective expression. Whimsical, magical, kind.
 Sticker-style cutout, centered, no background, no scenery, no border, no ground
@@ -208,9 +208,9 @@ background must be fully transparent alpha=0, NOT a checkerboard pattern,
 NOT white, NOT any color.
 ```
 
-### `assets/characters/(removed-)magical.png`
+### `assets/characters/onero-magical.png`
 ```
-The same unicorn (removed) in their full magical form — pale lavender and silver,
+The same unicorn Onero in their full magical form — pale lavender and silver,
 horn glowing with soft moonlight, surrounded by swirling starlight magic and
 constellation sparkles, eyes closed in serene concentration, mane lifted by
 magic energy. Whimsical, gentle, peaceful magical aura.

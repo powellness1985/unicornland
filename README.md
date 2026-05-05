@@ -1,27 +1,26 @@
 # Unicorn Land — A Game by Wave
 
-A web game designed by my young child daughter Wave from voice memo interviews, built by her dad using Claude Code. Part of the the-portfolio-site portfolio as a demonstration of voice-to-product AI-assisted development workflow with privacy-safe telemetry for data-driven iteration.
+A web game designed by a young child from voice memo interviews, built with Claude Code as a demonstration of voice-to-product AI-assisted development.
 
 ## The Story
 
-Wave designed this game entirely in voice memo interviews. From her imagination came Fruity the winged unicorn, the magical popsicle, Firey the silly dragon, and the philosophy that *"Fruity never gives up, even in the rain."*
+The game was designed entirely in voice memo interviews. From a child's imagination came Fruity the winged unicorn, the magical popsicle, Firey the silly dragon, and the philosophy that *"Fruity never gives up, even in the rain."*
 
 This project demonstrates the full cycle:
 1. **Voice memo → transcript**: Capture a child's creative vision
 2. **Claude-assisted build**: Translate imagination into a playable game
 3. **Deployment**: Ship a real product to the web
-4. **Data-driven iteration**: Use anonymous play telemetry to improve the experience
 
 ## Design Philosophy
 
 - **No losing states, no game over**: Pure sandbox delight and creative play
 - **Encouragement-driven**: Original phrases inspired by (but never copying) Gabby's Dollhouse, Daniel Tiger, Sesame Street, and Bluey
 - **Resilience-building through play**: Themes of persistence, growth mindset, and celebrating mistakes
-- **Birthday gift**: Built for Wave's birthday in a single day with Claude Code
+- **Birthday gift**: Built in a single day with Claude Code
 
 ## Privacy
 
-This game collects anonymous play data (balloon pops, session length, device type) to help improve the experience. **No personal information, IP addresses, or identifying data is ever collected or stored.** Each session gets a random anonymous ID.
+This game collects no personal information. There is no analytics, no telemetry, and no first-party data collection.
 
 ## How to Play
 
@@ -35,11 +34,9 @@ This game collects anonymous play data (balloon pops, session length, device typ
 ## Tech Stack
 
 - **Frontend**: Single `index.html` file, no build step
-- **Game engine**: Kaboom.js via CDN
-- **Typography**: Google Fonts Fredoka
-- **Backend**: Vercel Serverless Functions
-- **Telemetry**: Vercel KV (or Postgres)
-- **Deployment**: Vercel
+- **Game engine**: Hand-rolled HTML5 Canvas
+- **Typography**: Nunito (self-hosted)
+- **Deployment**: Vercel (static)
 
 ## Local Development
 
@@ -55,28 +52,14 @@ npx http-server
 
 1. Push code to GitHub
 2. Connect repository to Vercel
-3. Set environment variables:
-   - `KV_REST_API_URL`
-   - `KV_REST_API_TOKEN`
-4. Deploy
-
-### Setting up Vercel KV
-
-1. Go to vercel.com → Storage → Create KV Database
-2. Copy the REST API URL and token
-3. Add to `.env` and deploy
-
-### Connecting the Subdomain
-
-1. In Vercel, set domain to `unicornland.the-portfolio-site`
-2. Update DNS at your domain registrar to point to Vercel nameservers
+3. Deploy
 
 ## Credits
 
-- **Game design**: Wave
-- **Development**: the developer with Claude Code
+- **Game design**: Wave (a young child)
+- **Development**: A parent, with Claude Code
 - **Encouragement philosophy**: Inspired by Gabby's Dollhouse, Daniel Tiger's Neighborhood, Sesame Street, and Bluey
 
 ---
 
-*Built with ❤️ and Claude Code for Wave's birthday. 🦄🌧️🌈✨*
+*Built with ❤️ and Claude Code. 🦄🌧️🌈✨*

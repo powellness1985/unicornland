@@ -442,7 +442,7 @@ This is Wave's *actual school*, made magical and integrated into the game world.
 
 ## DESIGN PHILOSOPHY
 
-**For Wave ():**
+**For Wave :**
 - No losing states, no pressure, no scary elements
 - Clear cause-and-effect (I do X, Y happens immediately)
 - Visible progress (world paints before her eyes)
