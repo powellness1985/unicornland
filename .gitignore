@@ -1,7 +1,55 @@
-.DS_Store
-node_modules
-.vercel
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+
+# Build artifacts
+dist/
+build/
+out/
+.next/
+
+# Environment and secrets
 .env
-.env.local
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.pub
+credentials.json
+token*.json
+secrets.json
+
+# Backup and temp files
+*.bak*
+*.backup*
+*.orig
+*.tmp
+*.temp
+*~
 *.swp
 *.swo
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# IDE
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Vercel
+.vercel
+
+# Claude Code runtime artifacts
+.claude/worktrees/
+.claude/settings.local.json
+.claude/settings.*.json
+.claude/.env*
